@@ -1,0 +1,77 @@
+name: Deploy timeline to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - main.html
+      - json_save/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build site with latest timeline save
+        run: |
+          python - <<'PY'
+          import json
+          import shutil
+          from datetime import datetime
+          from pathlib import Path
+
+          saves = list(Path("json_save").glob("version_*.json"))
+          if not saves:
+              raise SystemExit("Aucun fichier version_*.json trouvé dans json_save/")
+
+          def version_date(path):
+              version = path.stem.removeprefix("version_")
+              try:
+                  return datetime.strptime(version, "%d-%m-%y")
+              except ValueError as error:
+                  raise SystemExit(
+                      f"Nom de sauvegarde invalide : {path.name} "
+                      "(format attendu : version_JJ-MM-AA.json)"
+                  ) from error
+
+          latest = max(saves, key=version_date)
+          with latest.open(encoding="utf-8") as save_file:
+              data = json.load(save_file)
+          if not isinstance(data, list):
+              raise SystemExit(f"La sauvegarde {latest} doit contenir une liste JSON")
+
+          site = Path("_site")
+          site.mkdir()
+          shutil.copyfile("main.html", site / "index.html")
+          shutil.copyfile(latest, site / "latest.json")
+          print(f"Publication de {latest} sous latest.json ({len(data)} événements)")
+          PY
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

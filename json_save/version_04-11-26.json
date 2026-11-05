@@ -1,0 +1,94 @@
+[
+  {
+    "id": "evt-1",
+    "date": "19 janvier 2313",
+    "title": "Scénario 1 : Un Doliprane s'il vous plaît",
+    "category": "scenario",
+    "isSecret": false,
+    "desc": "Réveil amnésique des PJ après avoir été drogués. Piégés par Raphaël et Miranda pour le meurtre de Richard Duncan, les joueurs déjouent la machination sans passer par la case prison.",
+    "sessionSummary": "Les PJ se réveillent dans un appartement saccagé avec une violente gueule de bois, découvrant que des effets personnels leur ont été dérobés pour les faire accuser du meurtre du Transféré Richard Duncan. Face à l'irruption de la milice corporatiste, les joueurs fuient et son confronté a des agents: un agent de la milice est abattu durant l'échauffourée. Lesjoueur se foont finalement capturer et interrogr par la milice .Les joueurs parviennent à éviter le piège de raphael et Miranda et les désignent comme coupable à la police à la police en exposant les falsifications. Les PJ évitent l'incarcération, mais leur victoire leur attire immédiatement les menaces directes du commandement de New Right.",
+    "highlights": [
+      "Un agent de la milice tué",
+      "Raphaël et Miranda balancés à la police",
+      "Appel menaçant du chef de New Right"
+    ]
+  },
+  {
+    "id": "evt-961569",
+    "date": "15 Février 2313",
+    "title": "Scénario 2 : La chute",
+    "category": "scenario",
+    "isSecret": false,
+    "desc": "Suite à la capture de raphael et miranda new right est dans une mauvaise position",
+    "sessionSummary": "",
+    "highlights": []
+  },
+  {
+    "id": "evt-2",
+    "date": "1er mars 2313",
+    "title": "Sortie de prison (Voie alternative non empruntée)",
+    "category": "justice",
+    "isSecret": true,
+    "desc": "Scénario alternatif : Si les PJ avaient été incarcérés, la reconstruction du connectome de Richard Duncan par New Mind les aurait innocentés après 45 jours.",
+    "sessionSummary": "Événement caduc dans votre chronologie réelle : les PJ ayant évité la prison dès le 19 janvier, ils sont restés libres et actifs dans les bas-fonds.",
+    "highlights": [
+      "Événement contourné avec succès par les joueurs"
+    ]
+  },
+  {
+    "id": "evt-3",
+    "date": "15 mars 2313",
+    "title": "Attaque de Terminus 1 (Xevolt + UNTRUST)",
+    "category": "rebellions",
+    "isSecret": false,
+    "desc": "Attaque d'envergure sur la station orbitale de Jupiter abritant le siège de New Mind. Alliance inédite et destructrice entre Xevolt et la cellule armée UNTRUST.",
+    "sessionSummary": "Opération majeure conjointe entre Xevolt et la branche armée UNTRUST. Assaut coordonné contre le complexe orbital de New Mind près de Jupiter.",
+    "highlights": [
+      "Frappe majeure contre les infrastructures de transfert",
+      "Rapprochement tactique entre Karl et ses anciennes connaissances"
+    ]
+  },
+  {
+    "id": "evt-4",
+    "date": "Avril – Juillet 2313",
+    "title": "La Grande Purge",
+    "category": "corpo",
+    "isSecret": false,
+    "desc": "Répression généralisée des mégacorporations et de leurs milices privées. Volonté d'éradication totale des mouvements révolutionnaires et des chirurgiens clandestins.",
+    "sessionSummary": "Vaste ratissage policier et corporatiste dans l'ensemble des cités souterraines et des stations orbitales.",
+    "highlights": [
+      "Fermeture des cliniques clandestines et traque des charcutiers cybernétiques",
+      "Surveillance accrue sur les flux informatiques et le marché noir"
+    ]
+  },
+  {
+    "id": "evt-5",
+    "date": "Août 2313",
+    "title": "Reddition du chef de Xevolt",
+    "category": "rebellions",
+    "isSecret": false,
+    "desc": "Le leader de Xevolt se rend officiellement pour apaiser la purge. Début d'une longue période creuse et de clandestinité silencieuse pour les insurgés du système.",
+    "sessionSummary": "",
+    "highlights": []
+  },
+  {
+    "id": "evt-6",
+    "date": "Octobre 2313",
+    "title": "Découverte du procédé « Nice Try »",
+    "category": "justice",
+    "isSecret": true,
+    "desc": "Révélé par les autorités lors des procès des arrestations de la purge. Fin officielle des opérations de ratissage intensif suite aux révélations judiciaires.",
+    "sessionSummary": "",
+    "highlights": []
+  },
+  {
+    "id": "evt-7",
+    "date": "Avril 2314",
+    "title": "Lancement de la mission habitée vers Proxima",
+    "category": "spatial",
+    "isSecret": false,
+    "desc": "Célébration du centenaire du protocole Seldon. Premier convoi interstellaire habité expédié vers Proxima avec 20 Transférés à son bord.",
+    "sessionSummary": "",
+    "highlights": []
+  }
+]

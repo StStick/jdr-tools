@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeast Eaters — Chronologie de Campagne</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#07090e',
+                            card: '#0f141f',
+                            border: '#1e293b',
+                            cyan: '#00f0ff',
+                            amber: '#f59e0b',
+                            red: '#ff003c',
+                            purple: '#a855f7',
+                            green: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['"Chakra Petch"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #07090e;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.04) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(255, 0, 60, 0.03) 0%, transparent 45%),
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .neon-glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+        }
+
+        .neon-glow-red {
+            box-shadow: 0 0 15px rgba(255, 0, 60, 0.25);
+        }
+
+        .neon-glow-amber {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+    </style>
+</head>
+<body class="text-slate-200 font-sans min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
+
+    <!-- En-tête / Header Nav -->
+    <header class="border-b border-cyber-border/80 bg-cyber-bg/90 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/40 flex items-center justify-center text-cyber-cyan neon-glow-cyan">
+                    <i class="fa-solid fa-timeline text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-tech text-xl sm:text-2xl font-bold tracking-wider text-white uppercase flex items-center gap-2">
+                        YEAST EATERS <span class="text-xs px-2 py-0.5 rounded bg-cyan-950/80 border border-cyber-cyan/30 text-cyber-cyan font-mono font-normal">2314 RETARD -1 AN (1313-1314)</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-mono">CHRONOLOGIE DE CAMPAGNE JDR &bull; SYSTÈME D'INTRIGUES</p>
+                </div>
+            </div>
+
+            <!-- Actions Header -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button id="btn-toggle-secret" class="px-3 py-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono font-semibold hover:bg-amber-500/20 transition flex items-center gap-1.5" title="Afficher/Masquer les secrets MJ">
+                    <i class="fa-solid fa-user-secret"></i>
+                    <span id="label-secret">Mode MJ : Activé</span>
+                </button>
+                <button id="btn-add-event" class="px-3.5 py-1.5 rounded-md bg-cyber-cyan text-black text-xs font-tech font-bold uppercase tracking-wider hover:bg-cyan-300 transition shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Ajouter Jalon</span>
+                </button>
+                <div class="relative inline-block text-left">
+                    <button id="btn-data-menu" class="p-2 rounded-md bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition text-xs">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+                    <!-- Dropdown data menu -->
+                    <div id="data-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md bg-cyber-card border border-cyber-border shadow-xl z-50 py-1 text-xs font-mono">
+                        <button id="btn-export" class="w-full text-left px-4 py-2 text-slate-300 hover:bg-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-download text-cyber-cyan"></i> Exporter JSON
+                        </button>
+                        <label class="w-full text-left px-4 py-2 text-slate-300 hover:bg-slate-800 flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-upload text-cyber-amber"></i> Importer JSON
+                            <input type="file" id="input-import" accept=".json" class="hidden">
+                        </label>
+                        <div class="border-t border-slate-800 my-1"></div>
+                        <button id="btn-reset" class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-950/40 flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-left text-cyber-red"></i> Réinitialiser défaut
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Zone de filtrage et recherche -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2 w-full">
+        <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border/70 backdrop-blur shadow-md flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full md:w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+                <input type="text" id="input-search" placeholder="Rechercher (titre, mot-clé, conspiration, lieu)..." 
+                    class="w-full bg-slate-900/90 border border-slate-700/80 rounded-lg pl-9 pr-4 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan transition">
+            </div>
+
+            <div class="flex items-center gap-1.5 flex-wrap w-full md:w-auto justify-start md:justify-end text-xs font-mono">
+                <span class="text-slate-400 mr-1 text-[11px] uppercase tracking-wider">Filtre :</span>
+                <button data-filter="all" class="filter-chip active px-2.5 py-1 rounded bg-slate-800 border border-slate-600 text-white font-semibold">Tous</button>
+                <button data-filter="scenario" class="filter-chip px-2.5 py-1 rounded bg-slate-900/60 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-950/30">Scénarios</button>
+                <button data-filter="rebellions" class="filter-chip px-2.5 py-1 rounded bg-slate-900/60 border border-red-500/30 text-red-400 hover:bg-red-950/30">Révolution</button>
+                <button data-filter="corpo" class="filter-chip px-2.5 py-1 rounded bg-slate-900/60 border border-amber-500/30 text-amber-400 hover:bg-amber-950/30">Corporations</button>
+                <button data-filter="secret" class="filter-chip px-2.5 py-1 rounded bg-slate-900/60 border border-purple-500/30 text-purple-400 hover:bg-purple-950/30">Secret MJ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Zone principale de Timeline -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full relative">
+        <div class="absolute left-6 md:left-1/2 top-10 bottom-10 w-0.5 bg-gradient-to-b from-cyan-500 via-amber-500 to-red-500 opacity-40 -translate-x-1/2 hidden sm:block"></div>
+
+        <div id="timeline-container" class="space-y-8 relative"></div>
+
+        <div id="empty-state" class="hidden text-center py-16">
+            <i class="fa-solid fa-database text-4xl text-slate-700 mb-3"></i>
+            <p class="text-slate-400 font-tech uppercase tracking-wider">Aucun événement ne correspond à vos filtres</p>
+        </div>
+    </main>
+
+    <!-- Modal Débriefing de Séance / Faits Marquants -->
+    <div id="debrief-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-cyber-card border border-cyan-500/50 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button id="btn-close-debrief" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <span id="debrief-badge" class="font-mono text-xs px-2.5 py-1 rounded border font-bold uppercase tracking-wider"></span>
+                <span id="debrief-date" class="font-mono text-xs text-slate-400"></span>
+            </div>
+
+            <h2 id="debrief-title" class="font-tech text-2xl font-bold text-white tracking-wide mb-2 flex items-center gap-2"></h2>
+            <p id="debrief-baseline" class="text-xs text-slate-400 font-mono italic mb-6 border-b border-cyber-border pb-3"></p>
+
+            <!-- Section 1 : Résumé de séance -->
+            <div class="mb-6">
+                <h3 class="font-tech text-sm uppercase font-bold text-cyan-400 tracking-wider flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-book-open"></i> Résumé de ce qu'il s'est passé en séance
+                </h3>
+                <div id="debrief-summary" class="bg-slate-900/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 leading-relaxed font-sans space-y-2 whitespace-pre-line"></div>
+            </div>
+
+            <!-- Section 2 : Faits marquants -->
+            <div class="mb-6">
+                <h3 class="font-tech text-sm uppercase font-bold text-amber-400 tracking-wider flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Faits marquants à retenir
+                </h3>
+                <ul id="debrief-highlights" class="space-y-2 font-mono text-xs"></ul>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-slate-800 text-xs">
+                <button id="btn-debrief-edit" class="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-slate-900 hover:border-cyan-400 hover:text-cyan-300 font-mono transition flex items-center gap-2">
+                    <i class="fa-solid fa-pen"></i> Modifier le compte-rendu
+                </button>
+                <button id="btn-debrief-close-bottom" class="px-4 py-2 rounded-lg bg-cyber-cyan text-black font-bold font-tech uppercase tracking-wider hover:bg-cyan-300 transition">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'Ajout / Édition -->
+    <div id="event-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cyber-card border border-cyber-border rounded-xl max-w-xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button id="btn-close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 id="modal-title" class="font-tech text-xl text-cyber-cyan uppercase font-bold tracking-wider mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left"></i> Ajouter un Événement
+            </h2>
+
+            <form id="event-form" class="space-y-4 text-xs font-mono">
+                <input type="hidden" id="form-event-id">
+
+                <div>
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide">Date / Période</label>
+                    <input type="text" id="form-date" required placeholder="ex: 19 janvier 1313 ou Avril – Juillet 1313" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide">Titre de l'événement</label>
+                    <input type="text" id="form-title" required placeholder="ex: Attaque de Terminus 1" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1 uppercase tracking-wide">Catégorie / Faction</label>
+                        <select id="form-category" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                            <option value="scenario">Scénario de jeu</option>
+                            <option value="rebellions">Révolution (Xevolt, UNTRUST...)</option>
+                            <option value="corpo">Corporations (New Mind, Lithos...)</option>
+                            <option value="justice">Justice & Répression</option>
+                            <option value="spatial">Conquête Spatiale / Seldon</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1 uppercase tracking-wide">Niveau d'Accès</label>
+                        <select id="form-secret" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                            <option value="false">Joueurs (Public / Connu)</option>
+                            <option value="true">Secret MJ (Caché aux joueurs)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide">Description brève (Timeline)</label>
+                    <textarea id="form-desc" rows="3" placeholder="Aperçu rapide affiché sur la timeline..." 
+                        class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none resize-none"></textarea>
+                </div>
+
+                <!-- Zone spécifique de débriefing de séance -->
+                <div class="border-t border-slate-800 pt-3">
+                    <div class="flex items-center gap-1.5 text-cyan-400 font-bold mb-2 uppercase text-[11px]">
+                        <i class="fa-solid fa-book-journal-whills"></i> Données de Séance (Compte-rendu joueur)
+                    </div>
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide">1. Résumé détaillé de la séance</label>
+                    <textarea id="form-summary" rows="4" placeholder="Ce qu'il s'est réellement passé pendant la partie..." 
+                        class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none resize-none mb-3"></textarea>
+
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide">2. Faits marquants à retenir (1 par ligne)</label>
+                    <textarea id="form-highlights" rows="3" placeholder="Un fait marquant par ligne&#10;Ex: Un agent abattu&#10;Ex: Trahison révélée" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none resize-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" id="btn-cancel-modal" class="px-4 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 uppercase font-semibold">Annuler</button>
+                    <button type="submit" class="px-4 py-2 rounded bg-cyber-cyan text-black font-bold uppercase font-tech hover:bg-cyan-300 shadow-md transition">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notifications Toast -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <!-- Logique JavaScript -->
+    <script>
+        const GITHUB_JSON_URL = new URL('latest.json', window.location.href).toString();
+
+        // Données initiales exactes mises à jour
+        const DEFAULT_TIMELINE = [
+            {
+                id: "evt-1",
+                date: "19 janvier 1313",
+                title: "Scénario 1 : Un Doliprane s'il vous plaît",
+                category: "scenario",
+                isSecret: false,
+                desc: "Réveil amnésique des PJ après avoir été drogués. Piégés par Raphaël et Miranda pour le meurtre de Richard Duncan, les joueurs déjouent la machination sans passer par la case prison.",
+                sessionSummary: "Les PJ se réveillent dans un appartement saccagé avec une violente gueule de bois, découvrant que des indices personnels leur ont été dérobés pour les faire accuser du meurtre du Transféré Richard Duncan. Face à l'irruption de la milice corporatiste, les joueurs refusent de se laisser désigner comme boucs émissaires : un agent de la milice est abattu durant l'échauffourée, et les joueurs parviennent à coincer et balancer directement Raphaël et Miranda à la police en exposant les falsifications. Les PJ évitent l'incarcération, mais leur victoire leur attire immédiatement les menaces directes du commandement de New Right.",
+                highlights: [
+                    "Un agent de la milice tué",
+                    "Raphaël et Miranda balancés à la police",
+                    "Appel menaçant du chef de New Right"
+                ]
+            },
+            {
+                id: "evt-2",
+                date: "1er mars 1313",
+                title: "Sortie de prison (Voie alternative non empruntée)",
+                category: "justice",
+                isSecret: true,
+                desc: "Scénario alternatif : Si les PJ avaient été incarcérés, la reconstruction du connectome de Richard Duncan par New Mind les aurait innocentés après 45 jours.",
+                sessionSummary: "Événement caduc dans votre chronologie réelle : les PJ ayant évité la prison dès le 19 janvier, ils sont restés libres et actifs dans les bas-fonds.",
+                highlights: [
+                    "Événement contourné avec succès par les joueurs"
+                ]
+            },
+            {
+                id: "evt-3",
+                date: "15 mars 1313",
+                title: "Attaque de Terminus 1 (Xevolt + UNTRUST)",
+                category: "rebellions",
+                isSecret: false,
+                desc: "Attaque d'envergure sur la station orbitale de Jupiter abritant le siège de New Mind. Alliance inédite et destructrice entre Xevolt et la cellule armée UNTRUST.",
+                sessionSummary: "Opération majeure conjointe entre Xevolt et la branche armée UNTRUST. Assaut coordonné contre le complexe orbital de New Mind près de Jupiter.",
+                highlights: [
+                    "Frappe majeure contre les infrastructures de transfert",
+                    "Rapprochement tactique entre Karl et ses anciennes connaissances"
+                ]
+            },
+            {
+                id: "evt-4",
+                date: "Avril – Juillet 1313",
+                title: "La Grande Purge",
+                category: "corpo",
+                isSecret: false,
+                desc: "Répression généralisée des mégacorporations et de leurs milices privées. Volonté d'éradication totale des mouvements révolutionnaires et des chirurgiens clandestins.",
+                sessionSummary: "Vaste ratissage policier et corporatiste dans l'ensemble des cités souterraines et des stations orbitales.",
+                highlights: [
+                    "Fermeture des cliniques clandestines et traque des charcutiers cybernétiques",
+                    "Surveillance accrue sur les flux informatiques et le marché noir"
+                ]
+            },
+            {
+                id: "evt-5",
+                date: "Août 1313",
+                title: "Reddition du chef de Xevolt",
+                category: "rebellions",
+                isSecret: false,
+                desc: "Le leader de Xevolt se rend officiellement pour apaiser la purge. Début d'une longue période creuse et de clandestinité silencieuse pour les insurgés du système.",
+                sessionSummary: "",
+                highlights: []
+            },
+            {
+                id: "evt-6",
+                date: "Octobre 1313",
+                title: "Découverte du procédé « Nice Try »",
+                category: "justice",
+                isSecret: true,
+                desc: "Révélé par les autorités lors des procès des arrestations de la purge. Fin officielle des opérations de ratissage intensif suite aux révélations judiciaires.",
+                sessionSummary: "",
+                highlights: []
+            },
+            {
+                id: "evt-7",
+                date: "Avril 1314",
+                title: "Lancement de la mission habitée vers Proxima",
+                category: "spatial",
+                isSecret: false,
+                desc: "Célébration du centenaire du protocole Seldon. Premier convoi interstellaire habité expédié vers Proxima avec 20 Transférés à son bord.",
+                sessionSummary: "",
+                highlights: []
+            }
+        ];
+
+        // État de l'application
+        let timelineEvents = [];
+        let showSecrets = true;
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let activeDebriefEventId = null;
+
+        // Fonction d'analyse intelligente des dates libres pour assurer le tri
+        function parseCyberDate(dateStr) {
+            if (!dateStr) return 0;
+            const s = dateStr.toLowerCase();
+            
+            // Cherche une année (4 chiffres)
+            const yearMatch = s.match(/\d{4}/);
+            const year = yearMatch ? parseInt(yearMatch[0], 10) : 0;
+            
+            // Cherche un mois textuel
+            const months = ['janvier', 'février', 'fevrier', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'aout', 'septembre', 'octobre', 'novembre', 'décembre', 'decembre'];
+            const monthMap = {
+                'janvier': 1, 'février': 2, 'fevrier': 2, 'mars': 3, 'avril': 4, 'mai': 5, 'juin': 6,
+                'juillet': 7, 'août': 8, 'aout': 8, 'septembre': 9, 'octobre': 10, 'novembre': 11, 'décembre': 12, 'decembre': 12
+            };
+            
+            let month = 0;
+            for (let m of months) {
+                if (s.includes(m)) {
+                    month = monthMap[m];
+                    break;
+                }
+            }
+            
+            // Cherche un jour (avant le mois en général). Ex : "19 janvier" ou "1er mars"
+            let day = 1; // 1 par défaut pour les périodes comme "Avril - Juillet"
+            const dayMatch = s.match(/(\d{1,2})(er)?\s+(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)/);
+            if (dayMatch) {
+                day = parseInt(dayMatch[1], 10);
+            }
+            
+            // Retourne un score de tri YYYYMMDD
+            return (year * 10000) + (month * 100) + day;
+        }
+
+        // Applique le tri chronologique sur le tableau des événements
+        function sortTimeline() {
+            timelineEvents.sort((a, b) => parseCyberDate(a.date) - parseCyberDate(b.date));
+        }
+
+        async function initData() {
+            try {
+                const response = await fetch(`${GITHUB_JSON_URL}?t=${Date.now()}`, { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`Chargement de latest.json impossible (HTTP ${response.status})`);
+                }
+
+                const data = await response.json();
+                if (!Array.isArray(data)) {
+                    throw new Error('Le fichier latest.json ne contient pas une liste d’événements');
+                }
+
+                timelineEvents = data;
+                showToast("Dernière sauvegarde chargée depuis GitHub Pages", "success");
+            } catch (error) {
+                console.warn("Impossible de charger la dernière sauvegarde depuis GitHub Pages:", error);
+                loadFromLocalStorage();
+            }
+
+            sortTimeline();
+            renderTimeline();
+        }
+
+        function loadFromLocalStorage() {
+            const stored = localStorage.getItem('yeast_eaters_timeline_v2');
+            if (stored) {
+                try {
+                    timelineEvents = JSON.parse(stored);
+                    showToast("Données chargées localement", "info");
+                } catch(e) {
+                    timelineEvents = [...DEFAULT_TIMELINE];
+                }
+            } else {
+                timelineEvents = [...DEFAULT_TIMELINE];
+                saveToLocalStorage();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('yeast_eaters_timeline_v2', JSON.stringify(timelineEvents));
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = {
+                info: 'border-cyan-500/50 bg-slate-900 text-cyan-300',
+                success: 'border-green-500/50 bg-slate-900 text-green-300',
+                danger: 'border-red-500/50 bg-slate-900 text-red-300'
+            };
+            toast.className = `p-3 rounded-lg border shadow-lg text-xs font-mono flex items-center gap-2 transform transition-all duration-300 ${colors[type] || colors.info}`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-4');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        const CATEGORY_STYLES = {
+            scenario: {
+                label: "Scénario Joué",
+                badgeClass: "bg-cyan-950/80 text-cyan-400 border-cyan-500/40",
+                borderClass: "border-l-cyan-500",
+                icon: "fa-gamepad",
+                glow: "neon-glow-cyan"
+            },
+            rebellions: {
+                label: "Révolution & Underground",
+                badgeClass: "bg-red-950/80 text-red-400 border-red-500/40",
+                borderClass: "border-l-red-500",
+                icon: "fa-fire",
+                glow: "neon-glow-red"
+            },
+            corpo: {
+                label: "Corporations & Armement",
+                badgeClass: "bg-amber-950/80 text-amber-400 border-amber-500/40",
+                borderClass: "border-l-amber-500",
+                icon: "fa-building-shield",
+                glow: "neon-glow-amber"
+            },
+            justice: {
+                label: "Justice, Procès & Purge",
+                badgeClass: "bg-purple-950/80 text-purple-400 border-purple-500/40",
+                borderClass: "border-l-purple-500",
+                icon: "fa-gavel",
+                glow: ""
+            },
+            spatial: {
+                label: "Seldon & Conquête",
+                badgeClass: "bg-emerald-950/80 text-emerald-400 border-emerald-500/40",
+                borderClass: "border-l-emerald-500",
+                icon: "fa-shuttle-space",
+                glow: ""
+            }
+        };
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            const emptyState = document.getElementById('empty-state');
+            container.innerHTML = '';
+
+            const filtered = timelineEvents.filter(evt => {
+                if (!showSecrets && evt.isSecret) return false;
+                if (currentFilter === 'scenario' && evt.category !== 'scenario') return false;
+                if (currentFilter === 'rebellions' && evt.category !== 'rebellions') return false;
+                if (currentFilter === 'corpo' && evt.category !== 'corpo') return false;
+                if (currentFilter === 'secret' && !evt.isSecret) return false;
+
+                if (searchQuery.trim() !== '') {
+                    const q = searchQuery.toLowerCase();
+                    const matchTitle = evt.title.toLowerCase().includes(q);
+                    const matchDate = evt.date.toLowerCase().includes(q);
+                    const matchDesc = evt.desc.toLowerCase().includes(q);
+                    const matchSummary = (evt.sessionSummary || '').toLowerCase().includes(q);
+                    const matchHighlights = (evt.highlights || []).some(h => h.toLowerCase().includes(q));
+                    if (!matchTitle && !matchDate && !matchDesc && !matchSummary && !matchHighlights) return false;
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach((evt, index) => {
+                const style = CATEGORY_STYLES[evt.category] || CATEGORY_STYLES.corpo;
+                const isEven = index % 2 === 0;
+                const hasDebrief = (evt.sessionSummary && evt.sessionSummary.trim() !== '') || (evt.highlights && evt.highlights.length > 0);
+
+                const cardEl = document.createElement('div');
+                cardEl.className = `relative flex flex-col sm:flex-row items-start ${isEven ? 'sm:flex-row-reverse' : ''} gap-4 group`;
+
+                const dateDotHtml = `
+                    <div class="hidden sm:flex absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 ${evt.isSecret ? 'border-purple-500 text-purple-400' : 'border-cyber-cyan text-cyber-cyan'} items-center justify-center text-xs z-10 shadow-lg cursor-pointer hover:scale-110 transition" onclick="openDebriefModal('${evt.id}')">
+                        <i class="fa-solid ${style.icon}"></i>
+                    </div>
+                `;
+
+                const cardContent = `
+                    <div class="w-full sm:w-[calc(50%-2rem)] bg-cyber-card border border-cyber-border/80 hover:border-slate-500 rounded-xl p-4 transition-all duration-200 border-l-4 ${style.borderClass} shadow-lg ${evt.isSecret ? 'bg-gradient-to-br from-cyber-card to-purple-950/20' : ''} cursor-pointer group hover:bg-slate-900/40" onclick="handleCardClick(event, '${evt.id}')">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="font-mono text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider ${style.badgeClass}">
+                                ${evt.date}
+                            </span>
+                            <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                                ${evt.isSecret ? '<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-950 border border-purple-500/50 text-purple-300 font-bold"><i class="fa-solid fa-lock"></i> SECRET MJ</span>' : ''}
+                                <button onclick="editEvent('${evt.id}')" class="text-slate-400 hover:text-cyber-cyan p-1 text-xs" title="Modifier">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                                <button onclick="deleteEvent('${evt.id}')" class="text-slate-400 hover:text-cyber-red p-1 text-xs" title="Supprimer">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <h3 class="font-tech text-base sm:text-lg font-bold text-white tracking-wide mb-2 flex items-center justify-between">
+                            <span>${evt.title}</span>
+                            <span class="text-xs text-cyber-cyan font-mono opacity-0 group-hover:opacity-100 transition flex items-center gap-1">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i> Débrief
+                            </span>
+                        </h3>
+
+                        <p class="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                            ${evt.desc}
+                        </p>
+
+                        <!-- Indicateur de Compte-rendu disponible -->
+                        ${hasDebrief ? `
+                            <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono flex items-center gap-1">
+                                    <i class="fa-solid fa-file-lines"></i> Compte-rendu & Faits marquants (${evt.highlights ? evt.highlights.length : 0})
+                                </span>
+                            </div>
+                        ` : ''}
+
+                        <div class="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                            <span><i class="fa-solid ${style.icon} mr-1"></i> ${style.label}</span>
+                            <span class="text-slate-500">ID: #${evt.id}</span>
+                        </div>
+                    </div>
+                `;
+
+                cardEl.innerHTML = dateDotHtml + cardContent;
+                container.appendChild(cardEl);
+            });
+        }
+
+        function handleCardClick(event, id) {
+            openDebriefModal(id);
+        }
+
+        const debriefModal = document.getElementById('debrief-modal');
+        function openDebriefModal(id) {
+            const evt = timelineEvents.find(e => e.id === id);
+            if (!evt) return;
+
+            activeDebriefEventId = id;
+            const style = CATEGORY_STYLES[evt.category] || CATEGORY_STYLES.corpo;
+
+            document.getElementById('debrief-badge').innerText = style.label;
+            document.getElementById('debrief-badge').className = `font-mono text-xs px-2.5 py-1 rounded border font-bold uppercase tracking-wider ${style.badgeClass}`;
+            document.getElementById('debrief-date').innerText = evt.date;
+            document.getElementById('debrief-title').innerText = evt.title;
+            document.getElementById('debrief-baseline').innerText = evt.desc;
+
+            const summaryContainer = document.getElementById('debrief-summary');
+            if (evt.sessionSummary && evt.sessionSummary.trim() !== '') {
+                summaryContainer.innerHTML = evt.sessionSummary;
+                summaryContainer.classList.remove('italic', 'text-slate-500');
+            } else {
+                summaryContainer.innerHTML = "Aucun résumé narratif n'a encore été saisi pour cette séance.";
+                summaryContainer.classList.add('italic', 'text-slate-500');
+            }
+
+            const highlightsContainer = document.getElementById('debrief-highlights');
+            highlightsContainer.innerHTML = '';
+            if (evt.highlights && evt.highlights.length > 0) {
+                evt.highlights.forEach(h => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start gap-2.5 bg-slate-900/60 border border-slate-800 p-2.5 rounded-lg text-slate-200';
+                    li.innerHTML = `
+                        <i class="fa-solid fa-caret-right text-amber-400 mt-0.5"></i>
+                        <span>${h}</span>
+                    `;
+                    highlightsContainer.appendChild(li);
+                });
+            } else {
+                highlightsContainer.innerHTML = `<li class="text-slate-500 italic">Aucun fait marquant consigné.</li>`;
+            }
+
+            debriefModal.classList.remove('hidden');
+        }
+
+        function closeDebriefModal() {
+            debriefModal.classList.add('hidden');
+            activeDebriefEventId = null;
+        }
+
+        document.getElementById('btn-close-debrief').addEventListener('click', closeDebriefModal);
+        document.getElementById('btn-debrief-close-bottom').addEventListener('click', closeDebriefModal);
+        document.getElementById('btn-debrief-edit').addEventListener('click', () => {
+            const idToEdit = activeDebriefEventId;
+            closeDebriefModal();
+            if (idToEdit) {
+                openModal(idToEdit);
+            }
+        });
+
+        const modal = document.getElementById('event-modal');
+        const form = document.getElementById('event-form');
+
+        function openModal(editId = null) {
+            form.reset();
+            const modalTitle = document.getElementById('modal-title');
+            if (editId) {
+                const evt = timelineEvents.find(e => e.id === editId);
+                if (!evt) return;
+                document.getElementById('form-event-id').value = evt.id;
+                document.getElementById('form-date').value = evt.date;
+                document.getElementById('form-title').value = evt.title;
+                document.getElementById('form-category').value = evt.category;
+                document.getElementById('form-secret').value = evt.isSecret ? "true" : "false";
+                document.getElementById('form-desc').value = evt.desc;
+                document.getElementById('form-summary').value = evt.sessionSummary || "";
+                document.getElementById('form-highlights').value = (evt.highlights || []).join('\n');
+                modalTitle.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Modifier l'Événement`;
+            } else {
+                document.getElementById('form-event-id').value = '';
+                modalTitle.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Ajouter un Événement`;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        window.editEvent = function(id) {
+            openModal(id);
+        };
+
+        window.deleteEvent = function(id) {
+            const index = timelineEvents.findIndex(e => e.id === id);
+            if (index !== -1) {
+                const removed = timelineEvents.splice(index, 1)[0];
+                saveToLocalStorage();
+                renderTimeline();
+                showToast(`Jalon "${removed.title}" supprimé`, 'danger');
+            }
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('form-event-id').value;
+            const date = document.getElementById('form-date').value.trim();
+            const title = document.getElementById('form-title').value.trim();
+            const category = document.getElementById('form-category').value;
+            const isSecret = document.getElementById('form-secret').value === 'true';
+            const desc = document.getElementById('form-desc').value.trim();
+            const sessionSummary = document.getElementById('form-summary').value.trim();
+            const rawHighlights = document.getElementById('form-highlights').value;
+            const highlights = rawHighlights.split('\n').map(h => h.trim()).filter(h => h.length > 0);
+
+            if (editId) {
+                const target = timelineEvents.find(e => e.id === editId);
+                if (target) {
+                    target.date = date;
+                    target.title = title;
+                    target.category = category;
+                    target.isSecret = isSecret;
+                    target.desc = desc;
+                    target.sessionSummary = sessionSummary;
+                    target.highlights = highlights;
+                    showToast('Événement mis à jour', 'success');
+                }
+            } else {
+                const newEvt = {
+                    id: "evt-" + Date.now().toString().slice(-6),
+                    date,
+                    title,
+                    category,
+                    isSecret,
+                    desc,
+                    sessionSummary,
+                    highlights
+                };
+                timelineEvents.push(newEvt);
+                showToast('Nouvel événement ajouté à la timeline', 'success');
+            }
+
+            // Tri après l'ajout ou la modification
+            sortTimeline();
+            saveToLocalStorage();
+            renderTimeline();
+            closeModal();
+        });
+
+        const btnToggleSecret = document.getElementById('btn-toggle-secret');
+        const labelSecret = document.getElementById('label-secret');
+        btnToggleSecret.addEventListener('click', () => {
+            showSecrets = !showSecrets;
+            if (showSecrets) {
+                labelSecret.innerText = "Mode MJ : Activé";
+                btnToggleSecret.className = "px-3 py-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono font-semibold hover:bg-amber-500/20 transition flex items-center gap-1.5";
+            } else {
+                labelSecret.innerText = "Vue Joueurs (Secrets Masqués)";
+                btnToggleSecret.className = "px-3 py-1.5 rounded-md border border-slate-700 bg-slate-900 text-slate-400 text-xs font-mono font-semibold hover:bg-slate-800 transition flex items-center gap-1.5";
+            }
+            renderTimeline();
+        });
+
+        document.getElementById('btn-add-event').addEventListener('click', () => openModal());
+        document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+        document.getElementById('btn-cancel-modal').addEventListener('click', closeModal);
+
+        document.getElementById('input-search').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderTimeline();
+        });
+
+        const filterChips = document.querySelectorAll('.filter-chip');
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                filterChips.forEach(c => {
+                    c.classList.remove('active', 'bg-slate-800', 'border-slate-500', 'text-white', 'font-semibold');
+                    c.classList.add('bg-slate-900/60');
+                });
+                chip.classList.add('active', 'bg-slate-800', 'border-slate-500', 'text-white', 'font-semibold');
+                currentFilter = chip.getAttribute('data-filter');
+                renderTimeline();
+            });
+        });
+
+        const btnDataMenu = document.getElementById('btn-data-menu');
+        const dataDropdown = document.getElementById('data-dropdown');
+        btnDataMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dataDropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', () => {
+            dataDropdown.classList.add('hidden');
+        });
+
+        document.getElementById('btn-export').addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(timelineEvents, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "yeast_eaters_timeline.json");
+            dlAnchor.click();
+            showToast('Fichier JSON exporté avec succès', 'info');
+        });
+
+        document.getElementById('input-import').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const imported = JSON.parse(event.target.result);
+                    if (Array.isArray(imported)) {
+                        timelineEvents = imported;
+                        // Tri forcé en cas d'importation d'un fichier brut non ordonné
+                        sortTimeline();
+                        saveToLocalStorage();
+                        renderTimeline();
+                        showToast('Chronologie importée et triée avec succès', 'success');
+                    } else {
+                        showToast('Format JSON invalide', 'danger');
+                    }
+                } catch(err) {
+                    showToast('Erreur de lecture du fichier', 'danger');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            localStorage.removeItem('yeast_eaters_timeline_v2');
+            timelineEvents = JSON.parse(JSON.stringify(DEFAULT_TIMELINE));
+            sortTimeline();
+            saveToLocalStorage();
+            renderTimeline();
+            showToast('Timeline réinitialisée avec les faits réels du Scénario 1', 'info');
+        });
+
+        window.onload = function() {
+            initData();
+        };
+    </script>
+</body>
+</html>
