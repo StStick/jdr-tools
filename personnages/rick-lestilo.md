@@ -15,5 +15,3 @@ Recueilli par un vieux mécanicien des profondeurs, Rick est devenu un prodige d
 ## Comportement
 Très réticent aux psychotropes. Nourrit des sympathies passives envers les mouvements contestataires sans jamais s'y enrôler aveuglément.
 
-## Rôle technique (Scénario 1)
-Sa malformation et ses implants en font la cible désignée pour la mèche de cheveux rasée à blanc au réveil. Son analyse chirurgicale des flux numériques lui permet d'identifier les artefacts et failles des deepfakes de Miranda.

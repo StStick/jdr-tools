@@ -14,6 +14,3 @@ Vrai nom **Makh Mineur**. Enfance violente dans les bas-fonds souterrains de Par
 
 ## Implication politique & Clandestinité
 Vétéran aguerri d'UNTRUST. A pris part à l'assassinat ciblé du vice-CEO de New Mind deux ans plus tôt, ainsi qu'à la tentative d'attentat de grande envergure sur Terminus 1 (embuscade fatale où seuls cinq agents ont survécu : Karl, Zélia, Gayrick, Helean et Marl). Sa tête est activement mise à prix. Méprise profondément le réformisme bourgeois de Xevolt sur Caracole.
-
-## Rôle technique (Scénario 1)
-Profil idéal pour être le contact ayant commandé les substances de la soirée. Sa boucle d'oreille distinctive sert de pièce à conviction dérobée par Raphaël pour charger les PJ sur le lieu du crime.

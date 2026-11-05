@@ -15,5 +15,3 @@ Après avoir racheté sa liberté et dérobé un vaisseau au sein des entrepôts
 ## Comportement & Lignes de conduite
 Traqué par les CrazyPandas qui réclament sa mort dans une ultime arène. Règle absolue : ne touche jamais aux stupéfiants et refuse catégoriquement de s'impliquer en politique.
 
-## Rôle technique (Scénario 1)
-Le drogage à son insu constitue pour lui un affront impardonnable alimentant sa soif de représailles contre Raphaël. Ses réflexes et son expertise de pilotage sont déterminants pour les courses-poursuites et les manœuvres d'évasion.
