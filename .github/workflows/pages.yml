@@ -7,6 +7,7 @@ on:
     paths:
       - main.html
       - json_save/**
+      - scenarios/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -36,6 +37,7 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import re
           import shutil
           from datetime import datetime
           from pathlib import Path
@@ -64,7 +66,56 @@ jobs:
           site.mkdir()
           shutil.copyfile("main.html", site / "index.html")
           shutil.copyfile(latest, site / "latest.json")
-          print(f"Publication de {latest} sous latest.json ({len(data)} événements)")
+          published_scenarios = []
+          scenario_files = sorted(Path("scenarios").glob("*.md")) if Path("scenarios").exists() else []
+          for scenario_file in scenario_files:
+              if scenario_file.name.lower() == "readme.md":
+                  continue
+
+              content = scenario_file.read_text(encoding="utf-8")
+              front_matter = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", content, re.DOTALL)
+              if not front_matter:
+                  raise SystemExit(
+                      f"{scenario_file} doit commencer par un en-tête YAML "
+                      "(title, date, secret) encadré par ---"
+                  )
+
+              metadata = {}
+              for line in front_matter.group(1).splitlines():
+                  if ":" not in line:
+                      continue
+                  key, value = line.split(":", 1)
+                  value = value.strip()
+                  try:
+                      metadata[key.strip()] = json.loads(value)
+                  except json.JSONDecodeError:
+                      metadata[key.strip()] = value.strip("'\"")
+
+              title = metadata.get("title")
+              if not isinstance(title, str) or not title.strip():
+                  raise SystemExit(f"{scenario_file} doit définir un titre non vide")
+              published_scenarios.append({
+                  "id": scenario_file.stem,
+                  "filename": scenario_file.name,
+                  "title": title,
+                  "date": metadata.get("date", ""),
+                  "isSecret": str(metadata.get("secret", "false")).lower() == "true",
+                  "content": content,
+              })
+
+          scenario_output = site / "scenarios"
+          scenario_output.mkdir()
+          for scenario_file in scenario_files:
+              if scenario_file.name.lower() != "readme.md":
+                  shutil.copyfile(scenario_file, scenario_output / scenario_file.name)
+          (scenario_output / "index.json").write_text(
+              json.dumps(published_scenarios, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(
+              f"Publication de {latest} ({len(data)} événements) et "
+              f"{len(published_scenarios)} scénario(s)"
+          )
           PY
 
       - name: Upload Pages artifact

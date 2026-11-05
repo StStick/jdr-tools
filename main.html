@@ -77,6 +77,98 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #00f0ff;
         }
+
+        .scenario-paper {
+            background: #ffffff;
+            color: #222222;
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        .scenario-paper h1,
+        .scenario-paper h2,
+        .scenario-paper h3,
+        .scenario-paper h4 {
+            color: #1e293b;
+            font-family: Arial, sans-serif;
+            font-weight: 700;
+            line-height: 1.25;
+            margin: 1.5em 0 0.55em;
+        }
+
+        .scenario-paper h1 { font-size: 1.8rem; margin-top: 0; }
+        .scenario-paper h2 { font-size: 1.45rem; }
+        .scenario-paper h3 { font-size: 1.2rem; }
+        .scenario-paper p { margin: 0.65em 0; }
+        .scenario-paper ul,
+        .scenario-paper ol { margin: 0.6em 0 0.8em; padding-left: 1.6em; }
+        .scenario-paper ul { list-style: disc; }
+        .scenario-paper ol { list-style: decimal; }
+        .scenario-paper blockquote {
+            border-left: 3px solid #94a3b8;
+            color: #475569;
+            font-style: italic;
+            margin: 1em 0;
+            padding-left: 1em;
+        }
+        .scenario-paper code {
+            background: #e2e8f0;
+            border-radius: 0.2rem;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.9em;
+            padding: 0.1em 0.3em;
+        }
+        .scenario-paper table {
+            border-collapse: collapse;
+            margin: 1rem 0;
+            width: 100%;
+        }
+        .scenario-paper th,
+        .scenario-paper td {
+            border: 1px solid #cbd5e1;
+            padding: 0.45rem 0.6rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        .scenario-paper th { background: #e2e8f0; color: #1e293b; }
+        .scenario-paper a { color: #17668a; text-decoration: underline; }
+
+        .scenario-callout {
+            border-left: 5px solid;
+            margin: 1.2rem 0;
+            padding: 0.75rem 1rem;
+        }
+        .scenario-callout-label {
+            font-family: Arial, sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+        }
+        .scenario-callout[data-type="desc"] { background: #eaf2f8; border-color: #3a7ca5; }
+        .scenario-callout[data-type="desc"] .scenario-callout-content { font-style: italic; }
+        .scenario-callout[data-type="mj"] { background: #fcedea; border-color: #c0392b; }
+        .scenario-callout[data-type="dial"] { background: #f2f2f2; border-color: #888888; }
+        .scenario-callout[data-type="dial"] .scenario-callout-content { font-style: italic; }
+        .scenario-callout[data-type="rp"] { background: #eef6ef; border-color: #4a7a5c; }
+        .scenario-callout[data-type="event"] { background: #f4eefb; border-color: #7e57c2; }
+        .scenario-callout[data-type="combat"] { background: #fdf0e4; border-color: #b5651d; }
+        .scenario-callout[data-type="prep"] { background: #eafbf6; border-color: #16a085; }
+        .scenario-callout[data-type="note"] { background: #fff9db; border-color: #c99a1e; }
+        .scenario-callout[data-type="mj"] .scenario-callout-label { color: #c0392b; }
+        .scenario-callout[data-type="desc"] .scenario-callout-label { color: #3a7ca5; }
+        .scenario-callout[data-type="dial"] .scenario-callout-label { color: #666666; }
+        .scenario-callout[data-type="rp"] .scenario-callout-label { color: #4a7a5c; }
+        .scenario-callout[data-type="event"] .scenario-callout-label { color: #7e57c2; }
+        .scenario-callout[data-type="combat"] .scenario-callout-label { color: #b5651d; }
+        .scenario-callout[data-type="prep"] .scenario-callout-label { color: #13856e; }
+        .scenario-callout[data-type="note"] .scenario-callout-label { color: #967013; }
+        .scenario-placeholder { color: #c0392b; }
+        .scenario-speaker-raphael { color: #9c6b2e; }
+        .scenario-speaker-miranda { color: #3d6fa8; }
+        .scenario-speaker-inspector { color: #6b3f3f; }
     </style>
 </head>
 <body class="text-slate-200 font-sans min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
@@ -90,7 +182,7 @@
                 </div>
                 <div>
                     <h1 class="font-tech text-xl sm:text-2xl font-bold tracking-wider text-white uppercase flex items-center gap-2">
-                        YEAST EATERS <span class="text-xs px-2 py-0.5 rounded bg-cyan-950/80 border border-cyber-cyan/30 text-cyber-cyan font-mono font-normal">2314 RETARD -1 AN (1313-1314)</span>
+                        YEAST EATERS <span class="text-xs px-2 py-0.5 rounded bg-cyan-950/80 border border-cyber-cyan/30 text-cyber-cyan font-mono font-normal">2314 RETARD -1 AN (2313-2314)</span>
                     </h1>
                     <p class="text-xs text-slate-400 font-mono">CHRONOLOGIE DE CAMPAGNE JDR &bull; SYSTÈME D'INTRIGUES</p>
                 </div>
@@ -98,6 +190,12 @@
 
             <!-- Actions Header -->
             <div class="flex items-center gap-2 flex-wrap">
+                <button id="btn-view-timeline" class="px-3 py-1.5 rounded-md border border-cyber-cyan/40 bg-cyan-950/40 text-cyber-cyan text-xs font-mono hover:bg-cyan-950/70 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-timeline"></i><span>Chronologie</span>
+                </button>
+                <button id="btn-view-scenarios" class="px-3 py-1.5 rounded-md border border-slate-700 bg-slate-900 text-slate-300 text-xs font-mono hover:border-cyber-cyan/40 hover:text-cyber-cyan transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open"></i><span>Scénarios</span>
+                </button>
                 <button id="btn-toggle-secret" class="px-3 py-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono font-semibold hover:bg-amber-500/20 transition flex items-center gap-1.5" title="Afficher/Masquer les secrets MJ">
                     <i class="fa-solid fa-user-secret"></i>
                     <span id="label-secret">Mode MJ : Activé</span>
@@ -130,7 +228,7 @@
     </header>
 
     <!-- Zone de filtrage et recherche -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2 w-full">
+    <section id="timeline-filters" class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2 w-full">
         <div class="p-4 rounded-xl bg-cyber-card border border-cyber-border/70 backdrop-blur shadow-md flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="relative w-full md:w-96">
                 <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
@@ -150,7 +248,7 @@
     </section>
 
     <!-- Zone principale de Timeline -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full relative">
+    <main id="timeline-view" class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full relative">
         <div class="absolute left-6 md:left-1/2 top-10 bottom-10 w-0.5 bg-gradient-to-b from-cyan-500 via-amber-500 to-red-500 opacity-40 -translate-x-1/2 hidden sm:block"></div>
 
         <div id="timeline-container" class="space-y-8 relative"></div>
@@ -160,6 +258,109 @@
             <p class="text-slate-400 font-tech uppercase tracking-wider">Aucun événement ne correspond à vos filtres</p>
         </div>
     </main>
+
+    <section id="scenarios-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+            <div>
+                <p class="text-cyber-cyan font-mono text-[11px] uppercase tracking-[0.2em] mb-1">Archives de campagne</p>
+                <h2 class="font-tech text-3xl font-bold text-white uppercase tracking-wide">Scénarios complets</h2>
+                <p class="text-sm text-slate-400 mt-2">Rédigez et consultez les scénarios au format Markdown, avec les encadrés de la charte Yeast Eaters.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button id="btn-import-scenario" class="px-3 py-2 rounded-md border border-slate-700 bg-slate-900 text-slate-300 text-xs font-mono hover:text-white hover:border-slate-500 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-import"></i>Importer .md
+                </button>
+                <input id="input-import-scenario" type="file" accept=".md,.markdown,text/markdown,text/plain" class="hidden">
+                <button id="btn-new-scenario" class="px-4 py-2 rounded-md bg-cyber-cyan text-black text-xs font-tech font-bold uppercase tracking-wider hover:bg-cyan-300 transition shadow-lg shadow-cyan-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i>Nouveau scénario
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-5 rounded-lg border border-amber-500/30 bg-amber-950/20 px-4 py-3 text-xs text-amber-200/90 font-mono">
+            <i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>
+            Les brouillons et modifications sont sauvegardés dans ce navigateur. Pour partager un scénario, téléchargez son fichier Markdown et ajoutez-le au dossier <code>scenarios/</code> du dépôt, puis poussez vos changements. GitHub Pages étant public, un scénario secret MJ publié pourra être lu dans son fichier.
+        </div>
+
+        <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)] gap-5 items-start">
+            <aside class="rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden">
+                <div class="p-3 border-b border-cyber-border">
+                    <label class="sr-only" for="scenario-search">Rechercher un scénario</label>
+                    <input id="scenario-search" type="search" placeholder="Rechercher un scénario..."
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan">
+                </div>
+                <div id="scenario-list" class="p-2 space-y-1 max-h-[70vh] overflow-y-auto"></div>
+                <p id="scenario-empty" class="hidden px-4 py-8 text-center text-xs text-slate-500 font-mono">Aucun scénario trouvé.</p>
+            </aside>
+
+            <div class="min-w-0">
+                <article id="scenario-reader" class="hidden rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden shadow-xl">
+                    <div class="flex flex-wrap items-center justify-between gap-3 p-4 sm:p-5 border-b border-cyber-border">
+                        <div class="min-w-0">
+                            <p id="scenario-reader-date" class="font-mono text-xs italic text-cyan-300"></p>
+                            <h3 id="scenario-reader-title" class="font-tech text-2xl font-bold text-white mt-1 break-words"></h3>
+                            <p id="scenario-reader-origin" class="text-[11px] text-slate-500 font-mono mt-1"></p>
+                        </div>
+                        <button id="btn-edit-scenario" class="px-3 py-2 rounded-md border border-cyber-cyan/40 text-cyber-cyan text-xs font-mono hover:bg-cyan-950/40 transition flex items-center gap-2">
+                            <i class="fa-solid fa-pen"></i>Modifier
+                        </button>
+                    </div>
+                    <div id="scenario-reader-content" class="scenario-paper p-5 sm:p-10"></div>
+                </article>
+
+                <form id="scenario-editor" class="hidden rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-cyber-border">
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <div>
+                                <h3 id="scenario-editor-heading" class="font-tech text-xl font-bold text-white uppercase">Nouveau scénario</h3>
+                                <p class="text-[11px] text-slate-500 font-mono mt-1">Le brouillon est sauvegardé dans ce navigateur à l’enregistrement.</p>
+                            </div>
+                            <label class="flex items-center gap-2 text-xs font-mono text-purple-300 cursor-pointer">
+                                <input id="scenario-secret" type="checkbox" class="accent-purple-500">
+                                Secret MJ
+                            </label>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <label class="text-[11px] text-slate-400 font-mono uppercase">Titre
+                                <input id="scenario-title" required maxlength="160" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                            </label>
+                            <label class="text-[11px] text-slate-400 font-mono uppercase">Date in-game
+                                <input id="scenario-date" maxlength="80" placeholder="Ex. 15 février 2313" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="grid xl:grid-cols-2 gap-0">
+                        <label class="p-4 sm:p-5 border-b xl:border-b-0 xl:border-r border-cyber-border">
+                            <span class="block text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Texte Markdown</span>
+                            <textarea id="scenario-markdown" required rows="24" spellcheck="true"
+                                class="w-full min-h-[32rem] resize-y bg-slate-950 border border-slate-700 rounded-lg p-4 text-sm leading-6 text-slate-200 font-mono focus:outline-none focus:border-cyber-cyan"
+                                placeholder="## Accroche&#10;&#10;::: desc&#10;Description à lire aux joueurs.&#10;:::"></textarea>
+                            <span class="block text-[10px] text-slate-500 font-mono mt-2">Balises d’encadré : ::: desc, mj, dial, rp, event, combat, prep, note — fermer chaque encadré par :::</span>
+                        </label>
+                        <div class="p-4 sm:p-5">
+                            <p class="text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Aperçu conforme à la charte</p>
+                            <div id="scenario-editor-preview" class="scenario-paper min-h-[32rem] rounded-lg p-5 sm:p-7"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap justify-end gap-2 p-4 border-t border-cyber-border">
+                        <button type="button" id="btn-cancel-scenario" class="px-3 py-2 rounded-md bg-slate-800 text-slate-300 text-xs font-mono hover:bg-slate-700">Annuler</button>
+                        <button type="button" id="btn-download-scenario" class="px-3 py-2 rounded-md border border-cyan-500/40 text-cyan-300 text-xs font-mono hover:bg-cyan-950/40 flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i>Télécharger .md
+                        </button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-cyber-cyan text-black text-xs font-tech font-bold uppercase hover:bg-cyan-300 flex items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i>Enregistrer le brouillon
+                        </button>
+                    </div>
+                </form>
+
+                <div id="scenario-welcome" class="rounded-xl border border-dashed border-slate-700 bg-cyber-card/50 p-10 text-center">
+                    <i class="fa-solid fa-book-open text-3xl text-slate-600 mb-3"></i>
+                    <p class="font-tech uppercase tracking-wider text-slate-300">Choisissez un scénario ou commencez-en un nouveau</p>
+                    <p class="text-xs text-slate-500 mt-2">Les fichiers partagés apparaîtront ici après leur publication sur GitHub Pages.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Modal Débriefing de Séance / Faits Marquants -->
     <div id="debrief-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
@@ -218,7 +419,7 @@
 
                 <div>
                     <label class="block text-slate-300 mb-1 uppercase tracking-wide">Date / Période</label>
-                    <input type="text" id="form-date" required placeholder="ex: 19 janvier 1313 ou Avril – Juillet 1313" 
+                    <input type="text" id="form-date" required placeholder="ex: 19 janvier 2313 ou Avril – Juillet 2313" 
                         class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
                 </div>
 
@@ -287,7 +488,7 @@
         const DEFAULT_TIMELINE = [
             {
                 id: "evt-1",
-                date: "19 janvier 1313",
+                date: "19 janvier 2313",
                 title: "Scénario 1 : Un Doliprane s'il vous plaît",
                 category: "scenario",
                 isSecret: false,
@@ -301,7 +502,7 @@
             },
             {
                 id: "evt-2",
-                date: "1er mars 1313",
+                date: "1er mars 2313",
                 title: "Sortie de prison (Voie alternative non empruntée)",
                 category: "justice",
                 isSecret: true,
@@ -313,7 +514,7 @@
             },
             {
                 id: "evt-3",
-                date: "15 mars 1313",
+                date: "15 mars 2313",
                 title: "Attaque de Terminus 1 (Xevolt + UNTRUST)",
                 category: "rebellions",
                 isSecret: false,
@@ -326,7 +527,7 @@
             },
             {
                 id: "evt-4",
-                date: "Avril – Juillet 1313",
+                date: "Avril – Juillet 2313",
                 title: "La Grande Purge",
                 category: "corpo",
                 isSecret: false,
@@ -339,7 +540,7 @@
             },
             {
                 id: "evt-5",
-                date: "Août 1313",
+                date: "Août 2313",
                 title: "Reddition du chef de Xevolt",
                 category: "rebellions",
                 isSecret: false,
@@ -349,7 +550,7 @@
             },
             {
                 id: "evt-6",
-                date: "Octobre 1313",
+                date: "Octobre 2313",
                 title: "Découverte du procédé « Nice Try »",
                 category: "justice",
                 isSecret: true,
@@ -359,7 +560,7 @@
             },
             {
                 id: "evt-7",
-                date: "Avril 1314",
+                date: "Avril 2314",
                 title: "Lancement de la mission habitée vers Proxima",
                 category: "spatial",
                 isSecret: false,
@@ -375,6 +576,12 @@
         let currentFilter = 'all';
         let searchQuery = '';
         let activeDebriefEventId = null;
+        let scenarioLibrary = [];
+        let localScenarios = [];
+        let selectedScenarioId = null;
+        let editingScenarioId = null;
+        const SCENARIO_STORAGE_KEY = 'yeast_eaters_scenarios_v1';
+        const SCENARIO_INDEX_URL = new URL('scenarios/index.json', window.location.href).toString();
 
         // Fonction d'analyse intelligente des dates libres pour assurer le tri
         function parseCyberDate(dateStr) {
@@ -760,6 +967,10 @@
         const btnToggleSecret = document.getElementById('btn-toggle-secret');
         const labelSecret = document.getElementById('label-secret');
         btnToggleSecret.addEventListener('click', () => {
+            if (!document.getElementById('scenario-editor').classList.contains('hidden')) {
+                showToast('Enregistrez ou annulez le brouillon ouvert avant de changer de mode.', 'info');
+                return;
+            }
             showSecrets = !showSecrets;
             if (showSecrets) {
                 labelSecret.innerText = "Mode MJ : Activé";
@@ -769,6 +980,8 @@
                 btnToggleSecret.className = "px-3 py-1.5 rounded-md border border-slate-700 bg-slate-900 text-slate-400 text-xs font-mono font-semibold hover:bg-slate-800 transition flex items-center gap-1.5";
             }
             renderTimeline();
+            renderScenarioList();
+            renderSelectedScenario();
         });
 
         document.getElementById('btn-add-event').addEventListener('click', () => openModal());
@@ -846,8 +1059,539 @@
             showToast('Timeline réinitialisée avec les faits réels du Scénario 1', 'info');
         });
 
+        const CALL_OUTS = {
+            desc: '📖 DESCRIPTION — À LIRE',
+            mj: '🎲 INFO MJ — SECRET',
+            dial: '💬 DIALOGUE',
+            rp: '🎭 SCÈNE RP',
+            event: '🎲 ÉVÈNEMENT — JET',
+            combat: '⚔️ COMBAT',
+            prep: '🗒️ EN AMONT DE SÉANCE',
+            note: '📌 INFO CAMPAGNE'
+        };
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        function parseScenarioDocument(source) {
+            const text = String(source || '').replace(/^\uFEFF/, '');
+            const frontMatter = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+            const metadata = {};
+            let markdown = text;
+
+            if (frontMatter) {
+                for (const line of frontMatter[1].split(/\r?\n/)) {
+                    const separator = line.indexOf(':');
+                    if (separator < 0) continue;
+                    const key = line.slice(0, separator).trim();
+                    let value = line.slice(separator + 1).trim();
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        try {
+                            value = JSON.parse(value);
+                        } catch (error) {
+                            value = value.slice(1, -1);
+                        }
+                    } else if (value.startsWith("'") && value.endsWith("'")) {
+                        value = value.slice(1, -1);
+                    }
+                    metadata[key] = value;
+                }
+                markdown = text.slice(frontMatter[0].length);
+            }
+
+            const heading = markdown.match(/^#\s+(.+)$/m);
+            return {
+                title: metadata.title || (heading ? heading[1].trim() : ''),
+                date: metadata.date || '',
+                isSecret: String(metadata.secret).toLowerCase() === 'true',
+                markdown: markdown.trim()
+            };
+        }
+
+        function scenarioDocument(scenario) {
+            return [
+                '---',
+                `title: ${JSON.stringify(scenario.title)}`,
+                `date: ${JSON.stringify(scenario.date || '')}`,
+                `secret: ${scenario.isSecret ? 'true' : 'false'}`,
+                '---',
+                '',
+                scenario.markdown.trim(),
+                ''
+            ].join('\n');
+        }
+
+        function renderInlineMarkdown(source) {
+            let text = escapeHtml(source);
+            text = text.replace(/\*\*\*\[(.+?)\]\*\*\*/g, '<strong><em class="scenario-placeholder">[$1]</em></strong>');
+            text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+            text = text.replace(/\*\*(Raphaël|Miranda|Inspecteur(?: de police)?)\s*:\*\*/gi, (match, speaker) => {
+                const normalized = speaker.toLowerCase();
+                const speakerClass = normalized === 'raphaël'
+                    ? 'scenario-speaker-raphael'
+                    : normalized === 'miranda'
+                        ? 'scenario-speaker-miranda'
+                        : 'scenario-speaker-inspector';
+                return `<strong class="${speakerClass}">${speaker} :</strong>`;
+            });
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g, (match, label, href) => {
+                const normalizedHref = href.replace(/&amp;/g, '&');
+                try {
+                    const url = new URL(normalizedHref);
+                    if (!['http:', 'https:', 'mailto:'].includes(url.protocol)) return label;
+                    return `<a href="${escapeHtml(normalizedHref)}" rel="noopener noreferrer">${label}</a>`;
+                } catch (error) {
+                    return label;
+                }
+            });
+            return text;
+        }
+
+        function renderMarkdownBlocks(markdown) {
+            const lines = String(markdown || '').split(/\r?\n/);
+            const output = [];
+            let paragraph = [];
+            let listType = '';
+
+            function flushParagraph() {
+                if (paragraph.length) {
+                    output.push(`<p>${paragraph.map(renderInlineMarkdown).join('<br>')}</p>`);
+                    paragraph = [];
+                }
+            }
+
+            function closeList() {
+                if (listType) {
+                    output.push(`</${listType}>`);
+                    listType = '';
+                }
+            }
+
+            for (let index = 0; index < lines.length; index += 1) {
+                const line = lines[index];
+                const callout = line.match(/^:::\s*(desc|mj|dial|rp|event|combat|prep|note)(?:\s+(.+?))?\s*$/i);
+
+                if (callout) {
+                    flushParagraph();
+                    closeList();
+                    let end = index + 1;
+                    while (end < lines.length && lines[end].trim() !== ':::') end += 1;
+                    if (end < lines.length) {
+                        const type = callout[1].toLowerCase();
+                        const subtitle = callout[2] ? ` — ${escapeHtml(callout[2])}` : '';
+                        output.push(
+                            `<section class="scenario-callout" data-type="${type}">` +
+                            `<div class="scenario-callout-label">${CALL_OUTS[type]}${subtitle}</div>` +
+                            `<div class="scenario-callout-content">${renderMarkdownBlocks(lines.slice(index + 1, end).join('\n'))}</div>` +
+                            '</section>'
+                        );
+                        index = end;
+                        continue;
+                    }
+                }
+
+                if (!line.trim()) {
+                    flushParagraph();
+                    closeList();
+                    continue;
+                }
+
+                const tableSeparator = index + 1 < lines.length &&
+                    /^\s*\|?[\s:-]+(?:\|[\s:-]+)+\|?\s*$/.test(lines[index + 1]);
+                if (line.includes('|') && tableSeparator) {
+                    flushParagraph();
+                    closeList();
+                    const cells = tableLine => tableLine.trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim());
+                    const headers = cells(line);
+                    const rows = [];
+                    index += 2;
+                    while (index < lines.length && lines[index].includes('|') && lines[index].trim()) {
+                        rows.push(cells(lines[index]));
+                        index += 1;
+                    }
+                    index -= 1;
+                    output.push(
+                        '<table><thead><tr>' +
+                        headers.map(cell => `<th>${renderInlineMarkdown(cell)}</th>`).join('') +
+                        '</tr></thead><tbody>' +
+                        rows.map(row => `<tr>${headers.map((_, cellIndex) =>
+                            `<td>${renderInlineMarkdown(row[cellIndex] || '')}</td>`
+                        ).join('')}</tr>`).join('') +
+                        '</tbody></table>'
+                    );
+                    continue;
+                }
+
+                const heading = line.match(/^(#{1,4})\s+(.+)$/);
+                if (heading) {
+                    flushParagraph();
+                    closeList();
+                    const level = heading[1].length;
+                    output.push(`<h${level}>${renderInlineMarkdown(heading[2])}</h${level}>`);
+                    continue;
+                }
+
+                const bullet = line.match(/^\s*[-*]\s+(.+)$/);
+                const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+                if (bullet || numbered) {
+                    flushParagraph();
+                    const nextListType = bullet ? 'ul' : 'ol';
+                    if (listType !== nextListType) {
+                        closeList();
+                        listType = nextListType;
+                        output.push(`<${listType}>`);
+                    }
+                    output.push(`<li>${renderInlineMarkdown((bullet || numbered)[1])}</li>`);
+                    continue;
+                }
+
+                const quote = line.match(/^\s*>\s?(.*)$/);
+                if (quote) {
+                    flushParagraph();
+                    closeList();
+                    output.push(`<blockquote>${renderInlineMarkdown(quote[1])}</blockquote>`);
+                    continue;
+                }
+
+                closeList();
+                paragraph.push(line.trim());
+            }
+
+            flushParagraph();
+            closeList();
+            return output.join('\n');
+        }
+
+        function scenarioSlug(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '') || 'scenario';
+        }
+
+        function normalizeScenario(entry, origin) {
+            const parsed = parseScenarioDocument(entry.content || entry.markdown || '');
+            return {
+                id: entry.id || scenarioSlug(entry.filename || parsed.title),
+                title: parsed.title || entry.title || 'Scénario sans titre',
+                date: parsed.date || entry.date || '',
+                isSecret: parsed.isSecret || Boolean(entry.isSecret),
+                markdown: parsed.markdown,
+                origin,
+                isPublished: origin === 'published' || Boolean(entry.isPublished)
+            };
+        }
+
+        function readLocalScenarios() {
+            try {
+                const stored = localStorage.getItem(SCENARIO_STORAGE_KEY);
+                if (!stored) return [];
+                const parsed = JSON.parse(stored);
+                if (!Array.isArray(parsed)) {
+                    throw new Error('La sauvegarde locale des scénarios n’est pas une liste.');
+                }
+                return parsed
+                    .filter(item => item && typeof item.id === 'string' && typeof item.markdown === 'string')
+                    .map(item => normalizeScenario(item, 'local'));
+            } catch (error) {
+                console.error('Impossible de lire les brouillons locaux de scénarios :', error);
+                showToast('Lecture des brouillons impossible ; vérifiez le stockage du navigateur.', 'danger');
+                return [];
+            }
+        }
+
+        async function initScenarios() {
+            localScenarios = readLocalScenarios();
+            const published = [];
+            try {
+                const response = await fetch(`${SCENARIO_INDEX_URL}?t=${Date.now()}`, { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`Chargement du catalogue impossible (HTTP ${response.status})`);
+                }
+                const data = await response.json();
+                if (!Array.isArray(data)) {
+                    throw new Error('Le catalogue des scénarios doit être une liste JSON.');
+                }
+                published.push(...data.map(item => normalizeScenario(item, 'published')));
+            } catch (error) {
+                console.warn('Impossible de charger le catalogue publié des scénarios :', error);
+                showToast('Scénarios publiés indisponibles ; les brouillons locaux restent accessibles.', 'danger');
+            }
+
+            const merged = new Map(published.map(scenario => [scenario.id, scenario]));
+            localScenarios.forEach(scenario => merged.set(scenario.id, scenario));
+            scenarioLibrary = Array.from(merged.values()).sort((a, b) =>
+                a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' })
+            );
+            renderScenarioList();
+            renderSelectedScenario();
+        }
+
+        function persistScenario(scenario) {
+            const updated = localScenarios.filter(item => item.id !== scenario.id);
+            updated.push(scenario);
+            try {
+                localStorage.setItem(SCENARIO_STORAGE_KEY, JSON.stringify(updated));
+                localScenarios = updated;
+                return true;
+            } catch (error) {
+                console.error('Impossible de sauvegarder le scénario dans le navigateur :', error);
+                showToast('Sauvegarde locale impossible. Exportez le fichier Markdown pour ne pas perdre le texte.', 'danger');
+                return false;
+            }
+        }
+
+        function renderScenarioList() {
+            const container = document.getElementById('scenario-list');
+            const empty = document.getElementById('scenario-empty');
+            const query = document.getElementById('scenario-search').value.trim().toLocaleLowerCase('fr');
+            const visible = scenarioLibrary.filter(scenario =>
+                (showSecrets || !scenario.isSecret) &&
+                (!query || `${scenario.title} ${scenario.date}`.toLocaleLowerCase('fr').includes(query))
+            );
+            container.replaceChildren();
+
+            visible.forEach(scenario => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `w-full text-left rounded-lg px-3 py-3 transition border ${
+                    selectedScenarioId === scenario.id
+                        ? 'bg-cyan-950/40 border-cyan-500/40'
+                        : 'border-transparent hover:bg-slate-900 hover:border-slate-700'
+                }`;
+                const title = document.createElement('span');
+                title.className = 'block text-sm text-slate-200 font-semibold';
+                title.textContent = scenario.title;
+                const meta = document.createElement('span');
+                meta.className = 'mt-1 flex items-center gap-2 text-[10px] text-slate-500 font-mono';
+                meta.textContent = scenario.date || (scenario.origin === 'local' ? 'Brouillon local' : 'Date non précisée');
+                if (scenario.isSecret) {
+                    const badge = document.createElement('span');
+                    badge.className = 'text-purple-300';
+                    badge.textContent = '• SECRET MJ';
+                    meta.appendChild(badge);
+                }
+                button.append(title, meta);
+                button.addEventListener('click', () => {
+                    if (!document.getElementById('scenario-editor').classList.contains('hidden')) {
+                        showToast('Enregistrez ou annulez le brouillon ouvert avant de changer de scénario.', 'info');
+                        return;
+                    }
+                    selectedScenarioId = scenario.id;
+                    editingScenarioId = null;
+                    renderScenarioList();
+                    renderSelectedScenario();
+                });
+                container.appendChild(button);
+            });
+            empty.classList.toggle('hidden', visible.length > 0);
+        }
+
+        function renderSelectedScenario() {
+            const scenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
+            const reader = document.getElementById('scenario-reader');
+            const editor = document.getElementById('scenario-editor');
+            const welcome = document.getElementById('scenario-welcome');
+            const canRead = scenario && (showSecrets || !scenario.isSecret);
+            editor.classList.add('hidden');
+            reader.classList.toggle('hidden', !canRead);
+            welcome.classList.toggle('hidden', Boolean(canRead));
+            if (!canRead) {
+                document.getElementById('scenario-reader-title').textContent = '';
+                document.getElementById('scenario-reader-date').textContent = '';
+                document.getElementById('scenario-reader-origin').textContent = '';
+                document.getElementById('scenario-reader-content').replaceChildren();
+                return;
+            }
+
+            document.getElementById('scenario-reader-title').textContent = scenario.title;
+            const date = document.getElementById('scenario-reader-date');
+            date.textContent = scenario.date;
+            date.classList.toggle('hidden', !scenario.date);
+            document.getElementById('scenario-reader-origin').textContent = scenario.origin === 'published'
+                ? 'Publié sur GitHub Pages'
+                : scenario.isPublished
+                    ? 'Modification locale — le fichier publié ne change qu’après export et push'
+                    : 'Brouillon enregistré dans ce navigateur';
+            document.getElementById('scenario-reader-content').innerHTML = renderMarkdownBlocks(scenario.markdown);
+        }
+
+        function renderScenarioEditorPreview() {
+            const markdown = document.getElementById('scenario-markdown').value;
+            document.getElementById('scenario-editor-preview').innerHTML = renderMarkdownBlocks(markdown);
+        }
+
+        function openScenarioEditor(scenario) {
+            const form = document.getElementById('scenario-editor');
+            editingScenarioId = scenario ? scenario.id : null;
+            document.getElementById('scenario-editor-heading').textContent = scenario ? 'Modifier le scénario' : 'Nouveau scénario';
+            document.getElementById('scenario-title').value = scenario ? scenario.title : '';
+            document.getElementById('scenario-date').value = scenario ? scenario.date : '';
+            document.getElementById('scenario-secret').checked = scenario ? scenario.isSecret : false;
+            document.getElementById('scenario-markdown').value = scenario
+                ? scenario.markdown
+                : '## Accroche\n\n## Déroulement\n\n::: desc\nTexte immersif à lire aux joueurs.\n:::\n\n::: mj\nInformations et secrets réservés au MJ.\n:::\n\n::: note\nConséquences et éléments à conserver pour la campagne.\n:::\n\n***[Élément à préciser par le MJ]***';
+            document.getElementById('scenario-reader').classList.add('hidden');
+            document.getElementById('scenario-welcome').classList.add('hidden');
+            form.classList.remove('hidden');
+            renderScenarioEditorPreview();
+            document.getElementById('scenario-title').focus();
+        }
+
+        function downloadScenario(scenario) {
+            const blob = new Blob([scenarioDocument(scenario)], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${scenarioSlug(scenario.id || scenario.title)}.md`;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function saveImportedScenario(title, date, isSecret, markdown, fileName) {
+            const id = scenarioSlug(fileName.replace(/\.(md|markdown)$/i, '') || title);
+            const existing = scenarioLibrary.find(item => item.id === id);
+            const scenario = {
+                id,
+                title,
+                date,
+                isSecret,
+                markdown,
+                origin: 'local',
+                isPublished: existing ? existing.isPublished : false
+            };
+            if (!persistScenario(scenario)) return;
+            scenarioLibrary = [...scenarioLibrary.filter(item => item.id !== id), scenario]
+                .sort((a, b) => a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' }));
+            selectedScenarioId = id;
+            renderScenarioList();
+            renderSelectedScenario();
+            showToast('Scénario Markdown importé et enregistré localement.', 'success');
+        }
+
+        function setActiveView(view) {
+            const scenarios = view === 'scenarios';
+            document.getElementById('timeline-filters').classList.toggle('hidden', scenarios);
+            document.getElementById('timeline-view').classList.toggle('hidden', scenarios);
+            document.getElementById('scenarios-view').classList.toggle('hidden', !scenarios);
+            document.getElementById('btn-add-event').classList.toggle('hidden', scenarios);
+            document.getElementById('btn-data-menu').classList.toggle('hidden', scenarios);
+            document.getElementById('data-dropdown').classList.add('hidden');
+            document.getElementById('btn-view-timeline').classList.toggle('border-cyber-cyan/40', !scenarios);
+            document.getElementById('btn-view-timeline').classList.toggle('bg-cyan-950/40', !scenarios);
+            document.getElementById('btn-view-timeline').classList.toggle('text-cyber-cyan', !scenarios);
+            document.getElementById('btn-view-timeline').classList.toggle('border-slate-700', scenarios);
+            document.getElementById('btn-view-timeline').classList.toggle('bg-slate-900', scenarios);
+            document.getElementById('btn-view-timeline').classList.toggle('text-slate-300', scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('border-cyber-cyan/40', scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('bg-cyan-950/40', scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('text-cyber-cyan', scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('border-slate-700', !scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('bg-slate-900', !scenarios);
+            document.getElementById('btn-view-scenarios').classList.toggle('text-slate-300', !scenarios);
+        }
+
+        document.getElementById('btn-view-timeline').addEventListener('click', () => setActiveView('timeline'));
+        document.getElementById('btn-view-scenarios').addEventListener('click', () => setActiveView('scenarios'));
+        document.getElementById('btn-new-scenario').addEventListener('click', () => {
+            if (!document.getElementById('scenario-editor').classList.contains('hidden')) {
+                showToast('Enregistrez ou annulez le brouillon ouvert avant d’en créer un autre.', 'info');
+                return;
+            }
+            openScenarioEditor(null);
+        });
+        document.getElementById('btn-edit-scenario').addEventListener('click', () => {
+            const scenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
+            if (scenario) openScenarioEditor(scenario);
+        });
+        document.getElementById('btn-cancel-scenario').addEventListener('click', () => {
+            editingScenarioId = null;
+            renderSelectedScenario();
+        });
+        document.getElementById('scenario-markdown').addEventListener('input', renderScenarioEditorPreview);
+        document.getElementById('scenario-search').addEventListener('input', renderScenarioList);
+
+        document.getElementById('scenario-editor').addEventListener('submit', event => {
+            event.preventDefault();
+            const title = document.getElementById('scenario-title').value.trim();
+            const date = document.getElementById('scenario-date').value.trim();
+            const markdown = document.getElementById('scenario-markdown').value.trim();
+            const existing = scenarioLibrary.find(item => item.id === editingScenarioId);
+            let id = editingScenarioId || scenarioSlug(title);
+            if (!editingScenarioId && scenarioLibrary.some(item => item.id === id)) {
+                id = `${id}-${Date.now().toString(36)}`;
+            }
+            const scenario = {
+                id,
+                title,
+                date,
+                isSecret: document.getElementById('scenario-secret').checked,
+                markdown,
+                origin: 'local',
+                isPublished: existing ? existing.isPublished : false
+            };
+            if (!persistScenario(scenario)) return;
+            scenarioLibrary = [...scenarioLibrary.filter(item => item.id !== id), scenario]
+                .sort((a, b) => a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' }));
+            selectedScenarioId = id;
+            editingScenarioId = null;
+            renderScenarioList();
+            renderSelectedScenario();
+            showToast('Brouillon de scénario enregistré dans ce navigateur.', 'success');
+        });
+
+        document.getElementById('btn-download-scenario').addEventListener('click', () => {
+            const title = document.getElementById('scenario-title').value.trim();
+            if (!title) {
+                showToast('Saisissez un titre avant de télécharger le scénario.', 'danger');
+                document.getElementById('scenario-title').focus();
+                return;
+            }
+            downloadScenario({
+                id: editingScenarioId || scenarioSlug(title),
+                title,
+                date: document.getElementById('scenario-date').value.trim(),
+                isSecret: document.getElementById('scenario-secret').checked,
+                markdown: document.getElementById('scenario-markdown').value.trim()
+            });
+        });
+
+        document.getElementById('btn-import-scenario').addEventListener('click', () => {
+            document.getElementById('input-import-scenario').click();
+        });
+        document.getElementById('input-import-scenario').addEventListener('change', async event => {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const parsed = parseScenarioDocument(await file.text());
+                const title = parsed.title || file.name.replace(/\.(md|markdown)$/i, '');
+                if (!parsed.markdown) {
+                    throw new Error('Le fichier Markdown ne contient pas de texte de scénario.');
+                }
+                saveImportedScenario(title, parsed.date, parsed.isSecret, parsed.markdown, file.name);
+            } catch (error) {
+                console.error('Import du scénario impossible :', error);
+                showToast(error.message || 'Impossible de lire ce fichier Markdown.', 'danger');
+            } finally {
+                event.target.value = '';
+            }
+        });
+
         window.onload = function() {
             initData();
+            initScenarios();
         };
     </script>
 </body>
