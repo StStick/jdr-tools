@@ -428,12 +428,16 @@
                             </label>
                         </div>
                     </div>
-                    <div class="grid xl:grid-cols-2 gap-0">
-                        <label class="p-4 sm:p-5 border-b xl:border-b-0 xl:border-r border-cyber-border">
-                            <span class="block text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Texte Markdown</span>
-                            <div class="flex gap-2 mb-2">
+                    <div id="scenario-editor-columns" class="grid xl:grid-cols-2 gap-0">
+                        <div class="p-4 sm:p-5 border-b xl:border-b-0 xl:border-r border-cyber-border">
+                            <label for="scenario-markdown" class="block text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Texte Markdown</label>
+                            <textarea id="scenario-markdown" required rows="24" spellcheck="true"
+                                class="w-full min-h-[32rem] resize-y bg-slate-950 border border-slate-700 rounded-lg p-4 text-sm leading-6 text-slate-200 font-mono focus:outline-none focus:border-cyber-cyan"
+                                placeholder="## Accroche&#10;&#10;::: desc&#10;Description à lire aux joueurs.&#10;:::"></textarea>
+                            <span class="block text-[10px] text-slate-500 font-mono mt-2">Balises d’encadré : ::: desc, mj, dial, rp, event, combat, prep, note — fermer chaque encadré par :::</span>
+                            <div class="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-slate-800">
                                 <label class="sr-only" for="scenario-template">Modèle de scène</label>
-                                <select id="scenario-template" class="min-w-0 flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs font-mono text-slate-300 focus:outline-none focus:border-cyber-cyan">
+                                <select id="scenario-template" class="min-w-[12rem] flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-2 text-xs font-mono text-slate-300 focus:outline-none focus:border-cyber-cyan">
                                     <option value="">Insérer un modèle de scène...</option>
                                     <option value="scene">Info MJ</option>
                                     <option value="description">Description à lire</option>
@@ -443,16 +447,15 @@
                                     <option value="combat">Combat</option>
                                     <option value="transition">Note</option>
                                 </select>
-                                <button type="button" id="btn-insert-template" class="shrink-0 px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300 text-xs font-mono hover:bg-cyan-950/40">
+                                <button type="button" id="btn-insert-template" class="shrink-0 px-3 py-2 rounded border border-cyan-500/40 text-cyan-300 text-xs font-mono hover:bg-cyan-950/40">
                                     Insérer
                                 </button>
+                                <button type="button" id="btn-toggle-scenario-preview" class="shrink-0 px-3 py-2 rounded border border-slate-700 text-slate-300 text-xs font-mono hover:border-slate-500 hover:text-white flex items-center gap-2" aria-pressed="false">
+                                    <i class="fa-solid fa-eye-slash"></i><span>Masquer l’aperçu</span>
+                                </button>
                             </div>
-                            <textarea id="scenario-markdown" required rows="24" spellcheck="true"
-                                class="w-full min-h-[32rem] resize-y bg-slate-950 border border-slate-700 rounded-lg p-4 text-sm leading-6 text-slate-200 font-mono focus:outline-none focus:border-cyber-cyan"
-                                placeholder="## Accroche&#10;&#10;::: desc&#10;Description à lire aux joueurs.&#10;:::"></textarea>
-                            <span class="block text-[10px] text-slate-500 font-mono mt-2">Balises d’encadré : ::: desc, mj, dial, rp, event, combat, prep, note — fermer chaque encadré par :::</span>
-                        </label>
-                        <div class="p-4 sm:p-5">
+                        </div>
+                        <div id="scenario-preview-panel" class="p-4 sm:p-5">
                             <p class="text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Aperçu conforme à la charte</p>
                             <nav id="scenario-editor-toc" class="scenario-toc hidden" aria-label="Sommaire de l’aperçu"></nav>
                             <div id="scenario-editor-preview" class="scenario-paper min-h-[32rem] rounded-lg p-5 sm:p-7"></div>
@@ -746,6 +749,7 @@
         let localScenarios = [];
         let selectedScenarioId = null;
         let editingScenarioId = null;
+        let scenarioPreviewVisible = true;
         let characters = [];
         let selectedCharacterId = null;
         let characterFilter = 'all';
@@ -1757,6 +1761,19 @@
             document.getElementById('scenario-editor-preview').innerHTML = renderMarkdownBlocks(markdown);
         }
 
+        function setScenarioPreviewVisible(visible) {
+            scenarioPreviewVisible = visible;
+            document.getElementById('scenario-preview-panel').classList.toggle('hidden', !visible);
+            const columns = document.getElementById('scenario-editor-columns');
+            columns.classList.toggle('xl:grid-cols-2', visible);
+            columns.classList.toggle('xl:grid-cols-1', !visible);
+            const button = document.getElementById('btn-toggle-scenario-preview');
+            button.setAttribute('aria-pressed', String(!visible));
+            button.title = visible ? 'Masquer l’aperçu' : 'Afficher l’aperçu';
+            button.querySelector('span').textContent = visible ? 'Masquer l’aperçu' : 'Afficher l’aperçu';
+            button.querySelector('i').className = visible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        }
+
         function openScenarioEditor(scenario) {
             const form = document.getElementById('scenario-editor');
             editingScenarioId = scenario ? scenario.id : null;
@@ -1900,6 +1917,9 @@
             textarea.setSelectionRange(cursor, cursor);
             select.value = '';
             renderScenarioEditorPreview();
+        });
+        document.getElementById('btn-toggle-scenario-preview').addEventListener('click', () => {
+            setScenarioPreviewVisible(!scenarioPreviewVisible);
         });
 
         document.getElementById('btn-print-scenario').addEventListener('click', () => {

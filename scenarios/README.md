@@ -23,6 +23,8 @@ menu « Insérer un modèle de scène » fournit des modèles Info MJ, descripti
 dialogue, roleplay, test, combat et note. Dans la lecture d'un scénario,
 le bouton **Imprimer** ouvre la boîte d'impression du navigateur ; choisissez
 une imprimante ou « Enregistrer au format PDF ».
+Dans l'éditeur, la barre d'insertion se trouve sous la zone Markdown et le
+bouton **Masquer l’aperçu** permet d'agrandir l'espace d'écriture.
 
 ## Encadrés de la charte
 
