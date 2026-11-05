@@ -196,6 +196,9 @@
                 <button id="btn-view-scenarios" class="px-3 py-1.5 rounded-md border border-slate-700 bg-slate-900 text-slate-300 text-xs font-mono hover:border-cyber-cyan/40 hover:text-cyber-cyan transition flex items-center gap-1.5">
                     <i class="fa-solid fa-book-open"></i><span>Scénarios</span>
                 </button>
+                <button id="btn-view-characters" class="px-3 py-1.5 rounded-md border border-slate-700 bg-slate-900 text-slate-300 text-xs font-mono hover:border-cyber-cyan/40 hover:text-cyber-cyan transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-users"></i><span>Personnages</span>
+                </button>
                 <button id="btn-toggle-secret" class="px-3 py-1.5 rounded-md border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono font-semibold hover:bg-amber-500/20 transition flex items-center gap-1.5" title="Afficher/Masquer les secrets MJ">
                     <i class="fa-solid fa-user-secret"></i>
                     <span id="label-secret">Mode MJ : Activé</span>
@@ -359,6 +362,56 @@
                     <p class="text-xs text-slate-500 mt-2">Les fichiers partagés apparaîtront ici après leur publication sur GitHub Pages.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="characters-view" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+        <div class="mb-6">
+            <p class="text-cyber-cyan font-mono text-[11px] uppercase tracking-[0.2em] mb-1">Dossier de campagne</p>
+            <h2 class="font-tech text-3xl font-bold text-white uppercase tracking-wide">Personnages</h2>
+            <p class="text-sm text-slate-400 mt-2">Fiches des personnages joueurs et personnages non-joueurs tirées du dossier de campagne.</p>
+        </div>
+
+        <div class="mb-5 rounded-lg border border-amber-500/30 bg-amber-950/20 px-4 py-3 text-xs text-amber-200/90 font-mono">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i>
+            Ces fiches sont générées depuis le dossier de référence et contiennent des informations d’intrigue. Le site et ses fichiers publiés sont publics.
+        </div>
+
+        <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)] gap-5 items-start">
+            <aside class="rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden">
+                <div class="p-3 border-b border-cyber-border">
+                    <label class="sr-only" for="character-search">Rechercher un personnage</label>
+                    <input id="character-search" type="search" placeholder="Rechercher un personnage..."
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan">
+                </div>
+                <div class="flex gap-1 p-2 border-b border-cyber-border">
+                    <button type="button" data-character-filter="all" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-cyan-950/40 text-cyan-300 border border-cyan-500/40">Tous</button>
+                    <button type="button" data-character-filter="PJ" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-700">PJ</button>
+                    <button type="button" data-character-filter="PNJ" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-700">PNJ</button>
+                </div>
+                <div id="character-list" class="p-2 space-y-1 max-h-[70vh] overflow-y-auto"></div>
+                <p id="character-empty" class="hidden px-4 py-8 text-center text-xs text-slate-500 font-mono">Aucun personnage trouvé.</p>
+            </aside>
+
+            <article id="character-sheet" class="rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden shadow-xl">
+                <div id="character-welcome" class="p-10 text-center">
+                    <i class="fa-solid fa-address-card text-3xl text-slate-600 mb-3"></i>
+                    <p class="font-tech uppercase tracking-wider text-slate-300">Choisissez un personnage</p>
+                    <p class="text-xs text-slate-500 mt-2">Chaque fiche provient d’un fichier Markdown distinct dans personnages/.</p>
+                </div>
+                <div id="character-details" class="hidden">
+                    <header class="p-5 sm:p-7 border-b border-cyber-border bg-gradient-to-br from-slate-900 to-cyber-card">
+                        <div class="flex items-start gap-4">
+                            <div id="character-avatar" class="w-14 h-14 shrink-0 rounded-xl border border-cyan-500/40 bg-cyan-950/40 text-cyan-300 flex items-center justify-center font-tech text-xl font-bold"></div>
+                            <div class="min-w-0">
+                                <span id="character-kind" class="inline-flex px-2 py-0.5 rounded border text-[10px] font-mono font-bold uppercase tracking-wider"></span>
+                                <h3 id="character-name" class="font-tech text-2xl sm:text-3xl font-bold text-white mt-1 break-words"></h3>
+                            </div>
+                        </div>
+                    </header>
+                    <div id="character-fields" class="p-5 sm:p-7 grid md:grid-cols-2 gap-4"></div>
+                </div>
+            </article>
         </div>
     </section>
 
@@ -580,8 +633,12 @@
         let localScenarios = [];
         let selectedScenarioId = null;
         let editingScenarioId = null;
+        let characters = [];
+        let selectedCharacterId = null;
+        let characterFilter = 'all';
         const SCENARIO_STORAGE_KEY = 'yeast_eaters_scenarios_v1';
         const SCENARIO_INDEX_URL = new URL('scenarios/index.json', window.location.href).toString();
+        const CHARACTER_INDEX_URL = new URL('characters/index.json', window.location.href).toString();
 
         // Fonction d'analyse intelligente des dates libres pour assurer le tri
         function parseCyberDate(dateStr) {
@@ -1339,6 +1396,117 @@
             renderSelectedScenario();
         }
 
+        async function initCharacters() {
+            try {
+                const response = await fetch(`${CHARACTER_INDEX_URL}?t=${Date.now()}`, { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`Chargement des fiches impossible (HTTP ${response.status})`);
+                }
+                const data = await response.json();
+                if (!Array.isArray(data) || data.some(character =>
+                    !character || typeof character.id !== 'string' ||
+                    typeof character.name !== 'string' ||
+                    !['PJ', 'PNJ'].includes(character.kind) ||
+                    !Array.isArray(character.fields)
+                )) {
+                    throw new Error('Le catalogue des personnages a un format invalide.');
+                }
+                characters = data;
+                renderCharacterList();
+            } catch (error) {
+                console.warn('Impossible de charger les fiches de personnages :', error);
+                document.getElementById('character-welcome').innerHTML =
+                    '<i class="fa-solid fa-triangle-exclamation text-3xl text-amber-500 mb-3"></i>' +
+                    '<p class="font-tech uppercase tracking-wider text-slate-300">Fiches indisponibles</p>' +
+                    '<p class="text-xs text-slate-500 mt-2">Vérifiez que le dossier personnages/ a bien été poussé et que le site a été redéployé.</p>';
+            }
+        }
+
+        function renderCharacterList() {
+            const container = document.getElementById('character-list');
+            const query = document.getElementById('character-search').value.trim().toLocaleLowerCase('fr');
+            const visible = characters.filter(character => {
+                if (characterFilter !== 'all' && character.kind !== characterFilter) return false;
+                const searchable = `${character.name} ${character.fields.map(field =>
+                    `${field.label} ${field.content}`
+                ).join(' ')}`.toLocaleLowerCase('fr');
+                return !query || searchable.includes(query);
+            });
+            if (selectedCharacterId && !visible.some(character => character.id === selectedCharacterId)) {
+                selectedCharacterId = null;
+                renderCharacterSheet();
+            }
+            container.replaceChildren();
+
+            visible.forEach(character => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `w-full text-left rounded-lg px-3 py-3 transition border ${
+                    selectedCharacterId === character.id
+                        ? 'bg-cyan-950/40 border-cyan-500/40'
+                        : 'border-transparent hover:bg-slate-900 hover:border-slate-700'
+                }`;
+                const name = document.createElement('span');
+                name.className = 'block text-sm text-slate-200 font-semibold';
+                name.textContent = character.name;
+                const kind = document.createElement('span');
+                kind.className = `mt-1 inline-flex px-1.5 py-0.5 rounded border text-[9px] font-mono ${
+                    character.kind === 'PJ'
+                        ? 'border-cyan-500/30 text-cyan-300'
+                        : 'border-amber-500/30 text-amber-300'
+                }`;
+                kind.textContent = character.kind === 'PJ' ? 'PERSONNAGE JOUEUR' : 'PERSONNAGE NON-JOUEUR';
+                button.append(name, kind);
+                button.addEventListener('click', () => {
+                    selectedCharacterId = character.id;
+                    renderCharacterList();
+                    renderCharacterSheet();
+                });
+                container.appendChild(button);
+            });
+            document.getElementById('character-empty').classList.toggle('hidden', visible.length > 0);
+        }
+
+        function renderCharacterSheet() {
+            const character = characters.find(item => item.id === selectedCharacterId);
+            const welcome = document.getElementById('character-welcome');
+            const details = document.getElementById('character-details');
+            welcome.classList.toggle('hidden', Boolean(character));
+            details.classList.toggle('hidden', !character);
+            if (!character) return;
+
+            const kind = document.getElementById('character-kind');
+            kind.textContent = character.kind === 'PJ' ? 'Personnage joueur' : 'Personnage non-joueur';
+            kind.className = `inline-flex px-2 py-0.5 rounded border text-[10px] font-mono font-bold uppercase tracking-wider ${
+                character.kind === 'PJ'
+                    ? 'border-cyan-500/40 text-cyan-300 bg-cyan-950/30'
+                    : 'border-amber-500/40 text-amber-300 bg-amber-950/30'
+            }`;
+            document.getElementById('character-name').textContent = character.name;
+            document.getElementById('character-avatar').textContent = character.name
+                .replace(/\s*\(.*$/, '')
+                .split(/\s+/)
+                .slice(0, 2)
+                .map(part => part[0] || '')
+                .join('')
+                .toLocaleUpperCase('fr');
+
+            const fields = document.getElementById('character-fields');
+            fields.replaceChildren();
+            character.fields.forEach(field => {
+                const section = document.createElement('section');
+                section.className = 'rounded-lg border border-cyber-border bg-slate-900/60 p-4';
+                const heading = document.createElement('h4');
+                heading.className = 'font-tech text-sm uppercase tracking-wide text-cyan-300 mb-2';
+                heading.textContent = field.label;
+                const body = document.createElement('div');
+                body.className = 'text-sm leading-6 text-slate-300';
+                body.innerHTML = renderMarkdownBlocks(field.content);
+                section.append(heading, body);
+                fields.appendChild(section);
+            });
+        }
+
         function persistScenario(scenario) {
             const updated = localScenarios.filter(item => item.id !== scenario.id);
             updated.push(scenario);
@@ -1482,29 +1650,52 @@
         }
 
         function setActiveView(view) {
+            const timeline = view === 'timeline';
             const scenarios = view === 'scenarios';
-            document.getElementById('timeline-filters').classList.toggle('hidden', scenarios);
-            document.getElementById('timeline-view').classList.toggle('hidden', scenarios);
+            const characterView = view === 'characters';
+            document.getElementById('timeline-filters').classList.toggle('hidden', !timeline);
+            document.getElementById('timeline-view').classList.toggle('hidden', !timeline);
             document.getElementById('scenarios-view').classList.toggle('hidden', !scenarios);
-            document.getElementById('btn-add-event').classList.toggle('hidden', scenarios);
-            document.getElementById('btn-data-menu').classList.toggle('hidden', scenarios);
+            document.getElementById('characters-view').classList.toggle('hidden', !characterView);
+            document.getElementById('btn-add-event').classList.toggle('hidden', !timeline);
+            document.getElementById('btn-data-menu').classList.toggle('hidden', !timeline);
+            document.getElementById('btn-toggle-secret').classList.toggle('hidden', characterView);
             document.getElementById('data-dropdown').classList.add('hidden');
-            document.getElementById('btn-view-timeline').classList.toggle('border-cyber-cyan/40', !scenarios);
-            document.getElementById('btn-view-timeline').classList.toggle('bg-cyan-950/40', !scenarios);
-            document.getElementById('btn-view-timeline').classList.toggle('text-cyber-cyan', !scenarios);
-            document.getElementById('btn-view-timeline').classList.toggle('border-slate-700', scenarios);
-            document.getElementById('btn-view-timeline').classList.toggle('bg-slate-900', scenarios);
-            document.getElementById('btn-view-timeline').classList.toggle('text-slate-300', scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('border-cyber-cyan/40', scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('bg-cyan-950/40', scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('text-cyber-cyan', scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('border-slate-700', !scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('bg-slate-900', !scenarios);
-            document.getElementById('btn-view-scenarios').classList.toggle('text-slate-300', !scenarios);
+            [
+                ['timeline', 'btn-view-timeline'],
+                ['scenarios', 'btn-view-scenarios'],
+                ['characters', 'btn-view-characters']
+            ].forEach(([name, buttonId]) => {
+                const active = view === name;
+                const button = document.getElementById(buttonId);
+                button.classList.toggle('border-cyber-cyan/40', active);
+                button.classList.toggle('bg-cyan-950/40', active);
+                button.classList.toggle('text-cyber-cyan', active);
+                button.classList.toggle('border-slate-700', !active);
+                button.classList.toggle('bg-slate-900', !active);
+                button.classList.toggle('text-slate-300', !active);
+            });
         }
 
         document.getElementById('btn-view-timeline').addEventListener('click', () => setActiveView('timeline'));
         document.getElementById('btn-view-scenarios').addEventListener('click', () => setActiveView('scenarios'));
+        document.getElementById('btn-view-characters').addEventListener('click', () => setActiveView('characters'));
+        document.getElementById('character-search').addEventListener('input', renderCharacterList);
+        document.querySelectorAll('.character-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                characterFilter = button.getAttribute('data-character-filter');
+                document.querySelectorAll('.character-filter').forEach(filterButton => {
+                    const active = filterButton === button;
+                    filterButton.classList.toggle('bg-cyan-950/40', active);
+                    filterButton.classList.toggle('text-cyan-300', active);
+                    filterButton.classList.toggle('border-cyan-500/40', active);
+                    filterButton.classList.toggle('bg-slate-900', !active);
+                    filterButton.classList.toggle('text-slate-400', !active);
+                    filterButton.classList.toggle('border-slate-700', !active);
+                });
+                renderCharacterList();
+            });
+        });
         document.getElementById('btn-new-scenario').addEventListener('click', () => {
             if (!document.getElementById('scenario-editor').classList.contains('hidden')) {
                 showToast('Enregistrez ou annulez le brouillon ouvert avant d’en créer un autre.', 'info');
@@ -1592,6 +1783,7 @@
         window.onload = function() {
             initData();
             initScenarios();
+            initCharacters();
         };
     </script>
 </body>

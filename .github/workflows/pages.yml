@@ -8,6 +8,7 @@ on:
       - main.html
       - json_save/**
       - scenarios/**
+      - personnages/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -112,9 +113,72 @@ jobs:
               json.dumps(published_scenarios, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
           )
+
+          characters = []
+          character_files = sorted(Path("personnages").glob("*.md")) if Path("personnages").exists() else []
+          for character_file in character_files:
+              if character_file.name.lower() == "readme.md":
+                  continue
+
+              content = character_file.read_text(encoding="utf-8")
+              front_matter = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", content, re.DOTALL)
+              if not front_matter:
+                  raise SystemExit(
+                      f"{character_file} doit commencer par un en-tête Markdown "
+                      "(name et kind) encadré par ---"
+                  )
+
+              metadata = {}
+              for line in front_matter.group(1).splitlines():
+                  if ":" not in line:
+                      continue
+                  key, value = line.split(":", 1)
+                  value = value.strip()
+                  try:
+                      metadata[key.strip()] = json.loads(value)
+                  except json.JSONDecodeError:
+                      metadata[key.strip()] = value.strip("'\"")
+
+              name = metadata.get("name")
+              kind = metadata.get("kind")
+              if not isinstance(name, str) or not name.strip():
+                  raise SystemExit(f"{character_file} doit définir un nom non vide")
+              if kind not in ("PJ", "PNJ"):
+                  raise SystemExit(f"{character_file} doit définir kind: PJ ou kind: PNJ")
+
+              body = content[front_matter.end():].strip()
+              fields = []
+              headings = list(re.finditer(r"^##\s+(.+?)\s*$", body, re.MULTILINE))
+              for index, heading in enumerate(headings):
+                  field_end = headings[index + 1].start() if index + 1 < len(headings) else len(body)
+                  field_content = body[heading.end():field_end].strip()
+                  if field_content:
+                      fields.append({"label": heading.group(1).strip(), "content": field_content})
+              if not fields and body:
+                  fields.append({"label": "Informations", "content": body})
+              if not fields:
+                  raise SystemExit(f"{character_file} ne contient aucune rubrique de personnage")
+              characters.append({
+                  "id": character_file.stem,
+                  "name": name.strip(),
+                  "kind": kind,
+                  "fields": fields,
+              })
+
+          if not characters:
+              raise SystemExit("Aucun fichier personnage .md trouvé dans personnages/")
+          characters_output = site / "characters"
+          characters_output.mkdir()
+          (characters_output / "index.json").write_text(
+              json.dumps(characters, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          for character_file in character_files:
+              if character_file.name.lower() != "readme.md":
+                  shutil.copyfile(character_file, characters_output / character_file.name)
           print(
               f"Publication de {latest} ({len(data)} événements) et "
-              f"{len(published_scenarios)} scénario(s)"
+              f"{len(published_scenarios)} scénario(s) et {len(characters)} personnage(s)"
           )
           PY
 
