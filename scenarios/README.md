@@ -18,6 +18,11 @@ secret: false
 Le corps prend en charge les titres `##`, listes `-`, tableaux, citations,
 liens HTTP(S), **gras**, *italique*, `code` et
 `***[éléments à arbitrer par le MJ]***` pour les placeholders rouges.
+Les titres `##` à `####` alimentent le sommaire cliquable. Dans l'éditeur, le
+menu « Insérer un modèle de scène » fournit des modèles Info MJ, description,
+dialogue, roleplay, test, combat et note. Dans la lecture d'un scénario,
+le bouton **Imprimer** ouvre la boîte d'impression du navigateur ; choisissez
+une imprimante ou « Enregistrer au format PDF ».
 
 ## Encadrés de la charte
 

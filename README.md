@@ -24,7 +24,9 @@ Les scénarios se rédigent dans l'onglet **Scénarios**. Les brouillons et les
 modifications restent dans le stockage local du navigateur ; pour les partager,
 télécharger le fichier `.md` et l'ajouter au dossier `scenarios/`, puis pousser
 le changement sur `main`. Le format et les encadrés disponibles sont décrits
-dans [`scenarios/README.md`](./scenarios/README.md).
+dans [`scenarios/README.md`](./scenarios/README.md). L'éditeur propose un
+sommaire automatique, des modèles de scène et une impression mise en page pour
+la table de jeu.
 
 L'onglet **Personnages** affiche les fiches PJ/PNJ et permet de les rechercher
 ou de filtrer par type. Chaque fiche est un fichier indépendant dans

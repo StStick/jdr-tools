@@ -84,6 +84,8 @@
             font-family: Calibri, Arial, sans-serif;
             font-size: 15px;
             line-height: 1.65;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
         }
 
         .scenario-paper h1,
@@ -169,6 +171,94 @@
         .scenario-speaker-raphael { color: #9c6b2e; }
         .scenario-speaker-miranda { color: #3d6fa8; }
         .scenario-speaker-inspector { color: #6b3f3f; }
+
+        .scenario-toc {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #008080;
+            margin: 0 0 1.5rem;
+            padding: 1rem 1.25rem;
+        }
+        .scenario-toc-title {
+            color: #1e293b;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem;
+        }
+        .scenario-toc-list {
+            display: grid;
+            gap: 0.2rem;
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .scenario-toc-list a {
+            color: #17668a;
+            display: block;
+            text-decoration: none;
+        }
+        .scenario-toc-list a:hover { text-decoration: underline; }
+        .scenario-toc-list .toc-level-3 { padding-left: 1rem; }
+        .scenario-paper [id] { scroll-margin-top: 1rem; }
+
+        @media print {
+            @page { margin: 2cm; }
+            body.scenario-print {
+                background: #ffffff !important;
+                color: #222222 !important;
+                display: block !important;
+                min-height: 0 !important;
+            }
+            body.scenario-print * { visibility: hidden !important; }
+            body.scenario-print #scenario-reader,
+            body.scenario-print #scenario-reader * { visibility: visible !important; }
+            body.scenario-print #scenario-reader {
+                border: 0 !important;
+                box-shadow: none !important;
+                display: block !important;
+                left: 0;
+                max-width: none !important;
+                overflow: visible !important;
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+            body.scenario-print #scenario-reader > div:first-child {
+                border-bottom: 2px solid #1e293b !important;
+                padding: 0 0 0.5cm !important;
+            }
+            body.scenario-print #scenario-reader-date {
+                color: #008080 !important;
+                font: italic 12pt Calibri, Arial, sans-serif !important;
+            }
+            body.scenario-print #scenario-reader-title {
+                color: #111827 !important;
+                font: bold 22pt Arial, sans-serif !important;
+            }
+            body.scenario-print #scenario-reader-origin,
+            body.scenario-print #btn-edit-scenario,
+            body.scenario-print #btn-print-scenario { display: none !important; }
+            body.scenario-print #scenario-reader-content {
+                background: #ffffff !important;
+                color: #222222 !important;
+                font: 11pt/1.15 Calibri, Arial, sans-serif !important;
+                max-width: none !important;
+                padding: 0.5cm 0 0 !important;
+            }
+            body.scenario-print .scenario-callout,
+            body.scenario-print .scenario-toc,
+            body.scenario-print table,
+            body.scenario-print blockquote,
+            body.scenario-print tr { break-inside: avoid; }
+            body.scenario-print thead { display: table-header-group; }
+            body.scenario-print h1,
+            body.scenario-print h2,
+            body.scenario-print h3,
+            body.scenario-print h4 { break-after: avoid; }
+            body.scenario-print a { color: inherit !important; text-decoration: none !important; }
+            body.scenario-print .scenario-toc { display: none !important; }
+        }
     </style>
 </head>
 <body class="text-slate-200 font-sans min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
@@ -304,10 +394,16 @@
                             <h3 id="scenario-reader-title" class="font-tech text-2xl font-bold text-white mt-1 break-words"></h3>
                             <p id="scenario-reader-origin" class="text-[11px] text-slate-500 font-mono mt-1"></p>
                         </div>
-                        <button id="btn-edit-scenario" class="px-3 py-2 rounded-md border border-cyber-cyan/40 text-cyber-cyan text-xs font-mono hover:bg-cyan-950/40 transition flex items-center gap-2">
-                            <i class="fa-solid fa-pen"></i>Modifier
-                        </button>
+                        <div class="flex gap-2">
+                            <button id="btn-print-scenario" class="px-3 py-2 rounded-md border border-slate-600 text-slate-300 text-xs font-mono hover:border-slate-400 hover:text-white transition flex items-center gap-2" title="Imprimer ou enregistrer en PDF">
+                                <i class="fa-solid fa-print"></i>Imprimer
+                            </button>
+                            <button id="btn-edit-scenario" class="px-3 py-2 rounded-md border border-cyber-cyan/40 text-cyber-cyan text-xs font-mono hover:bg-cyan-950/40 transition flex items-center gap-2">
+                                <i class="fa-solid fa-pen"></i>Modifier
+                            </button>
+                        </div>
                     </div>
+                    <nav id="scenario-reader-toc" class="scenario-toc mx-5 mt-5 sm:mx-10" aria-label="Sommaire du scénario"></nav>
                     <div id="scenario-reader-content" class="scenario-paper p-5 sm:p-10"></div>
                 </article>
 
@@ -335,6 +431,22 @@
                     <div class="grid xl:grid-cols-2 gap-0">
                         <label class="p-4 sm:p-5 border-b xl:border-b-0 xl:border-r border-cyber-border">
                             <span class="block text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Texte Markdown</span>
+                            <div class="flex gap-2 mb-2">
+                                <label class="sr-only" for="scenario-template">Modèle de scène</label>
+                                <select id="scenario-template" class="min-w-0 flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-xs font-mono text-slate-300 focus:outline-none focus:border-cyber-cyan">
+                                    <option value="">Insérer un modèle de scène...</option>
+                                    <option value="scene">Info MJ</option>
+                                    <option value="description">Description à lire</option>
+                                    <option value="dialogue">Dialogue PNJ</option>
+                                    <option value="rp">Scène de roleplay</option>
+                                    <option value="event">Événement / test</option>
+                                    <option value="combat">Combat</option>
+                                    <option value="transition">Note</option>
+                                </select>
+                                <button type="button" id="btn-insert-template" class="shrink-0 px-3 py-1.5 rounded border border-cyan-500/40 text-cyan-300 text-xs font-mono hover:bg-cyan-950/40">
+                                    Insérer
+                                </button>
+                            </div>
                             <textarea id="scenario-markdown" required rows="24" spellcheck="true"
                                 class="w-full min-h-[32rem] resize-y bg-slate-950 border border-slate-700 rounded-lg p-4 text-sm leading-6 text-slate-200 font-mono focus:outline-none focus:border-cyber-cyan"
                                 placeholder="## Accroche&#10;&#10;::: desc&#10;Description à lire aux joueurs.&#10;:::"></textarea>
@@ -342,6 +454,7 @@
                         </label>
                         <div class="p-4 sm:p-5">
                             <p class="text-[11px] text-cyan-300 font-mono uppercase tracking-wider mb-2">Aperçu conforme à la charte</p>
+                            <nav id="scenario-editor-toc" class="scenario-toc hidden" aria-label="Sommaire de l’aperçu"></nav>
                             <div id="scenario-editor-preview" class="scenario-paper min-h-[32rem] rounded-lg p-5 sm:p-7"></div>
                         </div>
                     </div>
@@ -1214,7 +1327,14 @@
             return text;
         }
 
-        function renderMarkdownBlocks(markdown) {
+        function headingAnchorId(text, counts) {
+            const base = scenarioSlug(text);
+            const count = counts[base] || 0;
+            counts[base] = count + 1;
+            return count ? `${base}-${count + 1}` : base;
+        }
+
+        function renderMarkdownBlocks(markdown, headingCounts = {}) {
             const lines = String(markdown || '').split(/\r?\n/);
             const output = [];
             let paragraph = [];
@@ -1249,7 +1369,7 @@
                         output.push(
                             `<section class="scenario-callout" data-type="${type}">` +
                             `<div class="scenario-callout-label">${CALL_OUTS[type]}${subtitle}</div>` +
-                            `<div class="scenario-callout-content">${renderMarkdownBlocks(lines.slice(index + 1, end).join('\n'))}</div>` +
+                            `<div class="scenario-callout-content">${renderMarkdownBlocks(lines.slice(index + 1, end).join('\n'), headingCounts)}</div>` +
                             '</section>'
                         );
                         index = end;
@@ -1294,7 +1414,8 @@
                     flushParagraph();
                     closeList();
                     const level = heading[1].length;
-                    output.push(`<h${level}>${renderInlineMarkdown(heading[2])}</h${level}>`);
+                    const id = headingAnchorId(heading[2], headingCounts);
+                    output.push(`<h${level} id="${id}">${renderInlineMarkdown(heading[2])}</h${level}>`);
                     continue;
                 }
 
@@ -1327,6 +1448,39 @@
             flushParagraph();
             closeList();
             return output.join('\n');
+        }
+
+        function renderScenarioToc(markdown, container) {
+            const lines = String(markdown || '').split(/\r?\n/);
+            const headings = [];
+            const counts = {};
+            for (const line of lines) {
+                const match = line.match(/^(#{1,4})\s+(.+)$/);
+                if (!match) continue;
+                const level = match[1].length;
+                const id = headingAnchorId(match[2], counts);
+                if (level >= 2) headings.push({ level, title: match[2].trim(), id });
+            }
+
+            container.replaceChildren();
+            container.classList.toggle('hidden', headings.length === 0);
+            if (!headings.length) return;
+
+            const title = document.createElement('p');
+            title.className = 'scenario-toc-title';
+            title.textContent = 'Sommaire';
+            const list = document.createElement('ul');
+            list.className = 'scenario-toc-list';
+            headings.forEach(heading => {
+                const item = document.createElement('li');
+                if (heading.level === 3) item.className = 'toc-level-3';
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.textContent = heading.title.replace(/\*\*/g, '').replace(/\*/g, '').replace(/`/g, '');
+                item.appendChild(link);
+                list.appendChild(item);
+            });
+            container.append(title, list);
         }
 
         function scenarioSlug(value) {
@@ -1593,11 +1747,13 @@
                 : scenario.isPublished
                     ? 'Modification locale — le fichier publié ne change qu’après export et push'
                     : 'Brouillon enregistré dans ce navigateur';
+            renderScenarioToc(scenario.markdown, document.getElementById('scenario-reader-toc'));
             document.getElementById('scenario-reader-content').innerHTML = renderMarkdownBlocks(scenario.markdown);
         }
 
         function renderScenarioEditorPreview() {
             const markdown = document.getElementById('scenario-markdown').value;
+            renderScenarioToc(markdown, document.getElementById('scenario-editor-toc'));
             document.getElementById('scenario-editor-preview').innerHTML = renderMarkdownBlocks(markdown);
         }
 
@@ -1610,7 +1766,7 @@
             document.getElementById('scenario-secret').checked = scenario ? scenario.isSecret : false;
             document.getElementById('scenario-markdown').value = scenario
                 ? scenario.markdown
-                : '## Accroche\n\n## Déroulement\n\n::: desc\nTexte immersif à lire aux joueurs.\n:::\n\n::: mj\nInformations et secrets réservés au MJ.\n:::\n\n::: note\nConséquences et éléments à conserver pour la campagne.\n:::\n\n***[Élément à préciser par le MJ]***';
+                : '## Accroche\n\n::: desc\nTexte immersif à lire aux joueurs.\n:::\n\n## Situation initiale\n\n::: prep\nInformations et questions à préparer avant la séance.\n:::\n\n## Déroulement\n\n### Scène 1 — [Titre]\n\n::: rp\nObjectif, situation et possibilités d’interaction.\n:::\n\n::: mj\nInformations et secrets réservés au MJ.\n:::\n\n## Conséquences\n\n::: note\nIndices et conséquences à conserver pour la campagne.\n:::\n\n***[Élément à préciser par le MJ]***';
             document.getElementById('scenario-reader').classList.add('hidden');
             document.getElementById('scenario-welcome').classList.add('hidden');
             form.classList.remove('hidden');
@@ -1713,6 +1869,44 @@
         });
         document.getElementById('scenario-markdown').addEventListener('input', renderScenarioEditorPreview);
         document.getElementById('scenario-search').addEventListener('input', renderScenarioList);
+
+        const SCENE_TEMPLATES = {
+            scene: '\n\n### Scène — [Titre]\n\n::: desc\nDescription d’ouverture à lire aux joueurs.\n:::\n\n::: rp\nObjectif de la scène, situation présente et questions ouvertes aux joueurs.\n:::\n\n::: mj\nIntention des PNJ, informations cachées et réactions possibles.\n:::\n',
+            description: '\n\n::: desc\nDécrivez les lieux, les sons, les odeurs et les détails que les personnages remarquent immédiatement.\n:::\n',
+            dialogue: '\n\n::: dial [Nom du PNJ]\n**[Nom du PNJ] :** « *Réplique du personnage, son ton et ses intentions.* »\n:::\n',
+            rp: '\n\n::: rp [Nom de la scène]\n**Objectif :** Ce que chaque protagoniste cherche à obtenir.\n\n**Approche :** Questions, dilemmes ou options à proposer aux joueurs.\n\n**Issues possibles :** Conséquences des choix, sans imposer une solution unique.\n:::\n',
+            event: '\n\n::: event [Nom du test ou de l’événement]\n**Déclencheur :** [Condition qui lance l’événement]\n\n**Test :** [Compétence] — DD [Valeur]\n\n**Réussite :** [Information ou avantage obtenu]\n\n**Échec :** [Conséquence ou complication]\n:::\n',
+            combat: '\n\n::: combat [Nom de la rencontre]\n**Adversaires :** [Effectif et profils]\n\n**Terrain :** [Couvertures, obstacles, dangers]\n\n**Renforts :** [Arrivée et conditions]\n\n**Fuite / reddition :** [Déclencheurs et conséquences]\n:::\n',
+            transition: '\n\n::: note [Indice ou transition]\n**Indice :** [Ce que les personnages peuvent découvrir]\n\n**Conséquence :** [Lien avec la campagne ou la prochaine scène]\n:::\n'
+        };
+
+        document.getElementById('btn-insert-template').addEventListener('click', () => {
+            const select = document.getElementById('scenario-template');
+            const template = SCENE_TEMPLATES[select.value];
+            if (!template) {
+                showToast('Choisissez un modèle de scène à insérer.', 'info');
+                return;
+            }
+            const textarea = document.getElementById('scenario-markdown');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const before = textarea.value.slice(0, start);
+            const after = textarea.value.slice(end);
+            const prefix = before && !before.endsWith('\n') ? '\n' : '';
+            const insertion = `${prefix}${template.trimStart()}`;
+            textarea.value = `${before}${insertion}${after}`;
+            const cursor = before.length + insertion.length;
+            textarea.focus();
+            textarea.setSelectionRange(cursor, cursor);
+            select.value = '';
+            renderScenarioEditorPreview();
+        });
+
+        document.getElementById('btn-print-scenario').addEventListener('click', () => {
+            document.body.classList.add('scenario-print');
+            window.print();
+        });
+        window.addEventListener('afterprint', () => document.body.classList.remove('scenario-print'));
 
         document.getElementById('scenario-editor').addEventListener('submit', event => {
             event.preventDefault();
