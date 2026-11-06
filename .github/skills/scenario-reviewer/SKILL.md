@@ -18,6 +18,7 @@ ou être le fichier actif.
   conjugaison et la ponctuation manifestement fautive. Ne pas reformuler,
   réorganiser, enrichir, supprimer ou modifier le ton, les intentions, les
   mécaniques et les faits. Préserver la structure Markdown et les métadonnées.
+  Attribuerune couleurs a caque pnj qui apparait dans les dialogues et les descriptions.
   Signaler séparément toute phrase ambiguë qu’une correction stricte ne permet
   pas de réparer sans reformulation.
 - **Revue** : ne pas modifier le scénario. Évaluer sa jouabilité, sa structure,
