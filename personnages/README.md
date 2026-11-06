@@ -31,10 +31,13 @@ Chaque fiche doit contenir exactement les trois rubriques `Personnalité`,
 `Histoire` et `Objectif`, dans cet ordre. Leur contenu peut utiliser le
 Markdown (gras, italique, listes, citations).
 
-Dans l'onglet **Personnages**, le bouton **Créer un personnage** télécharge un
-fichier Markdown à partir de ce modèle. GitHub Pages ne peut pas écrire dans le
-dépôt : ajoutez le fichier téléchargé dans ce dossier puis poussez le changement
-sur `main` pour le publier.
+Dans l'onglet **Personnages**, le bouton **Créer un personnage** ouvre un
+questionnaire guidé avec aperçu et vérification des champs obligatoires. Le
+brouillon est sauvegardé automatiquement dans le navigateur et peut être repris
+sur ce même appareil ; **Effacer le brouillon** le supprime. Quand la fiche est
+complète, téléchargez le fichier Markdown. GitHub Pages ne peut pas écrire dans
+le dépôt : ajoutez le fichier téléchargé dans ce dossier puis poussez le
+changement sur `main` pour le publier.
 
 Pour retirer un personnage du site, supprimez simplement son fichier `.md` de ce
 dossier. Poussez les changements sur `main` pour publier les ajouts ou retraits.

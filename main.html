@@ -516,9 +516,40 @@
                         <datalist id="character-categories"></datalist>
                     </div>
                 </div>
+                <div class="grid lg:grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="new-character-personality" class="block text-xs font-semibold text-cyan-300 mb-1">Personnalité</label>
+                            <p class="text-[11px] text-slate-500 mb-2">Comment se comporte-t-il ? Que veut-il, que cache-t-il, comment réagit-il sous pression ?</p>
+                            <textarea id="new-character-personality" rows="4" placeholder="Décrivez son tempérament, ses valeurs, ses contradictions et sa manière de s'exprimer." class="character-draft-field w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan resize-y"></textarea>
+                        </div>
+                        <div>
+                            <label for="new-character-history" class="block text-xs font-semibold text-cyan-300 mb-1">Histoire</label>
+                            <p class="text-[11px] text-slate-500 mb-2">Quels événements l'ont façonné ? Quelle est sa situation actuelle ?</p>
+                            <textarea id="new-character-history" rows="5" placeholder="Racontez ses origines, les événements marquants et sa situation actuelle." class="character-draft-field w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan resize-y"></textarea>
+                        </div>
+                        <div>
+                            <label for="new-character-objective" class="block text-xs font-semibold text-cyan-300 mb-1">Objectif</label>
+                            <p class="text-[11px] text-slate-500 mb-2">Que cherche-t-il à accomplir ? Qu'est-ce qui pourrait l'en empêcher ?</p>
+                            <textarea id="new-character-objective" rows="3" placeholder="Indiquez son objectif, sa motivation ou ce qu'il espère obtenir." class="character-draft-field w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan resize-y"></textarea>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <section class="rounded-lg border border-cyber-border bg-slate-950/60 p-4">
+                            <h3 class="font-tech uppercase tracking-wide text-sm text-white">Vérification avant téléchargement</h3>
+                            <ul id="character-validation-list" class="mt-3 space-y-2 text-xs" aria-live="polite"></ul>
+                            <p id="character-draft-status" class="text-[11px] text-slate-500 mt-3" aria-live="polite">Brouillon conservé dans ce navigateur.</p>
+                        </section>
+                        <section class="rounded-lg border border-cyber-border bg-slate-950/60 p-4">
+                            <h3 class="font-tech uppercase tracking-wide text-sm text-white">Aperçu de la fiche</h3>
+                            <div id="character-create-preview" class="mt-3 space-y-4 text-sm text-slate-300"></div>
+                        </section>
+                    </div>
+                </div>
                 <div class="flex flex-wrap justify-end gap-2">
-                    <button type="button" id="btn-cancel-character" class="px-3 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm">Annuler</button>
-                    <button type="submit" class="px-3 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-600 text-sm font-semibold">Télécharger le modèle Markdown</button>
+                    <button type="button" id="btn-clear-character-draft" class="px-3 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm">Effacer le brouillon</button>
+                    <button type="button" id="btn-cancel-character" class="px-3 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm">Fermer</button>
+                    <button type="submit" id="btn-download-character" class="px-3 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-600 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed">Télécharger le Markdown</button>
                 </div>
                 <p class="text-xs text-slate-500">Le site étant statique, le fichier téléchargé devra être ajouté dans <code>personnages/</code>, puis poussé sur GitHub pour être publié.</p>
             </form>
@@ -792,6 +823,7 @@
         let selectedCharacterId = null;
         let characterFilter = 'all';
         let characterCategoryFilter = 'all';
+        const CHARACTER_DRAFT_STORAGE_KEY = 'yeast_eaters_character_draft_v1';
         const SCENARIO_STORAGE_KEY = 'yeast_eaters_scenarios_v1';
         const SCENARIO_INDEX_URL = new URL('scenarios/index.json', window.location.href).toString();
         const CHARACTER_INDEX_URL = new URL('characters/index.json', window.location.href).toString();
@@ -1611,6 +1643,7 @@
                 }
                 characters = data;
                 renderCharacterCategoryOptions();
+                updateCharacterCreationPreview();
                 renderCharacterList();
             } catch (error) {
                 console.warn('Impossible de charger les fiches de personnages :', error);
@@ -1633,6 +1666,112 @@
 
             const datalist = document.getElementById('character-categories');
             datalist.replaceChildren(...categories.map(category => new Option(category, category)));
+        }
+
+        function characterDraftValues() {
+            return {
+                name: document.getElementById('new-character-name').value,
+                kind: document.getElementById('new-character-kind').value,
+                category: document.getElementById('new-character-category').value,
+                personality: document.getElementById('new-character-personality').value,
+                history: document.getElementById('new-character-history').value,
+                objective: document.getElementById('new-character-objective').value
+            };
+        }
+
+        function updateCharacterCreationPreview() {
+            const draft = characterDraftValues();
+            const slug = draft.name.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            const checks = [
+                { label: 'Nom renseigné', valid: Boolean(draft.name.trim()) },
+                { label: 'Catégorie renseignée', valid: Boolean(draft.category.trim()) },
+                { label: 'Personnalité renseignée', valid: Boolean(draft.personality.trim()) },
+                { label: 'Histoire renseignée', valid: Boolean(draft.history.trim()) },
+                { label: 'Objectif renseigné', valid: Boolean(draft.objective.trim()) },
+                {
+                    label: 'Nom de fichier disponible',
+                    valid: Boolean(slug) && !characters.some(character => character.id.toLowerCase() === slug)
+                }
+            ];
+            const validation = document.getElementById('character-validation-list');
+            validation.replaceChildren(...checks.map(check => {
+                const item = document.createElement('li');
+                item.className = check.valid ? 'text-emerald-300' : 'text-amber-300';
+                item.textContent = `${check.valid ? '✓' : '○'} ${check.label}`;
+                return item;
+            }));
+            document.getElementById('btn-download-character').disabled = checks.some(check => !check.valid);
+
+            const preview = document.getElementById('character-create-preview');
+            preview.replaceChildren();
+            const heading = document.createElement('div');
+            const title = document.createElement('h4');
+            title.className = 'font-tech text-lg font-bold text-white';
+            title.textContent = draft.name.trim() || 'Nom du personnage';
+            const metadata = document.createElement('p');
+            metadata.className = 'text-[11px] text-slate-400 mt-1';
+            metadata.textContent = `${draft.kind === 'PJ' ? 'Personnage joueur' : 'Personnage non-joueur'} · ${draft.category.trim() || 'Catégorie à définir'}`;
+            heading.append(title, metadata);
+            preview.appendChild(heading);
+
+            [
+                ['Personnalité', draft.personality],
+                ['Histoire', draft.history],
+                ['Objectif', draft.objective]
+            ].forEach(([label, content]) => {
+                const section = document.createElement('section');
+                section.className = 'border-t border-slate-800 pt-3';
+                const sectionTitle = document.createElement('h4');
+                sectionTitle.className = 'font-tech text-xs uppercase tracking-wide text-cyan-300 mb-1';
+                sectionTitle.textContent = label;
+                const body = document.createElement('div');
+                body.className = 'text-sm leading-6 text-slate-300';
+                body.innerHTML = content.trim()
+                    ? renderMarkdownBlocks(content)
+                    : '<p class="italic text-slate-500">À compléter…</p>';
+                section.append(sectionTitle, body);
+                preview.appendChild(section);
+            });
+        }
+
+        function saveCharacterDraft() {
+            try {
+                localStorage.setItem(CHARACTER_DRAFT_STORAGE_KEY, JSON.stringify(characterDraftValues()));
+                document.getElementById('character-draft-status').textContent =
+                    `Brouillon sauvegardé automatiquement à ${new Date().toLocaleTimeString('fr')}.`;
+            } catch (error) {
+                console.error('Impossible de sauvegarder le brouillon du personnage :', error);
+                document.getElementById('character-draft-status').textContent =
+                    'Sauvegarde automatique impossible. Vérifiez le stockage du navigateur.';
+            }
+        }
+
+        function restoreCharacterDraft() {
+            try {
+                const stored = localStorage.getItem(CHARACTER_DRAFT_STORAGE_KEY);
+                if (!stored) {
+                    updateCharacterCreationPreview();
+                    return;
+                }
+                const draft = JSON.parse(stored);
+                if (!draft || typeof draft !== 'object' || Array.isArray(draft)) {
+                    throw new Error('Le brouillon sauvegardé a un format invalide.');
+                }
+                document.getElementById('new-character-name').value = typeof draft.name === 'string' ? draft.name : '';
+                document.getElementById('new-character-kind').value = draft.kind === 'PJ' ? 'PJ' : 'PNJ';
+                document.getElementById('new-character-category').value = typeof draft.category === 'string' ? draft.category : '';
+                document.getElementById('new-character-personality').value = typeof draft.personality === 'string' ? draft.personality : '';
+                document.getElementById('new-character-history').value = typeof draft.history === 'string' ? draft.history : '';
+                document.getElementById('new-character-objective').value = typeof draft.objective === 'string' ? draft.objective : '';
+                document.getElementById('character-draft-status').textContent = 'Brouillon restauré depuis ce navigateur.';
+                updateCharacterCreationPreview();
+            } catch (error) {
+                console.error('Impossible de restaurer le brouillon du personnage :', error);
+                document.getElementById('character-draft-status').textContent =
+                    'Le brouillon n’a pas pu être restauré. Vous pouvez l’effacer et recommencer.';
+                showToast('Lecture du brouillon du personnage impossible.', 'danger');
+            }
         }
 
         function renderCharacterList() {
@@ -1920,21 +2059,45 @@
         });
         document.getElementById('btn-new-character').addEventListener('click', () => {
             document.getElementById('character-create-form').classList.toggle('hidden');
+            updateCharacterCreationPreview();
             document.getElementById('new-character-name').focus();
         });
         document.getElementById('btn-cancel-character').addEventListener('click', () => {
-            document.getElementById('character-create-form').reset();
             document.getElementById('character-create-form').classList.add('hidden');
         });
+        document.getElementById('btn-clear-character-draft').addEventListener('click', () => {
+            try {
+                document.getElementById('character-create-form').reset();
+                localStorage.removeItem(CHARACTER_DRAFT_STORAGE_KEY);
+                document.getElementById('character-draft-status').textContent = 'Brouillon effacé.';
+                updateCharacterCreationPreview();
+            } catch (error) {
+                console.error('Impossible d’effacer le brouillon du personnage :', error);
+                showToast('Effacement du brouillon impossible.', 'danger');
+            }
+        });
+        document.querySelectorAll('#character-create-form .character-draft-field, #new-character-name, #new-character-kind, #new-character-category')
+            .forEach(input => {
+                input.addEventListener('input', () => {
+                    saveCharacterDraft();
+                    updateCharacterCreationPreview();
+                });
+                input.addEventListener('change', () => {
+                    saveCharacterDraft();
+                    updateCharacterCreationPreview();
+                });
+            });
         document.getElementById('character-create-form').addEventListener('submit', event => {
             event.preventDefault();
-            const name = document.getElementById('new-character-name').value.trim();
-            const kind = document.getElementById('new-character-kind').value;
-            const category = document.getElementById('new-character-category').value.trim();
+            const draft = characterDraftValues();
+            const name = draft.name.trim();
+            const kind = draft.kind;
+            const category = draft.category.trim();
             const slug = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
                 .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            if (!slug) {
-                showToast('Le nom doit contenir au moins une lettre ou un chiffre.', 'danger');
+            updateCharacterCreationPreview();
+            if (!slug || !category || !draft.personality.trim() || !draft.history.trim() || !draft.objective.trim()) {
+                showToast('Complétez le nom, la catégorie et les trois rubriques avant le téléchargement.', 'danger');
                 return;
             }
             if (characters.some(character => character.id.toLowerCase() === slug)) {
@@ -1950,15 +2113,15 @@ category: ${JSON.stringify(category)}
 
 ## Personnalité
 
-Décrivez sa personnalité, son comportement et sa façon de s’exprimer.
+${draft.personality.trim()}
 
 ## Histoire
 
-Racontez ses origines, les événements marquants et sa situation actuelle.
+${draft.history.trim()}
 
 ## Objectif
 
-Indiquez ce que le personnage cherche à accomplir, ou ce qui le motive.
+${draft.objective.trim()}
 `;
             const file = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
             const url = URL.createObjectURL(file);
@@ -1968,8 +2131,15 @@ Indiquez ce que le personnage cherche à accomplir, ou ce qui le motive.
             link.click();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
             document.getElementById('character-create-form').reset();
+            try {
+                localStorage.removeItem(CHARACTER_DRAFT_STORAGE_KEY);
+            } catch (error) {
+                console.error('Impossible d’effacer le brouillon après téléchargement :', error);
+            }
             document.getElementById('character-create-form').classList.add('hidden');
-            showToast('Modèle téléchargé. Ajoutez-le dans personnages/ puis poussez-le sur GitHub pour le publier.', 'success');
+            document.getElementById('character-draft-status').textContent = 'Brouillon téléchargé et effacé.';
+            updateCharacterCreationPreview();
+            showToast('Fiche téléchargée. Ajoutez-la dans personnages/ puis poussez-la sur GitHub pour la publier.', 'success');
         });
         document.querySelectorAll('.character-filter').forEach(button => {
             button.addEventListener('click', () => {
@@ -2114,6 +2284,7 @@ Indiquez ce que le personnage cherche à accomplir, ou ce qui le motive.
         window.onload = function() {
             initData();
             initScenarios();
+            restoreCharacterDraft();
             initCharacters();
         };
     </script>
