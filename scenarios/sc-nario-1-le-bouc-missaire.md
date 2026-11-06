@@ -1,5 +1,5 @@
 ---
-title: "Scénario 1 : un doliprane s'il vous plaît"
+title: "Scénario 1 : un Doliprane, s'il vous plaît"
 date: "19 janvier 2313"
 secret: false
 ---
@@ -13,7 +13,7 @@ secret: false
 - **Mise en scène :** Raphaël a commandité cet assassinat pour se couvrir : il a drogué trois pègres au bar la veille au soir, pour ensuite placer des preuves sur la scène de crime.
 
 ::: prep
-Demander à chaque joueur son planning de la journée jusqu'à 20h, et où il va au bar — cela servira pour les alibis.
+Demander à chaque joueur son planning de la journée jusqu'à 20 h et où il est allé au bar — cela servira pour les alibis.
 :::
 
 ## Déroulé des scènes
@@ -33,7 +33,7 @@ Vous vous réveillez dans une chambre où, de toute évidence, une fête a été
 Vous ouvrez difficilement les yeux, la bouche sèche, avec un mal de crâne comme vous en avez rarement connu — et surtout, vous réalisez que vous êtes entourés de trois parfaits inconnus.
 :::
 
-*Consigne aux joueurs :* Laissez-les présenter l'allure de leur personnage. Ils ne doivent pas présenter leur lore, nom, etc. — les personnages ne se connaissent absolument pas.
+*Consigne aux joueurs :* Laissez-les présenter l'allure de leur personnage. Ils ne doivent pas présenter leur lore, leur nom, etc. — les personnages ne se connaissent absolument pas.
 
 ::: mj
 Après la description des personnages, notez certains effets manquants dans leur description (veste, pantalon, bijoux…). Ils pourront être retrouvés avec un jet de Perception DD 10, ou au bout de quelques minutes de recherche in-game. Certains bijoux resteront introuvables, ayant été laissés sur la scène de crime par Raphaël.
@@ -42,7 +42,7 @@ De plus, HoleeFuck a été rasé — envoyez l'info à l'autre joueur par MP ; l
 :::
 
 ::: desc
-Le quatrième personnage a l'air plus frais que vous : il est déjà réveillé et complètement habillé. Car si la description que vous venez de faire correspond à ce à quoi vous pensez ressembler, vous réalisez assez vite qu'il vous manque pas mal de choses : HoleeFuck n'a plus de pantalon, Karl il te manque tes lunettes et ta boucle d'oreille, Rick ton téléphone et porte-monnaie. 
+Le quatrième personnage a l'air plus frais que vous : il est déjà réveillé et complètement habillé. Car si la description que vous venez de faire correspond à ce à quoi vous pensez ressembler, vous réalisez assez vite qu'il vous manque pas mal de choses : HoleeFuck n'a plus de pantalon ; Karl, il te manque tes lunettes et ta boucle d'oreille ; Rick, ton téléphone et ton porte-monnaie.
 
 L'inconnu porte une veste en cuir, un pantalon de type sarouel, et a des dreadlocks. En vous voyant réveillés, il s'exclame :
 :::
@@ -58,14 +58,14 @@ Comment réagissez-vous ?
 :::
 
 ::: rp Réaction des joueurs
-Les joueurs discutent entre eux, cherchent leurs affaires en même temps, et se rendent compte du bijou manquant. HoleeFuck rasé réalise qu'il est désormais chauve…
+Les joueurs discutent entre eux, cherchent leurs affaires en même temps et se rendent compte du bijou manquant. HoleeFuck rasé réalise qu'il est désormais chauve…
 :::
 
 ::: mj
 Si les joueurs interrogent Raphaël pour obtenir des informations (évidemment fausses) :
 - Il se souvient de la soirée.
 - Ils ont discuté.
-- Karl a appelé son dealer, et ils ont pris un mélange LSD/kétamine — Raphaël, lui, en a pris moins, n'étant pas serein.
+- Karl a appelé son dealer, et ils ont pris un mélange de LSD et de kétamine — Raphaël, lui, en a pris moins, n'étant pas serein.
 - À partir de là, la soirée est partie en vrille : de bar en bar, jusqu'à rentrer faire un after chez Raphaël.
 :::
 
@@ -90,9 +90,9 @@ Une fois que Raphaël a ramené à manger d'atroces pancakes de levure, il décl
 ## Scène 2 — Raphaël fait ami-ami
 
 ::: mj
-Raphaël veut vendre New Right aux joueurs. Si par miracle la police ne remonte pas jusqu'à eux, ils pourraient devenir de bons alliés.
+Raphaël veut vendre New Right aux joueurs. Si, par miracle, la police ne remonte pas jusqu'à eux, ils pourraient devenir de bons alliés.
 
-Mais surtout, il leur présente New Right comme un groupe pacifiste — cela guide les joueurs vers une fausse piste, et lui permettra de sortir New Right du radar des milices en condamnant vivement le meurtre, en présence des autorités.
+Mais surtout, il leur présente New Right comme un groupe pacifiste — cela guide les joueurs vers une fausse piste et permet à Raphaël de sortir New Right du radar des milices en condamnant vivement le meurtre, en présence des autorités.
 :::
 
 ::: desc
@@ -106,7 +106,7 @@ Vous vous installez donc dans la salle à manger avec votre goûter. L'ambiance 
 :::
 
 ::: event Jet d'Intelligence
-**Jet d'Intelligence DD 15** *(potentiellement avec bonus de situation selon le lore des joueurs)* :
+**Jet d'Intelligence DD 15** *(potentiellement avec un bonus de situation selon le lore des joueurs)* :
 Même en cas de réussite, les infos concernant New Right restent vagues : c'est un petit groupe peu influent qui milite contre le transfert de conscience.
 :::
 
@@ -128,13 +128,13 @@ On sonne à la porte. Raphaël va ouvrir, en indiquant que c'est Miranda.
 
 ::: mj
 **Dossier Miranda :**
-Miranda est la hackeuse du groupe New Right. Elle est spécialisée dans la génération par intelligence artificielle de photos/vidéos totalement indiscernables de la réalité, même avec les outils d'analyse les plus poussés.
+Miranda est la hackeuse du groupe New Right. Elle est spécialisée dans la génération par intelligence artificielle de photos et de vidéos totalement indiscernables de la réalité, même avec les outils d'analyse les plus poussés.
 
 Dans cette affaire, elle a piraté les vidéos de surveillance de la demeure du Transféré et remplacé Raphaël par le groupe de joueurs.
 :::
 
 ::: desc
-Raphaël revient alors avec une jeune femme, à qui vous donnez entre 18 et 20 ans. Elle a le même style vestimentaire, un peu « hippie », que Raphaël. Elle porte des lunettes connectées ; à part ça, rien de très marquant.
+Raphaël revient alors avec une jeune femme, que vous estimez âgée de 18 à 20 ans. Elle a le même style vestimentaire, un peu « hippie », que Raphaël. Elle porte des lunettes connectées ; à part ça, rien de très marquant.
 :::
 
 ::: dial Raphaël & Miranda
@@ -146,7 +146,7 @@ Raphaël revient alors avec une jeune femme, à qui vous donnez entre 18 et 20 a
 ::: event Patrouille extérieure
 Pendant que les joueurs répondent, on entend à l'extérieur une patrouille de police — chose très rare dans ce genre de bas quartier.
 
-**Perception DD 10 :** Raphaël a une réaction sensiblement stressée face au bruit. En cas de bonne réussite, les joueurs remarquent aussi un petit signe de tête de Miranda, très calme.
+**Perception DD 10 :** Raphaël a une réaction sensiblement stressée face au bruit. En cas de bonne réussite, les joueurs remarquent aussi que Miranda, très calme, fait un petit signe de tête.
 :::
 
 ::: rp Recrutement New Right
@@ -191,7 +191,7 @@ En bas, vous trouvez deux policiers restés ici pour monter la garde.
 **Conditions :**
 - Deux ennemis : Soldats (NC 1 [Endurci]).
 - Fuite possible.
-- Connaissant les joueurs, il y a une chance sur deux qu'ils s'entre-abandonnent — après tout, ils ne se connaissent pas.
+- Connaissant les joueurs, il y a une chance sur deux qu'ils s'abandonnent les uns les autres — après tout, ils ne se connaissent pas.
 - **Renforts :** Arrivent au tour 4 par la fenêtre.
 :::
 
@@ -217,7 +217,7 @@ Forme le cœur de la plupart des forces armées, le soldat est entraîné à agi
 
 « *Des drones sifflent au-dessus de vos têtes, les caméras se braquent sur vous, des sirènes commencent à retentir autour de vous. Que faites-vous ?* »
 
-- Laissez les joueurs décrire leur stratégie de fuite dans une ville souterraine postmoderne (improvisation requise). Ruelles de commerces, accès au métro à quelques centaines de mètres…
+- Laissez les joueurs décrire leur stratégie de fuite dans une ville souterraine postmoderne (improvisation requise). Ruelles bordées de commerces, accès au métro à quelques centaines de mètres…
 - **Refuge anti-police :** S'ils visent un bar ou un lieu spécifique hostile aux forces de l'ordre, ils recevront de l'aide — possible micro-combat avec barricades et pneus en feu —, mais finiront inévitablement encerclés.
 - **Pleine course :** Tests de Dextérité réguliers pour distancer les poursuivants, avant d'être finalement cernés.
 :::
@@ -244,7 +244,7 @@ En cas de réussite, vous remarquez qu'en disant cela, Raphaël a du mal à vous
 :::
 
 ::: desc
-Quelques minutes après, quatre gardes lourdement armés viennent vous chercher, vous menottent, et vous emmènent dans une salle d'interrogatoire où vous êtes attachés à la table.
+Quelques minutes après, quatre gardes lourdement armés viennent vous chercher, vous menottent et vous emmènent dans une salle d'interrogatoire où vous êtes attachés à la table.
 :::
 
 ::: rp L'interrogatoire
@@ -260,7 +260,7 @@ Les joueurs sont accusés du meurtre de **Richard Duncan**, un Transféré.
 **Preuves accumulées contre eux :**
 - Le bijou de Karl a été retrouvé sur la scène de crime.
 - Des cheveux de HoleeFuck sont sur place (l'inspecteur ironise sur le fait qu'il aurait été plus malin de se raser avant).
-- Une vidéo surveillance montre les protagonistes à 19h30 pénétrer chez Richard (deepfake confectionné par Miranda).
+- Une vidéosurveillance montre les protagonistes à 19 h 30 pénétrer chez Richard (deepfake confectionné par Miranda).
 
 **Questions posées par l'inspecteur :**
 1. Comment ont-ils piraté le système de sécurité ?
@@ -273,7 +273,7 @@ Les joueurs sont accusés du meurtre de **Richard Duncan**, un Transféré.
 - **Modificateurs :** Chaque argument pertinent et vérifiable abaisse le DD de 5.
 
 **Issues :**
-- **Échec :** Transférés en prison ; procès prévu deux mois plus tard. Au bout d'un mois et demi, rebondissement : le connectome de Richard est reconstruit, prouvant la culpabilité de Raphaël. Raphaël et Miranda sont condamnés à mort, les PJ blanchis.
+- **Échec :** Transférés en prison ; procès prévu deux mois plus tard. Au bout d'un mois et demi, rebondissement : le connectome de Richard est reconstruit, ce qui prouve la culpabilité de Raphaël. Raphaël et Miranda sont condamnés à mort, les PJ sont blanchis.
 - **Réussite :** Libération immédiate. S'ils ont dénoncé New Right, Raphaël et Miranda sont jugés ; sinon, ils restent libres.
 - **Épilogue commun :** Le lendemain, le leader de New Right contacte discrètement les joueurs pour s'excuser officiellement. Si les PJ ne les ont pas balancés, il les remercie, offre une récompense financière et propose une intégration au réseau.
 :::
