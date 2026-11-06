@@ -125,7 +125,7 @@ jobs:
               if not front_matter:
                   raise SystemExit(
                       f"{character_file} doit commencer par un en-tête Markdown "
-                      "(name et kind) encadré par ---"
+                      "(name, kind et category) encadré par ---"
                   )
 
               metadata = {}
@@ -141,27 +141,39 @@ jobs:
 
               name = metadata.get("name")
               kind = metadata.get("kind")
+              category = metadata.get("category")
               if not isinstance(name, str) or not name.strip():
                   raise SystemExit(f"{character_file} doit définir un nom non vide")
               if kind not in ("PJ", "PNJ"):
                   raise SystemExit(f"{character_file} doit définir kind: PJ ou kind: PNJ")
+              if not isinstance(category, str) or not category.strip():
+                  raise SystemExit(f"{character_file} doit définir une catégorie non vide")
 
               body = content[front_matter.end():].strip()
-              fields = []
               headings = list(re.finditer(r"^##\s+(.+?)\s*$", body, re.MULTILINE))
+              expected_headings = ["Personnalité", "Histoire", "Objectif"]
+              actual_headings = [heading.group(1).strip() for heading in headings]
+              if actual_headings != expected_headings:
+                  raise SystemExit(
+                      f"{character_file} doit contenir, dans cet ordre, les rubriques "
+                      "'## Personnalité', '## Histoire' et '## Objectif'"
+                  )
+
+              fields = []
               for index, heading in enumerate(headings):
                   field_end = headings[index + 1].start() if index + 1 < len(headings) else len(body)
                   field_content = body[heading.end():field_end].strip()
-                  if field_content:
-                      fields.append({"label": heading.group(1).strip(), "content": field_content})
-              if not fields and body:
-                  fields.append({"label": "Informations", "content": body})
-              if not fields:
-                  raise SystemExit(f"{character_file} ne contient aucune rubrique de personnage")
+                  if not field_content:
+                      raise SystemExit(
+                          f"{character_file} doit renseigner la rubrique "
+                          f"'{heading.group(1).strip()}'"
+                      )
+                  fields.append({"label": heading.group(1).strip(), "content": field_content})
               characters.append({
                   "id": character_file.stem,
                   "name": name.strip(),
                   "kind": kind,
+                  "category": category.strip(),
                   "fields": fields,
               })
 

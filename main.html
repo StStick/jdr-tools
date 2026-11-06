@@ -493,6 +493,37 @@
             Ces fiches sont générées depuis le dossier de référence et contiennent des informations d’intrigue. Le site et ses fichiers publiés sont publics.
         </div>
 
+        <div class="mb-5">
+            <button type="button" id="btn-new-character" class="px-4 py-2 rounded bg-cyber-cyan text-black font-bold uppercase font-tech hover:bg-cyan-300 shadow-md transition">
+                <i class="fa-solid fa-user-plus mr-1"></i> Créer un personnage
+            </button>
+            <form id="character-create-form" class="hidden mt-4 rounded-xl bg-cyber-card border border-cyber-border/80 p-4 sm:p-5 space-y-4">
+                <div class="grid sm:grid-cols-3 gap-3">
+                    <div>
+                        <label for="new-character-name" class="block text-xs text-slate-300 mb-1">Nom</label>
+                        <input id="new-character-name" required maxlength="100" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyber-cyan">
+                    </div>
+                    <div>
+                        <label for="new-character-kind" class="block text-xs text-slate-300 mb-1">Type</label>
+                        <select id="new-character-kind" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-cyber-cyan">
+                            <option value="PNJ">PNJ</option>
+                            <option value="PJ">PJ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="new-character-category" class="block text-xs text-slate-300 mb-1">Catégorie / faction</label>
+                        <input id="new-character-category" required maxlength="80" list="character-categories" placeholder="Ex. New Right" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyber-cyan">
+                        <datalist id="character-categories"></datalist>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-end gap-2">
+                    <button type="button" id="btn-cancel-character" class="px-3 py-2 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm">Annuler</button>
+                    <button type="submit" class="px-3 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-600 text-sm font-semibold">Télécharger le modèle Markdown</button>
+                </div>
+                <p class="text-xs text-slate-500">Le site étant statique, le fichier téléchargé devra être ajouté dans <code>personnages/</code>, puis poussé sur GitHub pour être publié.</p>
+            </form>
+        </div>
+
         <div class="grid lg:grid-cols-[18rem_minmax(0,1fr)] gap-5 items-start">
             <aside class="rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden">
                 <div class="p-3 border-b border-cyber-border">
@@ -504,6 +535,12 @@
                     <button type="button" data-character-filter="all" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-cyan-950/40 text-cyan-300 border border-cyan-500/40">Tous</button>
                     <button type="button" data-character-filter="PJ" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-700">PJ</button>
                     <button type="button" data-character-filter="PNJ" class="character-filter flex-1 rounded px-2 py-1.5 text-[10px] font-mono bg-slate-900 text-slate-400 border border-slate-700">PNJ</button>
+                </div>
+                <div class="p-2 border-b border-cyber-border">
+                    <label class="sr-only" for="character-category-filter">Filtrer par catégorie</label>
+                    <select id="character-category-filter" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1.5 text-[10px] font-mono text-slate-300 focus:outline-none focus:border-cyber-cyan">
+                        <option value="all">Toutes les catégories</option>
+                    </select>
                 </div>
                 <div id="character-list" class="p-2 space-y-1 max-h-[70vh] overflow-y-auto"></div>
                 <p id="character-empty" class="hidden px-4 py-8 text-center text-xs text-slate-500 font-mono">Aucun personnage trouvé.</p>
@@ -522,6 +559,7 @@
                             <div class="min-w-0">
                                 <span id="character-kind" class="inline-flex px-2 py-0.5 rounded border text-[10px] font-mono font-bold uppercase tracking-wider"></span>
                                 <h3 id="character-name" class="font-tech text-2xl sm:text-3xl font-bold text-white mt-1 break-words"></h3>
+                                <span id="character-category" class="inline-flex mt-2 px-2 py-0.5 rounded border border-slate-600 text-[10px] font-mono text-slate-300"></span>
                             </div>
                         </div>
                     </header>
@@ -753,6 +791,7 @@
         let characters = [];
         let selectedCharacterId = null;
         let characterFilter = 'all';
+        let characterCategoryFilter = 'all';
         const SCENARIO_STORAGE_KEY = 'yeast_eaters_scenarios_v1';
         const SCENARIO_INDEX_URL = new URL('scenarios/index.json', window.location.href).toString();
         const CHARACTER_INDEX_URL = new URL('characters/index.json', window.location.href).toString();
@@ -1564,12 +1603,14 @@
                 if (!Array.isArray(data) || data.some(character =>
                     !character || typeof character.id !== 'string' ||
                     typeof character.name !== 'string' ||
+                    typeof character.category !== 'string' ||
                     !['PJ', 'PNJ'].includes(character.kind) ||
                     !Array.isArray(character.fields)
                 )) {
                     throw new Error('Le catalogue des personnages a un format invalide.');
                 }
                 characters = data;
+                renderCharacterCategoryOptions();
                 renderCharacterList();
             } catch (error) {
                 console.warn('Impossible de charger les fiches de personnages :', error);
@@ -1580,14 +1621,29 @@
             }
         }
 
+        function renderCharacterCategoryOptions() {
+            const select = document.getElementById('character-category-filter');
+            const categories = [...new Set(characters.map(character => character.category.trim()).filter(Boolean))]
+                .sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+            if (!categories.includes(characterCategoryFilter)) characterCategoryFilter = 'all';
+
+            select.replaceChildren(new Option('Toutes les catégories', 'all'));
+            categories.forEach(category => select.add(new Option(category, category)));
+            select.value = characterCategoryFilter;
+
+            const datalist = document.getElementById('character-categories');
+            datalist.replaceChildren(...categories.map(category => new Option(category, category)));
+        }
+
         function renderCharacterList() {
             const container = document.getElementById('character-list');
             const query = document.getElementById('character-search').value.trim().toLocaleLowerCase('fr');
             const visible = characters.filter(character => {
                 if (characterFilter !== 'all' && character.kind !== characterFilter) return false;
+                if (characterCategoryFilter !== 'all' && character.category !== characterCategoryFilter) return false;
                 const searchable = `${character.name} ${character.fields.map(field =>
                     `${field.label} ${field.content}`
-                ).join(' ')}`.toLocaleLowerCase('fr');
+                ).join(' ')} ${character.category}`.toLocaleLowerCase('fr');
                 return !query || searchable.includes(query);
             });
             if (selectedCharacterId && !visible.some(character => character.id === selectedCharacterId)) {
@@ -1614,7 +1670,10 @@
                         : 'border-amber-500/30 text-amber-300'
                 }`;
                 kind.textContent = character.kind === 'PJ' ? 'PERSONNAGE JOUEUR' : 'PERSONNAGE NON-JOUEUR';
-                button.append(name, kind);
+                const category = document.createElement('span');
+                category.className = 'mt-1 ml-1 inline-flex px-1.5 py-0.5 rounded border border-slate-700 text-[9px] font-mono text-slate-400';
+                category.textContent = character.category;
+                button.append(name, kind, category);
                 button.addEventListener('click', () => {
                     selectedCharacterId = character.id;
                     renderCharacterList();
@@ -1641,6 +1700,7 @@
                     : 'border-amber-500/40 text-amber-300 bg-amber-950/30'
             }`;
             document.getElementById('character-name').textContent = character.name;
+            document.getElementById('character-category').textContent = character.category;
             document.getElementById('character-avatar').textContent = character.name
                 .replace(/\s*\(.*$/, '')
                 .split(/\s+/)
@@ -1854,6 +1914,63 @@
         document.getElementById('btn-view-scenarios').addEventListener('click', () => setActiveView('scenarios'));
         document.getElementById('btn-view-characters').addEventListener('click', () => setActiveView('characters'));
         document.getElementById('character-search').addEventListener('input', renderCharacterList);
+        document.getElementById('character-category-filter').addEventListener('change', event => {
+            characterCategoryFilter = event.target.value;
+            renderCharacterList();
+        });
+        document.getElementById('btn-new-character').addEventListener('click', () => {
+            document.getElementById('character-create-form').classList.toggle('hidden');
+            document.getElementById('new-character-name').focus();
+        });
+        document.getElementById('btn-cancel-character').addEventListener('click', () => {
+            document.getElementById('character-create-form').reset();
+            document.getElementById('character-create-form').classList.add('hidden');
+        });
+        document.getElementById('character-create-form').addEventListener('submit', event => {
+            event.preventDefault();
+            const name = document.getElementById('new-character-name').value.trim();
+            const kind = document.getElementById('new-character-kind').value;
+            const category = document.getElementById('new-character-category').value.trim();
+            const slug = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            if (!slug) {
+                showToast('Le nom doit contenir au moins une lettre ou un chiffre.', 'danger');
+                return;
+            }
+            if (characters.some(character => character.id.toLowerCase() === slug)) {
+                showToast('Un fichier existe déjà pour ce nom. Choisissez un nom différent.', 'danger');
+                return;
+            }
+
+            const markdown = `---
+name: ${JSON.stringify(name)}
+kind: ${kind}
+category: ${JSON.stringify(category)}
+---
+
+## Personnalité
+
+Décrivez sa personnalité, son comportement et sa façon de s’exprimer.
+
+## Histoire
+
+Racontez ses origines, les événements marquants et sa situation actuelle.
+
+## Objectif
+
+Indiquez ce que le personnage cherche à accomplir, ou ce qui le motive.
+`;
+            const file = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(file);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${slug}.md`;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            document.getElementById('character-create-form').reset();
+            document.getElementById('character-create-form').classList.add('hidden');
+            showToast('Modèle téléchargé. Ajoutez-le dans personnages/ puis poussez-le sur GitHub pour le publier.', 'success');
+        });
         document.querySelectorAll('.character-filter').forEach(button => {
             button.addEventListener('click', () => {
                 characterFilter = button.getAttribute('data-character-filter');

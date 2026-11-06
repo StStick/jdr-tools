@@ -1,19 +1,17 @@
 ---
 name: "Raphaël"
 kind: PNJ
+category: "New Right"
 ---
 
-## Statut / Faction
-Cadre opérationnel de terrain pour **New Right**.
+## Personnalité
 
-## Apparence
-Allure impeccable, élégance soignée et artificielle, visage avenant dissimulant une tension extrême.
+Allure impeccable et élégance soignée, presque artificielle. Son visage avenant dissimule une tension extrême. Sa couleur de dialogue est l'ambre foncé / cuivré (`#9C6B2E`).
 
-## Codes de dialogue
-Couleur dédiée ambre foncé / cuivré (`#9C6B2E`).
+## Histoire
 
-## Indices matériels
-Ecchymoses fraîches sous le col de sa chemise, traces résiduelles d'huile noire de châssis androïde sur les poignets.
+Cadre opérationnel de terrain pour **New Right**. Il porte des ecchymoses fraîches sous le col de sa chemise et des traces résiduelles d'huile noire de châssis androïde sur les poignets.
 
-## Rôle dans l'intrigue
-Auteur direct de l'exécution de Richard Duncan. Organisateur de la machination visant à sacrifier les PJ comme coupables idéaux.
+## Objectif
+
+Auteur direct de l'exécution de Richard Duncan et organisateur de la machination visant à sacrifier les PJ comme coupables idéaux.

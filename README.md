@@ -29,10 +29,11 @@ sommaire automatique, des modèles de scène et une impression mise en page pour
 la table de jeu.
 
 L'onglet **Personnages** affiche les fiches PJ/PNJ et permet de les rechercher
-ou de filtrer par type. Chaque fiche est un fichier indépendant dans
-[`personnages/`](./personnages/) : ajoutez un `.md` pour créer une fiche ou
-supprimez le fichier correspondant pour retirer un personnage. Le format est
-documenté dans [`personnages/README.md`](./personnages/README.md).
+ou de filtrer par type et catégorie. Le bouton **Créer un personnage** génère
+un modèle Markdown à télécharger ; ajoutez-le ensuite dans
+[`personnages/`](./personnages/) et poussez le changement pour le publier. Pour
+retirer un personnage, supprimez son fichier `.md`. Le format est documenté
+dans [`personnages/README.md`](./personnages/README.md).
 
 **Attention :** GitHub Pages est public. Les événements marqués « Secret MJ »
 restent cachés dans l'interface en mode joueurs, mais leur contenu est lisible
