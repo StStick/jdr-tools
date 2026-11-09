@@ -18,12 +18,13 @@ characterColors: {"miranda": "#3D6FA8", "raphael": "#9C6B2E"}
 ```
 
 `characters` contient les identifiants des fiches de `personnages/` (nom du
-fichier sans `.md`). Dans l'éditeur de scénario, cochez les personnages
-concernés et choisissez leur couleur : toutes les occurrences de leur nom sont
-colorées dans l'aperçu et à la lecture. Les couleurs doivent être au format
-hexadécimal `#RRGGBB`. Les événements de la chronologie peuvent être associés à
-un scénario depuis leur formulaire de modification ; le jalon affiche alors un
-bouton pour ouvrir ce scénario.
+fichier sans `.md`). Dans l'éditeur de scénario, recherchez et ajoutez uniquement
+les personnages présents, puis choisissez leur couleur. Seuls les personnages
+ajoutés apparaissent dans la liste ; leur nom est coloré dans l'aperçu et à la
+lecture. Les couleurs doivent être au format hexadécimal `#RRGGBB`. Les
+événements de la chronologie peuvent être associés à un scénario depuis leur
+formulaire de modification ; le jalon affiche alors un bouton pour ouvrir ce
+scénario.
 
 Le corps prend en charge les titres `##`, listes `-`, tableaux, citations,
 liens HTTP(S), **gras**, *italique*, `code` et
