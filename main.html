@@ -171,6 +171,11 @@
         .scenario-speaker-raphael { color: #9c6b2e; }
         .scenario-speaker-miranda { color: #3d6fa8; }
         .scenario-speaker-inspector { color: #6b3f3f; }
+        .scenario-character-links {
+            border-top: 1px solid #334155;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+        }
 
         .scenario-toc {
             background: #f1f5f9;
@@ -403,8 +408,10 @@
                             </button>
                         </div>
                     </div>
+                    <div id="scenario-reader-characters" class="px-5 pt-4 sm:px-10"></div>
                     <nav id="scenario-reader-toc" class="scenario-toc mx-5 mt-5 sm:mx-10" aria-label="Sommaire du scénario"></nav>
                     <div id="scenario-reader-content" class="scenario-paper p-5 sm:p-10"></div>
+                    <div id="scenario-reader-timeline-links" class="px-5 pb-5 sm:px-10 sm:pb-10"></div>
                 </article>
 
                 <form id="scenario-editor" class="hidden rounded-xl bg-cyber-card border border-cyber-border/80 overflow-hidden">
@@ -427,6 +434,13 @@
                                 <input id="scenario-date" maxlength="80" placeholder="Ex. 15 février 2313" class="mt-1 w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100 focus:border-cyber-cyan focus:outline-none">
                             </label>
                         </div>
+                        <section class="mt-4 rounded-lg border border-slate-800 bg-slate-950/50 p-3">
+                            <h4 class="text-[11px] text-cyan-300 font-mono uppercase tracking-wider">Personnages du scénario</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">Sélectionnez les personnages présents : leur nom sera mis en couleur dans l’aperçu et le scénario.</p>
+                            <div id="scenario-character-selector" class="mt-3 grid sm:grid-cols-2 gap-2">
+                                <p class="text-xs text-slate-500">Chargement des personnages…</p>
+                            </div>
+                        </section>
                     </div>
                     <div id="scenario-editor-columns" class="grid xl:grid-cols-2 gap-0">
                         <div class="p-4 sm:p-5 border-b xl:border-b-0 xl:border-r border-cyber-border">
@@ -595,6 +609,7 @@
                         </div>
                     </header>
                     <div id="character-fields" class="p-5 sm:p-7 grid md:grid-cols-2 gap-4"></div>
+                    <div id="character-linked-scenarios" class="px-5 pb-5 sm:px-7 sm:pb-7"></div>
                 </div>
             </article>
         </div>
@@ -665,6 +680,13 @@
                     <label class="block text-slate-300 mb-1 uppercase tracking-wide">Titre de l'événement</label>
                     <input type="text" id="form-title" required placeholder="ex: Attaque de Terminus 1" 
                         class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1 uppercase tracking-wide" for="form-scenario-id">Scénario associé</label>
+                    <select id="form-scenario-id" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan focus:outline-none">
+                        <option value="">Aucun scénario lié</option>
+                    </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -818,6 +840,8 @@
         let localScenarios = [];
         let selectedScenarioId = null;
         let editingScenarioId = null;
+        let editingScenarioCharacterIds = [];
+        let editingScenarioCharacterColors = {};
         let scenarioPreviewVisible = true;
         let characters = [];
         let selectedCharacterId = null;
@@ -868,6 +892,48 @@
             timelineEvents.sort((a, b) => parseCyberDate(a.date) - parseCyberDate(b.date));
         }
 
+        function linkedScenarioForEvent(evt) {
+            if (evt.scenarioId) {
+                return scenarioLibrary.find(scenario => scenario.id === evt.scenarioId) || null;
+            }
+            if (evt.category !== 'scenario') return null;
+            const eventTitle = scenarioSlug(evt.title.replace(/^sc[eé]nario\s+\d+\s*:\s*/i, ''));
+            return scenarioLibrary.find(scenario =>
+                scenarioSlug(scenario.title.replace(/^sc[eé]nario\s+\d+\s*:\s*/i, '')) === eventTitle
+            ) || null;
+        }
+
+        function openLinkedScenario(scenarioId) {
+            const scenario = scenarioLibrary.find(item => item.id === scenarioId);
+            if (!scenario) {
+                showToast('Le scénario associé est introuvable. Vérifiez le catalogue publié.', 'danger');
+                return;
+            }
+            if (scenario.isSecret && !showSecrets) {
+                showToast('Ce scénario est réservé au MJ. Activez le mode MJ pour le consulter.', 'info');
+                return;
+            }
+            selectedScenarioId = scenario.id;
+            editingScenarioId = null;
+            setActiveView('scenarios');
+            renderScenarioList();
+            renderSelectedScenario();
+        }
+
+        function refreshTimelineScenarioOptions(selectedId = '') {
+            const select = document.getElementById('form-scenario-id');
+            if (!select) return;
+            select.replaceChildren(new Option('Aucun scénario lié', ''));
+            scenarioLibrary.forEach(scenario => {
+                const suffix = scenario.isSecret ? ' — Secret MJ' : '';
+                select.add(new Option(`${scenario.title}${suffix}`, scenario.id));
+            });
+            if (selectedId && !scenarioLibrary.some(scenario => scenario.id === selectedId)) {
+                select.add(new Option('Scénario associé indisponible', selectedId));
+            }
+            select.value = selectedId;
+        }
+
         async function initData() {
             try {
                 const response = await fetch(`${GITHUB_JSON_URL}?t=${Date.now()}`, { cache: 'no-store' });
@@ -889,6 +955,12 @@
 
             sortTimeline();
             renderTimeline();
+            if (document.getElementById('scenario-editor').classList.contains('hidden')) {
+                const scenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
+                if (scenario && !document.getElementById('scenario-reader').classList.contains('hidden')) {
+                    renderScenarioTimelineLinks(scenario);
+                }
+            }
         }
 
         function loadFromLocalStorage() {
@@ -1000,6 +1072,7 @@
                 const style = CATEGORY_STYLES[evt.category] || CATEGORY_STYLES.corpo;
                 const isEven = index % 2 === 0;
                 const hasDebrief = (evt.sessionSummary && evt.sessionSummary.trim() !== '') || (evt.highlights && evt.highlights.length > 0);
+                const linkedScenario = linkedScenarioForEvent(evt);
 
                 const cardEl = document.createElement('div');
                 cardEl.className = `relative flex flex-col sm:flex-row items-start ${isEven ? 'sm:flex-row-reverse' : ''} gap-4 group`;
@@ -1011,7 +1084,7 @@
                 `;
 
                 const cardContent = `
-                    <div class="w-full sm:w-[calc(50%-2rem)] bg-cyber-card border border-cyber-border/80 hover:border-slate-500 rounded-xl p-4 transition-all duration-200 border-l-4 ${style.borderClass} shadow-lg ${evt.isSecret ? 'bg-gradient-to-br from-cyber-card to-purple-950/20' : ''} cursor-pointer group hover:bg-slate-900/40" onclick="handleCardClick(event, '${evt.id}')">
+                    <div class="timeline-card-content w-full sm:w-[calc(50%-2rem)] bg-cyber-card border border-cyber-border/80 hover:border-slate-500 rounded-xl p-4 transition-all duration-200 border-l-4 ${style.borderClass} shadow-lg ${evt.isSecret ? 'bg-gradient-to-br from-cyber-card to-purple-950/20' : ''} cursor-pointer group hover:bg-slate-900/40" onclick="handleCardClick(event, '${evt.id}')">
                         <div class="flex items-center justify-between gap-2 mb-2">
                             <span class="font-mono text-xs px-2 py-0.5 rounded font-bold uppercase tracking-wider ${style.badgeClass}">
                                 ${evt.date}
@@ -1055,6 +1128,17 @@
                 `;
 
                 cardEl.innerHTML = dateDotHtml + cardContent;
+                if (linkedScenario && (!linkedScenario.isSecret || showSecrets)) {
+                    const link = document.createElement('button');
+                    link.type = 'button';
+                    link.className = 'mt-3 inline-flex items-center gap-2 rounded border border-cyan-500/30 bg-cyan-950/30 px-2.5 py-1.5 text-[11px] font-mono text-cyan-300 hover:bg-cyan-950/60';
+                    link.innerHTML = '<i class="fa-solid fa-book-open"></i><span>Ouvrir le scénario</span>';
+                    link.addEventListener('click', event => {
+                        event.stopPropagation();
+                        openLinkedScenario(linkedScenario.id);
+                    });
+                    cardEl.querySelector('.timeline-card-content').appendChild(link);
+                }
                 container.appendChild(cardEl);
             });
         }
@@ -1133,6 +1217,7 @@
                 document.getElementById('form-date').value = evt.date;
                 document.getElementById('form-title').value = evt.title;
                 document.getElementById('form-category').value = evt.category;
+                refreshTimelineScenarioOptions(linkedScenarioForEvent(evt)?.id || '');
                 document.getElementById('form-secret').value = evt.isSecret ? "true" : "false";
                 document.getElementById('form-desc').value = evt.desc;
                 document.getElementById('form-summary').value = evt.sessionSummary || "";
@@ -1140,6 +1225,7 @@
                 modalTitle.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Modifier l'Événement`;
             } else {
                 document.getElementById('form-event-id').value = '';
+                refreshTimelineScenarioOptions();
                 modalTitle.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Ajouter un Événement`;
             }
             modal.classList.remove('hidden');
@@ -1169,6 +1255,7 @@
             const date = document.getElementById('form-date').value.trim();
             const title = document.getElementById('form-title').value.trim();
             const category = document.getElementById('form-category').value;
+            const scenarioId = document.getElementById('form-scenario-id').value;
             const isSecret = document.getElementById('form-secret').value === 'true';
             const desc = document.getElementById('form-desc').value.trim();
             const sessionSummary = document.getElementById('form-summary').value.trim();
@@ -1181,6 +1268,8 @@
                     target.date = date;
                     target.title = title;
                     target.category = category;
+                    if (scenarioId) target.scenarioId = scenarioId;
+                    else delete target.scenarioId;
                     target.isSecret = isSecret;
                     target.desc = desc;
                     target.sessionSummary = sessionSummary;
@@ -1193,6 +1282,7 @@
                     date,
                     title,
                     category,
+                    ...(scenarioId ? { scenarioId } : {}),
                     isSecret,
                     desc,
                     sessionSummary,
@@ -1337,11 +1427,15 @@
                     if (separator < 0) continue;
                     const key = line.slice(0, separator).trim();
                     let value = line.slice(separator + 1).trim();
-                    if (value.startsWith('"') && value.endsWith('"')) {
+                    if (
+                        (value.startsWith('"') && value.endsWith('"')) ||
+                        (value.startsWith('[') && value.endsWith(']')) ||
+                        (value.startsWith('{') && value.endsWith('}'))
+                    ) {
                         try {
                             value = JSON.parse(value);
                         } catch (error) {
-                            value = value.slice(1, -1);
+                            if (value.startsWith('"')) value = value.slice(1, -1);
                         }
                     } else if (value.startsWith("'") && value.endsWith("'")) {
                         value = value.slice(1, -1);
@@ -1356,6 +1450,13 @@
                 title: metadata.title || (heading ? heading[1].trim() : ''),
                 date: metadata.date || '',
                 isSecret: String(metadata.secret).toLowerCase() === 'true',
+                characterIds: Array.isArray(metadata.characters)
+                    ? metadata.characters.filter(id => typeof id === 'string')
+                    : [],
+                characterColors: metadata.characterColors && typeof metadata.characterColors === 'object' &&
+                    !Array.isArray(metadata.characterColors)
+                    ? metadata.characterColors
+                    : {},
                 markdown: markdown.trim()
             };
         }
@@ -1366,11 +1467,63 @@
                 `title: ${JSON.stringify(scenario.title)}`,
                 `date: ${JSON.stringify(scenario.date || '')}`,
                 `secret: ${scenario.isSecret ? 'true' : 'false'}`,
+                `characters: ${JSON.stringify(scenario.characterIds || [])}`,
+                `characterColors: ${JSON.stringify(scenario.characterColors || {})}`,
                 '---',
                 '',
                 scenario.markdown.trim(),
                 ''
             ].join('\n');
+        }
+
+        function escapeRegExp(value) {
+            return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function colorCharacterMentions(html, characterStyles) {
+            const styles = Object.values(characterStyles || {})
+                .filter(item => item && item.name && /^#[0-9a-f]{6}$/i.test(item.color))
+                .sort((a, b) => b.name.length - a.name.length);
+            if (!styles.length) return html;
+
+            const colorByName = new Map(styles.map(item => [item.name.toLocaleLowerCase('fr'), item.color]));
+            const alternatives = styles.map(item => escapeRegExp(item.name)).join('|');
+            const expression = new RegExp(
+                `(^|[^\\p{L}\\p{N}_])(${alternatives})(?=$|[^\\p{L}\\p{N}_])`,
+                'giu'
+            );
+            const template = document.createElement('template');
+            template.innerHTML = html;
+            const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT);
+            const textNodes = [];
+            while (walker.nextNode()) {
+                if (!walker.currentNode.parentElement?.closest('[data-character-color], code, a')) {
+                    textNodes.push(walker.currentNode);
+                }
+            }
+
+            textNodes.forEach(node => {
+                const source = node.nodeValue;
+                let lastIndex = 0;
+                let match;
+                const fragment = document.createDocumentFragment();
+                expression.lastIndex = 0;
+                while ((match = expression.exec(source)) !== null) {
+                    const nameStart = match.index + match[1].length;
+                    fragment.append(document.createTextNode(source.slice(lastIndex, nameStart)));
+                    const span = document.createElement('span');
+                    span.dataset.characterColor = 'true';
+                    span.style.color = colorByName.get(match[2].toLocaleLowerCase('fr'));
+                    span.textContent = match[2];
+                    fragment.appendChild(span);
+                    lastIndex = nameStart + match[2].length;
+                }
+                if (lastIndex) {
+                    fragment.append(document.createTextNode(source.slice(lastIndex)));
+                    node.replaceWith(fragment);
+                }
+            });
+            return template.innerHTML;
         }
 
         function renderInlineMarkdown(source) {
@@ -1409,7 +1562,7 @@
             return count ? `${base}-${count + 1}` : base;
         }
 
-        function renderMarkdownBlocks(markdown, headingCounts = {}) {
+        function renderMarkdownBlocks(markdown, headingCounts = {}, characterStyles = {}) {
             const lines = String(markdown || '').split(/\r?\n/);
             const output = [];
             let paragraph = [];
@@ -1444,7 +1597,7 @@
                         output.push(
                             `<section class="scenario-callout" data-type="${type}">` +
                             `<div class="scenario-callout-label">${CALL_OUTS[type]}${subtitle}</div>` +
-                            `<div class="scenario-callout-content">${renderMarkdownBlocks(lines.slice(index + 1, end).join('\n'), headingCounts)}</div>` +
+                            `<div class="scenario-callout-content">${renderMarkdownBlocks(lines.slice(index + 1, end).join('\n'), headingCounts, characterStyles)}</div>` +
                             '</section>'
                         );
                         index = end;
@@ -1522,7 +1675,7 @@
 
             flushParagraph();
             closeList();
-            return output.join('\n');
+            return colorCharacterMentions(output.join('\n'), characterStyles);
         }
 
         function renderScenarioToc(markdown, container) {
@@ -1569,12 +1722,22 @@
 
         function normalizeScenario(entry, origin) {
             const parsed = parseScenarioDocument(entry.content || entry.markdown || '');
+            const rawColors = parsed.characterColors || entry.characterColors || {};
+            const characterColors = Object.fromEntries(
+                Object.entries(rawColors).filter(([id, color]) =>
+                    typeof id === 'string' && typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)
+                )
+            );
             return {
                 id: entry.id || scenarioSlug(entry.filename || parsed.title),
                 title: parsed.title || entry.title || 'Scénario sans titre',
                 date: parsed.date || entry.date || '',
                 isSecret: parsed.isSecret || Boolean(entry.isSecret),
                 markdown: parsed.markdown,
+                characterIds: Array.isArray(parsed.characterIds) && parsed.characterIds.length
+                    ? parsed.characterIds
+                    : Array.isArray(entry.characterIds) ? entry.characterIds : [],
+                characterColors,
                 origin,
                 isPublished: origin === 'published' || Boolean(entry.isPublished)
             };
@@ -1621,8 +1784,16 @@
             scenarioLibrary = Array.from(merged.values()).sort((a, b) =>
                 a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' })
             );
+            const openEvent = timelineEvents.find(event =>
+                event.id === document.getElementById('form-event-id').value
+            );
+            refreshTimelineScenarioOptions(
+                openEvent ? linkedScenarioForEvent(openEvent)?.id || '' : document.getElementById('form-scenario-id').value
+            );
             renderScenarioList();
             renderSelectedScenario();
+            renderTimeline();
+            renderCharacterSheet();
         }
 
         async function initCharacters() {
@@ -1644,7 +1815,17 @@
                 characters = data;
                 renderCharacterCategoryOptions();
                 updateCharacterCreationPreview();
+                renderScenarioCharacterSelector();
                 renderCharacterList();
+                renderCharacterSheet();
+                if (document.getElementById('scenario-editor').classList.contains('hidden')) {
+                    const selectedScenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
+                    if (selectedScenario && !document.getElementById('scenario-reader').classList.contains('hidden')) {
+                        renderScenarioLinkedCharacters(selectedScenario);
+                    }
+                } else {
+                    renderScenarioEditorPreview();
+                }
             } catch (error) {
                 console.warn('Impossible de charger les fiches de personnages :', error);
                 document.getElementById('character-welcome').innerHTML =
@@ -1666,6 +1847,96 @@
 
             const datalist = document.getElementById('character-categories');
             datalist.replaceChildren(...categories.map(category => new Option(category, category)));
+        }
+
+        const SCENARIO_CHARACTER_PALETTE = [
+            '#3d6fa8', '#9c6b2e', '#8b5cf6', '#0f766e', '#be123c', '#4d7c0f', '#b45309'
+        ];
+
+        function defaultScenarioCharacterColor(character, index) {
+            const name = character.name.toLocaleLowerCase('fr');
+            if (name.startsWith('miranda')) return '#3d6fa8';
+            if (name.startsWith('raphaël') || name.startsWith('raphael')) return '#9c6b2e';
+            return SCENARIO_CHARACTER_PALETTE[index % SCENARIO_CHARACTER_PALETTE.length];
+        }
+
+        function renderScenarioCharacterSelector() {
+            const container = document.getElementById('scenario-character-selector');
+            if (!container) return;
+            container.replaceChildren();
+            if (!characters.length) {
+                const empty = document.createElement('p');
+                empty.className = 'text-xs text-slate-500';
+                empty.textContent = 'Aucun personnage disponible dans le catalogue.';
+                container.appendChild(empty);
+                return;
+            }
+
+            characters.forEach((character, index) => {
+                const selected = editingScenarioCharacterIds.includes(character.id);
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-2 rounded border border-slate-800 bg-slate-900/70 px-2 py-1.5';
+                const label = document.createElement('label');
+                label.className = 'flex min-w-0 items-center gap-2 text-xs text-slate-300 cursor-pointer';
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.dataset.scenarioCharacter = character.id;
+                checkbox.checked = selected;
+                checkbox.className = 'accent-cyan-500';
+                const name = document.createElement('span');
+                name.className = 'truncate';
+                name.textContent = character.name;
+                label.append(checkbox, name);
+
+                const color = document.createElement('input');
+                color.type = 'color';
+                color.dataset.scenarioCharacterColor = character.id;
+                color.value = editingScenarioCharacterColors[character.id] || defaultScenarioCharacterColor(character, index);
+                color.disabled = !selected;
+                color.title = `Couleur de ${character.name} dans ce scénario`;
+                color.setAttribute('aria-label', `Couleur de ${character.name} dans ce scénario`);
+                color.className = 'h-7 w-9 cursor-pointer rounded border border-slate-700 bg-slate-900 disabled:cursor-not-allowed disabled:opacity-40';
+                row.append(label, color);
+                container.appendChild(row);
+            });
+        }
+
+        function scenarioCharacterStyles(scenario) {
+            const styles = {};
+            (scenario.characterIds || []).forEach(id => {
+                const character = characters.find(item => item.id === id);
+                const color = scenario.characterColors?.[id] ||
+                    (character ? defaultScenarioCharacterColor(character, characters.indexOf(character)) : '');
+                if (character && typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)) {
+                    styles[id] = { name: character.name, color };
+                }
+            });
+            return styles;
+        }
+
+        function openLinkedCharacter(characterId) {
+            const character = characters.find(item => item.id === characterId);
+            if (!character) {
+                showToast('Cette fiche personnage est introuvable.', 'danger');
+                return;
+            }
+            selectedCharacterId = character.id;
+            characterFilter = 'all';
+            characterCategoryFilter = 'all';
+            document.getElementById('character-search').value = '';
+            document.getElementById('character-category-filter').value = 'all';
+            document.querySelectorAll('.character-filter').forEach(button => {
+                const active = button.dataset.characterFilter === 'all';
+                button.classList.toggle('bg-cyan-950/40', active);
+                button.classList.toggle('text-cyan-300', active);
+                button.classList.toggle('border-cyan-500/40', active);
+                button.classList.toggle('bg-slate-900', !active);
+                button.classList.toggle('text-slate-400', !active);
+                button.classList.toggle('border-slate-700', !active);
+            });
+            setActiveView('characters');
+            renderCharacterList();
+            renderCharacterSheet();
         }
 
         function characterDraftValues() {
@@ -1862,6 +2133,28 @@
                 section.append(heading, body);
                 fields.appendChild(section);
             });
+
+            const linkedScenarios = scenarioLibrary.filter(scenario =>
+                (scenario.characterIds || []).includes(character.id)
+            );
+            const linkedContainer = document.getElementById('character-linked-scenarios');
+            linkedContainer.replaceChildren();
+            if (linkedScenarios.length) {
+                const heading = document.createElement('h4');
+                heading.className = 'font-tech text-xs uppercase tracking-wide text-cyan-300 mb-2';
+                heading.textContent = 'Scénarios liés';
+                const list = document.createElement('div');
+                list.className = 'flex flex-wrap gap-2';
+                linkedScenarios.forEach(scenario => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'rounded border border-cyan-500/30 bg-cyan-950/30 px-2.5 py-1.5 text-xs text-cyan-300 hover:bg-cyan-950/60';
+                    button.textContent = scenario.title;
+                    button.addEventListener('click', () => openLinkedScenario(scenario.id));
+                    list.appendChild(button);
+                });
+                linkedContainer.append(heading, list);
+            }
         }
 
         function persistScenario(scenario) {
@@ -1938,6 +2231,8 @@
                 document.getElementById('scenario-reader-date').textContent = '';
                 document.getElementById('scenario-reader-origin').textContent = '';
                 document.getElementById('scenario-reader-content').replaceChildren();
+                document.getElementById('scenario-reader-characters').replaceChildren();
+                document.getElementById('scenario-reader-timeline-links').replaceChildren();
                 return;
             }
 
@@ -1950,14 +2245,80 @@
                 : scenario.isPublished
                     ? 'Modification locale — le fichier publié ne change qu’après export et push'
                     : 'Brouillon enregistré dans ce navigateur';
+            renderScenarioLinkedCharacters(scenario);
             renderScenarioToc(scenario.markdown, document.getElementById('scenario-reader-toc'));
-            document.getElementById('scenario-reader-content').innerHTML = renderMarkdownBlocks(scenario.markdown);
+            document.getElementById('scenario-reader-content').innerHTML = renderMarkdownBlocks(
+                scenario.markdown,
+                {},
+                scenarioCharacterStyles(scenario)
+            );
+            renderScenarioTimelineLinks(scenario);
+        }
+
+        function renderScenarioLinkedCharacters(scenario) {
+            const container = document.getElementById('scenario-reader-characters');
+            container.replaceChildren();
+            const linkedCharacters = (scenario.characterIds || [])
+                .map(id => characters.find(character => character.id === id))
+                .filter(Boolean);
+            if (!linkedCharacters.length) return;
+
+            const label = document.createElement('span');
+            label.className = 'mr-2 text-[10px] font-mono uppercase text-slate-500';
+            label.textContent = 'Personnages :';
+            container.appendChild(label);
+            linkedCharacters.forEach(character => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'mr-2 mb-1 rounded border px-2 py-1 text-[11px] font-mono hover:brightness-125';
+                const color = scenario.characterColors?.[character.id] ||
+                    defaultScenarioCharacterColor(character, characters.indexOf(character));
+                button.style.borderColor = color;
+                button.style.color = color;
+                button.textContent = character.name;
+                button.addEventListener('click', () => openLinkedCharacter(character.id));
+                container.appendChild(button);
+            });
+        }
+
+        function renderScenarioTimelineLinks(scenario) {
+            const container = document.getElementById('scenario-reader-timeline-links');
+            container.replaceChildren();
+            const relatedEvents = timelineEvents.filter(evt =>
+                (showSecrets || !evt.isSecret) && linkedScenarioForEvent(evt)?.id === scenario.id
+            );
+            if (!relatedEvents.length) return;
+
+            const section = document.createElement('section');
+            section.className = 'scenario-character-links';
+            const heading = document.createElement('h4');
+            heading.className = 'font-tech text-sm uppercase tracking-wide text-cyan-300 mb-2';
+            heading.textContent = 'Jalons liés dans la chronologie';
+            const list = document.createElement('div');
+            list.className = 'flex flex-wrap gap-2';
+            relatedEvents.forEach(evt => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'rounded border border-slate-600 bg-slate-800 px-2.5 py-1.5 text-xs text-slate-200 hover:border-cyan-500/50 hover:text-cyan-300';
+                button.textContent = `${evt.date} — ${evt.title}`;
+                button.addEventListener('click', () => openDebriefModal(evt.id));
+                list.appendChild(button);
+            });
+            section.append(heading, list);
+            container.appendChild(section);
         }
 
         function renderScenarioEditorPreview() {
             const markdown = document.getElementById('scenario-markdown').value;
             renderScenarioToc(markdown, document.getElementById('scenario-editor-toc'));
-            document.getElementById('scenario-editor-preview').innerHTML = renderMarkdownBlocks(markdown);
+            document.getElementById('scenario-editor-preview').innerHTML = renderMarkdownBlocks(
+                markdown,
+                {},
+                scenarioCharacterStyles({
+                    characterIds: editingScenarioCharacterIds,
+                    characterColors: editingScenarioCharacterColors
+                })
+            );
         }
 
         function setScenarioPreviewVisible(visible) {
@@ -1980,12 +2341,15 @@
             document.getElementById('scenario-title').value = scenario ? scenario.title : '';
             document.getElementById('scenario-date').value = scenario ? scenario.date : '';
             document.getElementById('scenario-secret').checked = scenario ? scenario.isSecret : false;
+            editingScenarioCharacterIds = scenario ? [...(scenario.characterIds || [])] : [];
+            editingScenarioCharacterColors = scenario ? { ...(scenario.characterColors || {}) } : {};
             document.getElementById('scenario-markdown').value = scenario
                 ? scenario.markdown
                 : '## Accroche\n\n::: desc\nTexte immersif à lire aux joueurs.\n:::\n\n## Situation initiale\n\n::: prep\nInformations et questions à préparer avant la séance.\n:::\n\n## Déroulement\n\n### Scène 1 — [Titre]\n\n::: rp\nObjectif, situation et possibilités d’interaction.\n:::\n\n::: mj\nInformations et secrets réservés au MJ.\n:::\n\n## Conséquences\n\n::: note\nIndices et conséquences à conserver pour la campagne.\n:::\n\n***[Élément à préciser par le MJ]***';
             document.getElementById('scenario-reader').classList.add('hidden');
             document.getElementById('scenario-welcome').classList.add('hidden');
             form.classList.remove('hidden');
+            renderScenarioCharacterSelector();
             renderScenarioEditorPreview();
             document.getElementById('scenario-title').focus();
         }
@@ -2000,7 +2364,7 @@
             setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
-        function saveImportedScenario(title, date, isSecret, markdown, fileName) {
+        function saveImportedScenario(title, date, isSecret, markdown, fileName, characterIds = [], characterColors = {}) {
             const id = scenarioSlug(fileName.replace(/\.(md|markdown)$/i, '') || title);
             const existing = scenarioLibrary.find(item => item.id === id);
             const scenario = {
@@ -2009,6 +2373,8 @@
                 date,
                 isSecret,
                 markdown,
+                characterIds,
+                characterColors,
                 origin: 'local',
                 isPublished: existing ? existing.isPublished : false
             };
@@ -2173,6 +2539,32 @@ ${draft.objective.trim()}
         });
         document.getElementById('scenario-markdown').addEventListener('input', renderScenarioEditorPreview);
         document.getElementById('scenario-search').addEventListener('input', renderScenarioList);
+        document.getElementById('scenario-character-selector').addEventListener('change', event => {
+            const checkbox = event.target.closest('[data-scenario-character]');
+            if (!checkbox) return;
+            const id = checkbox.dataset.scenarioCharacter;
+            const character = characters.find(item => item.id === id);
+            if (checkbox.checked) {
+                if (!editingScenarioCharacterIds.includes(id)) editingScenarioCharacterIds.push(id);
+                if (!editingScenarioCharacterColors[id] && character) {
+                    editingScenarioCharacterColors[id] = defaultScenarioCharacterColor(character, characters.indexOf(character));
+                }
+            } else {
+                editingScenarioCharacterIds = editingScenarioCharacterIds.filter(item => item !== id);
+                delete editingScenarioCharacterColors[id];
+            }
+            renderScenarioCharacterSelector();
+            renderScenarioEditorPreview();
+        });
+        document.getElementById('scenario-character-selector').addEventListener('input', event => {
+            const colorInput = event.target.closest('[data-scenario-character-color]');
+            if (!colorInput) return;
+            const id = colorInput.dataset.scenarioCharacterColor;
+            if (/^#[0-9a-f]{6}$/i.test(colorInput.value)) {
+                editingScenarioCharacterColors[id] = colorInput.value;
+                renderScenarioEditorPreview();
+            }
+        });
 
         const SCENE_TEMPLATES = {
             scene: '\n\n### Scène — [Titre]\n\n::: desc\nDescription d’ouverture à lire aux joueurs.\n:::\n\n::: rp\nObjectif de la scène, situation présente et questions ouvertes aux joueurs.\n:::\n\n::: mj\nIntention des PNJ, informations cachées et réactions possibles.\n:::\n',
@@ -2231,6 +2623,8 @@ ${draft.objective.trim()}
                 date,
                 isSecret: document.getElementById('scenario-secret').checked,
                 markdown,
+                characterIds: [...editingScenarioCharacterIds],
+                characterColors: { ...editingScenarioCharacterColors },
                 origin: 'local',
                 isPublished: existing ? existing.isPublished : false
             };
@@ -2256,6 +2650,8 @@ ${draft.objective.trim()}
                 title,
                 date: document.getElementById('scenario-date').value.trim(),
                 isSecret: document.getElementById('scenario-secret').checked,
+                characterIds: [...editingScenarioCharacterIds],
+                characterColors: { ...editingScenarioCharacterColors },
                 markdown: document.getElementById('scenario-markdown').value.trim()
             });
         });
@@ -2272,7 +2668,15 @@ ${draft.objective.trim()}
                 if (!parsed.markdown) {
                     throw new Error('Le fichier Markdown ne contient pas de texte de scénario.');
                 }
-                saveImportedScenario(title, parsed.date, parsed.isSecret, parsed.markdown, file.name);
+                saveImportedScenario(
+                    title,
+                    parsed.date,
+                    parsed.isSecret,
+                    parsed.markdown,
+                    file.name,
+                    parsed.characterIds,
+                    parsed.characterColors
+                );
             } catch (error) {
                 console.error('Import du scénario impossible :', error);
                 showToast(error.message || 'Impossible de lire ce fichier Markdown.', 'danger');

@@ -95,12 +95,27 @@ jobs:
               title = metadata.get("title")
               if not isinstance(title, str) or not title.strip():
                   raise SystemExit(f"{scenario_file} doit définir un titre non vide")
+              character_ids = metadata.get("characters", [])
+              character_colors = metadata.get("characterColors", {})
+              if not isinstance(character_ids, list) or any(
+                  not isinstance(character_id, str) for character_id in character_ids
+              ):
+                  raise SystemExit(f"{scenario_file} doit définir characters comme une liste de noms de fichiers")
+              if not isinstance(character_colors, dict) or any(
+                  character_id not in character_ids
+                  or not isinstance(color, str)
+                  or not re.fullmatch(r"#[0-9a-fA-F]{6}", color)
+                  for character_id, color in character_colors.items()
+              ):
+                  raise SystemExit(f"{scenario_file} contient des couleurs de personnage invalides")
               published_scenarios.append({
                   "id": scenario_file.stem,
                   "filename": scenario_file.name,
                   "title": title,
                   "date": metadata.get("date", ""),
                   "isSecret": str(metadata.get("secret", "false")).lower() == "true",
+                  "characterIds": character_ids,
+                  "characterColors": character_colors,
                   "content": content,
               })
 
