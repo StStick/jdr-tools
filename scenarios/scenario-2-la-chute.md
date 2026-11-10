@@ -2,8 +2,8 @@
 title: "La Chute"
 date: "12 février 2313"
 secret: false
-characters: ["karl", "rick", "ho-lee-fuk"]
-characterColors: {"karl": "#3D6FA8", "rick": "#9C6B2E", "ho-lee-fuk": "#4A7A5C"}
+characters: ["karl-lapartheid", "rick-lestilo", "ho-lee-fuk"]
+characterColors: {"karl-lapartheid": "#3D6FA8", "rick-lestilo": "#9C6B2E", "ho-lee-fuk": "#4A7A5C"}
 ---
 
 ## Synopsis & Situation Initiale
