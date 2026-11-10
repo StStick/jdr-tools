@@ -201,7 +201,7 @@ Les joueurs doivent improviser une explication crédible pour justifier leur pr�
 :::
 
 ::: rp Contact au comptoir
-***[Rencontre avec le barman, échange du mot de passe et révélation de l'informateur]***
+***[Rencontre avec le barman, échange du mot de passe et révélation de l'infoermateur]***
 :::
 
 ```
