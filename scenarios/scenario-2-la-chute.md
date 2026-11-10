@@ -2,8 +2,8 @@
 title: "La Chute"
 date: "12 février 2313"
 secret: false
-characters: ["karl-lapartheid", "rick-lestilo", "ho-lee-fuk"]
-characterColors: {"karl-lapartheid": "#3D6FA8", "rick-lestilo": "#9C6B2E", "ho-lee-fuk": "#4A7A5C"}
+characters: ["karl-lapartheid","rick-lestilo","ho-lee-fuk","eva-cassaire","miranda","raphael"]
+characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-fuk":"#4A7A5C","eva-cassaire":"#ff0000","miranda":"#8000ff","raphael":"#004080"}
 ---
 
 ## Synopsis & Situation Initiale
@@ -264,8 +264,8 @@ Vous franchissez le sas pour pénétrer dans une succursale sécurisée, coupée
 La femme assise en face d'eux n'est autre que **June White**, la véritable dirigeante de **New Mind**. Les PJ l'ignorent totalement au début de la scène.
 :::
 
-::: dial June White
-**June White :** « *Après tout ce qui s'est passé, j'avais hâte de vous rencontrer en personne. Enfin... je suis tout de même étonnée que vous ayez osé venir. Qu'est-ce qui vous amène jusqu'à moi ?* »
+::: dial Eva Cassaire
+**Eva Cassaire :** « *Après tout ce qui s'est passé, j'avais hâte de vous rencontrer en personne. Enfin... je suis tout de même étonnée que vous ayez osé venir. Qu'est-ce qui vous amène jusqu'à moi ?* »
 :::
 
 ::: rp Justifications des PJ & Demande d'identité
@@ -273,20 +273,13 @@ La femme assise en face d'eux n'est autre que **June White**, la véritable diri
 - Amenez naturellement les PJ à l'interroger sur son identité et sa fonction dans le réseau.
 :::
 
-::: dial June White
-**June White :** « *Je suis June White. C'est moi qui dirige New Mind.* »
+::: dial Eva Cassaire
+**Eva Cassaire :** « *Rapplez vous, je vous ai eu au télphone il ya un mois* »
 :::
 
 ::: rp La Vérité sur New Mind
-June White profite de cet échange pour lever le voile sur la vraie nature de son organisation, brisant l'illusion pacifiste véhiculée précédemment :
+Eva Cassaire profite de cet échange pour lever le voile sur la vraie nature de son organisation, brisant l'illusion pacifiste véhiculée précédemment :
 - **Le masque brisé :** Contrairement au portrait de façade et à l'image réformiste/pacifique que Raphaël leur avait servie lors de leur première rencontre, New Mind n'a absolument rien d'un groupe inoffensif.
 - **L'élite cybernétique :** New Mind est en réalité une organisation cybercriminelle et subversive de premier plan, ultra-spécialisée dans la guerre électronique et le cyber-terrorisme de haut vol.
 - **Les meilleurs hackers :** Le réseau rassemble et coordonne certains des esprits et des hackers les plus redoutables et dangereux de tout le système.
-:::
-
-::: note Dossier PNJ : June White
-- **Nom :** June White
-- **Affiliation :** Dirigeante suprême de New Mind
-- **Rôle secret :** Tête pensante de l'élite des hackers et du cyber-terrorisme systémique
-- **Statut vis-à-vis des PJ :** Méfiante mais intéressée par le levier que représente la mission d'UNTRUST
 :::
