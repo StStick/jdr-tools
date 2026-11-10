@@ -3,7 +3,7 @@ title: "La Chute"
 date: "12 février 2313"
 secret: false
 characters: ["karl-lapartheid","rick-lestilo","ho-lee-fuk","eva-cassaire","miranda","raphael"]
-characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-fuk":"#4A7A5C","eva-cassaire":"#444444","miranda":"#3D6FA8","raphael":"#9C6B2E"}
+characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-fuk":"#4A7A5C","eva-cassaire":"#ff0b0b","miranda":"#3D6FA8","raphael":"#9C6B2E"}
 ---
 
 ## Synopsis & Situation Initiale
