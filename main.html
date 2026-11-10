@@ -29,6 +29,7 @@
                             purple: '#a855f7',
                             green: '#10b981'
                         }
+
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -243,6 +244,7 @@
             }
             body.scenario-print #scenario-reader-origin,
             body.scenario-print #btn-edit-scenario,
+            body.scenario-print #btn-delete-scenario,
             body.scenario-print #btn-print-scenario { display: none !important; }
             body.scenario-print #scenario-reader-content {
                 background: #ffffff !important;
@@ -405,6 +407,9 @@
                             </button>
                             <button id="btn-edit-scenario" class="px-3 py-2 rounded-md border border-cyber-cyan/40 text-cyber-cyan text-xs font-mono hover:bg-cyan-950/40 transition flex items-center gap-2">
                                 <i class="fa-solid fa-pen"></i>Modifier
+                            </button>
+                            <button id="btn-delete-scenario" class="hidden px-3 py-2 rounded-md border border-red-500/40 text-red-300 text-xs font-mono hover:bg-red-950/40 transition flex items-center gap-2">
+                                <i class="fa-solid fa-trash"></i>Supprimer le brouillon
                             </button>
                         </div>
                     </div>
@@ -1746,6 +1751,7 @@
                     : Array.isArray(entry.characterIds) ? entry.characterIds : [],
                 characterColors,
                 origin,
+                publishedId: typeof entry.publishedId === 'string' ? entry.publishedId : null,
                 isPublished: origin === 'published' || Boolean(entry.isPublished)
             };
         }
@@ -1784,6 +1790,40 @@
             } catch (error) {
                 console.warn('Impossible de charger le catalogue publié des scénarios :', error);
                 showToast('Scénarios publiés indisponibles ; les brouillons locaux restent accessibles.', 'danger');
+            }
+
+            const publishedIds = new Set(published.map(scenario => scenario.id));
+            const usedIds = new Set(publishedIds);
+            let localScenariosMigrated = false;
+            localScenarios = localScenarios.map(scenario => {
+                if (!usedIds.has(scenario.id)) {
+                    usedIds.add(scenario.id);
+                    return scenario;
+                }
+
+                const originalId = scenario.id;
+                let draftId = `${originalId}-local-draft`;
+                let suffix = 2;
+                while (usedIds.has(draftId)) {
+                    draftId = `${originalId}-local-draft-${suffix}`;
+                    suffix += 1;
+                }
+                usedIds.add(draftId);
+                localScenariosMigrated = true;
+                return {
+                    ...scenario,
+                    id: draftId,
+                    publishedId: originalId,
+                    isPublished: publishedIds.has(originalId) || scenario.isPublished
+                };
+            });
+            if (localScenariosMigrated) {
+                try {
+                    localStorage.setItem(SCENARIO_STORAGE_KEY, JSON.stringify(localScenarios));
+                } catch (error) {
+                    console.error('Impossible de séparer les brouillons locaux des scénarios publiés :', error);
+                    showToast('Les brouillons restent accessibles dans cette session, mais leur séparation n’a pas pu être sauvegardée dans le navigateur.', 'danger');
+                }
             }
 
             const merged = new Map(published.map(scenario => [scenario.id, scenario]));
@@ -2242,6 +2282,32 @@
             }
         }
 
+        function deleteLocalScenario(scenario) {
+            if (scenario.origin !== 'local') return;
+            if (!window.confirm(`Supprimer le brouillon local « ${scenario.title} » ? Le scénario publié ne sera pas modifié.`)) {
+                return;
+            }
+
+            const updated = localScenarios.filter(item => item.id !== scenario.id);
+            try {
+                localStorage.setItem(SCENARIO_STORAGE_KEY, JSON.stringify(updated));
+            } catch (error) {
+                console.error('Impossible de supprimer le brouillon local :', error);
+                showToast('Suppression impossible dans le stockage du navigateur.', 'danger');
+                return;
+            }
+
+            localScenarios = updated;
+            scenarioLibrary = scenarioLibrary.filter(item => item.id !== scenario.id);
+            selectedScenarioId = scenario.publishedId &&
+                scenarioLibrary.some(item => item.id === scenario.publishedId)
+                ? scenario.publishedId
+                : null;
+            renderScenarioList();
+            renderSelectedScenario();
+            showToast('Brouillon local supprimé.', 'success');
+        }
+
         function renderScenarioList() {
             const container = document.getElementById('scenario-list');
             const empty = document.getElementById('scenario-empty');
@@ -2265,7 +2331,12 @@
                 title.textContent = scenario.title;
                 const meta = document.createElement('span');
                 meta.className = 'mt-1 flex items-center gap-2 text-[10px] text-slate-500 font-mono';
-                meta.textContent = scenario.date || (scenario.origin === 'local' ? 'Brouillon local' : 'Date non précisée');
+                const sourceLabel = scenario.origin === 'local'
+                    ? scenario.isPublished ? 'Modification locale' : 'Brouillon local'
+                    : '';
+                meta.textContent = [scenario.date || 'Date non précisée', sourceLabel]
+                    .filter(Boolean)
+                    .join(' · ');
                 if (scenario.isSecret) {
                     const badge = document.createElement('span');
                     badge.className = 'text-purple-300';
@@ -2294,6 +2365,7 @@
             const editor = document.getElementById('scenario-editor');
             const welcome = document.getElementById('scenario-welcome');
             const canRead = scenario && (showSecrets || !scenario.isSecret);
+            document.getElementById('btn-delete-scenario').classList.toggle('hidden', !scenario || scenario.origin !== 'local');
             editor.classList.add('hidden');
             reader.classList.toggle('hidden', !canRead);
             welcome.classList.toggle('hidden', Boolean(canRead));
@@ -2308,6 +2380,7 @@
             }
 
             document.getElementById('scenario-reader-title').textContent = scenario.title;
+            document.getElementById('btn-delete-scenario').classList.toggle('hidden', scenario.origin !== 'local');
             const date = document.getElementById('scenario-reader-date');
             date.textContent = scenario.date;
             date.classList.toggle('hidden', !scenario.date);
@@ -2437,8 +2510,21 @@
         }
 
         function saveImportedScenario(title, date, isSecret, markdown, fileName, characterIds = [], characterColors = {}) {
-            const id = scenarioSlug(fileName.replace(/\.(md|markdown)$/i, '') || title);
-            const existing = scenarioLibrary.find(item => item.id === id);
+            const baseId = scenarioSlug(fileName.replace(/\.(md|markdown)$/i, '') || title);
+            const published = scenarioLibrary.find(item => item.id === baseId && item.origin === 'published');
+            const existingDraft = scenarioLibrary.find(item =>
+                item.origin === 'local' && item.publishedId === baseId
+            );
+            const existing = existingDraft || published;
+            let id = existingDraft?.id || baseId;
+            if (published && !existingDraft) {
+                id = `${baseId}-local-draft`;
+                let suffix = 2;
+                while (scenarioLibrary.some(item => item.id === id)) {
+                    id = `${baseId}-local-draft-${suffix}`;
+                    suffix += 1;
+                }
+            }
             const scenario = {
                 id,
                 title,
@@ -2448,6 +2534,7 @@
                 characterIds,
                 characterColors,
                 origin: 'local',
+                publishedId: published ? baseId : existing?.publishedId || null,
                 isPublished: existing ? existing.isPublished : false
             };
             if (!persistScenario(scenario)) return;
@@ -2605,6 +2692,10 @@ ${draft.objective.trim()}
             const scenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
             if (scenario) openScenarioEditor(scenario);
         });
+        document.getElementById('btn-delete-scenario').addEventListener('click', () => {
+            const scenario = scenarioLibrary.find(item => item.id === selectedScenarioId);
+            if (scenario) deleteLocalScenario(scenario);
+        });
         document.getElementById('btn-cancel-scenario').addEventListener('click', () => {
             editingScenarioId = null;
             renderSelectedScenario();
@@ -2677,7 +2768,16 @@ ${draft.objective.trim()}
             const markdown = document.getElementById('scenario-markdown').value.trim();
             const existing = scenarioLibrary.find(item => item.id === editingScenarioId);
             let id = editingScenarioId || scenarioSlug(title);
-            if (!editingScenarioId && scenarioLibrary.some(item => item.id === id)) {
+            let publishedId = existing?.publishedId || null;
+            if (existing?.origin === 'published') {
+                publishedId = existing.id;
+                id = `${existing.id}-local-draft`;
+                let suffix = 2;
+                while (scenarioLibrary.some(item => item.id === id)) {
+                    id = `${existing.id}-local-draft-${suffix}`;
+                    suffix += 1;
+                }
+            } else if (!editingScenarioId && scenarioLibrary.some(item => item.id === id)) {
                 id = `${id}-${Date.now().toString(36)}`;
             }
             const scenario = {
@@ -2689,6 +2789,7 @@ ${draft.objective.trim()}
                 characterIds: [...editingScenarioCharacterIds],
                 characterColors: { ...editingScenarioCharacterColors },
                 origin: 'local',
+                publishedId,
                 isPublished: existing ? existing.isPublished : false
             };
             if (!persistScenario(scenario)) return;

@@ -77,5 +77,10 @@ Indices critiques et conséquences à archiver pour la campagne.
 
 Les styles d'encadrés suivent la charte graphique du projet. Les brouillons créés
 dans le site restent dans le navigateur ; télécharger le `.md` puis le déposer
-dans ce dossier pour le publier. GitHub Pages étant public, ne publiez pas ici
-de secret qui ne doit pas être accessible aux joueurs.
+dans ce dossier pour le publier. Une modification locale d'un scénario déjà
+publié reste une version séparée, étiquetée « Modification locale » : le fichier
+Markdown reste la version publiée et fait foi sur les autres navigateurs.
+Les versions locales peuvent être supprimées depuis leur page avec le bouton
+« Supprimer le brouillon » ; cette action ne supprime jamais le fichier publié.
+GitHub Pages étant public, ne publiez pas ici de secret qui ne doit pas être
+accessible aux joueurs.
