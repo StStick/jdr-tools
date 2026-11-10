@@ -9,17 +9,17 @@ characterColors: {"karl-lapartheid": "#3D6FA8", "rick-lestilo": "#9C6B2E", "ho-l
 ## Synopsis & Situation Initiale
 
 ::: desc
-Les retombées des événements du mois dernier frappent de plein fouet le groupe[cite: 1]. Depuis la capture de Raphaël et Miranda par les forces de l'ordre, l'étau se resserre inexorablement sur New Right, menaçant d'emporter l'ensemble du réseau et ses associés dans sa chute[cite: 1, 6].
+Les retombées des événements du mois dernier frappent de plein fouet le groupe. Depuis la capture de Raphaël et Miranda par les forces de l'ordre, l'étau se resserre inexorablement sur New Right, menaçant d'emporter l'ensemble du réseau et ses associés dans sa chute.
 :::
 
 ::: mj
-La capture de Raphaël et Miranda lors du premier scénario a déclenché une réaction en chaîne dévastatrice[cite: 1, 6]. Les autorités corporatistes exploitent les données saisies et les interrogatoires, provoquant l'effondrement et le démantèlement méthodique de la cellule New Right[cite: 1]. Les PJ se retrouvent en première ligne, traqués et vulnérables face à la dislocation générale du réseau.
+La capture de Raphaël et Miranda lors du premier scénario a déclenché une réaction en chaîne dévastatrice. Les autorités corporatistes exploitent les données saisies et les interrogatoires, provoquant l'effondrement et le démantèlement méthodique de la cellule New Right. Les PJ se retrouvent en première ligne, traqués et vulnérables face à la dislocation générale du réseau.
 :::
 
 ::: prep Organisation Discord
 Dès le lancement de la séance, séparez immédiatement les protagonistes dans trois salons vocaux distincts :
-- **Canal 1 :** Karl Lagerfeld
-- **Canal 2 :** Rick
+- **Canal 1 :** Karl L'Apartheid
+- **Canal 2 :** Rick Lestilo
 - **Canal 3 :** Ho Lee Fuk
 
 Passez voir chaque joueur dans son salon pour lui exposer sa situation personnelle d'introduction (reprise de contacts pour Karl, commande de composant pour Rick, fausse piste pour Ho Lee Fuk).
@@ -27,8 +27,8 @@ Passez voir chaque joueur dans son salon pour lui exposer sa situation personnel
 
 ::: note
 - **Date de départ :** 12 février 2313
-- **Contexte direct :** Arrestation de Raphaël et Miranda, dislocation imminente de l'organisation[cite: 1, 6].
-- **Enjeux :** Éviter d'être emporté dans la purge et survivre à la chute du réseau[cite: 1].
+- **Contexte direct :** Arrestation de Raphaël et Miranda, dislocation imminente de l'organisation.
+- **Enjeux :** Éviter d'être emporté dans la purge et survivre à la chute du réseau.
 :::
 
 ---
@@ -42,10 +42,10 @@ Après un mois d'isolement et de cavale suite à la chute de leur cellule, les m
 :::
 
 ::: mj
-En prévision de l'assaut conjointement planifié avec Xevolt contre la base de New Mind, l'organisation paramilitaire UNTRUST cherche à recruter le groupe Night pour leurs compétences réputées de hackers[cite: 1]. UNTRUST orchestre leur venue à Lyon selon les accroches suivantes :
-- **Karl Lagerfeld :** Recontacté par le réseau révolutionnaire qu'il sondait depuis un mois, on lui donne rendez-vous pour un projet d'envergure[cite: 1].
-- **Rick :** Une commande urgente pour un composant électronique rare le fait se déplacer tout près du quartier d'opérations d'UNTRUST.
-- **Ho Lee Fuk :** Une piste soudaine sur les Crazy Pandas (ravisseurs de son père) le guide vers la banlieue de Lyon[cite: 1].
+En prévision de l'assaut conjointement planifié avec Xevolt contre la base de New Mind, l'organisation paramilitaire UNTRUST cherche à recruter le groupe Night pour leurs compétences réputées de hackers. UNTRUST orchestre leur venue à Lyon selon les accroches suivantes :
+- **Karl L'Apartheid :** Recontacté par le réseau révolutionnaire qu'il sondait depuis un mois, on lui donne rendez-vous pour un projet d'envergure.
+- **Rick Lestilo :** Une commande urgente pour un composant électronique rare le fait se déplacer tout près du quartier d'opérations d'UNTRUST.
+- **Ho Lee Fuk :** Une piste soudaine sur les Crazy Pandas (ravisseurs de son père) le guide vers la banlieue de Lyon.
 :::
 
 ---
@@ -54,12 +54,12 @@ En prévision de l'assaut conjointement planifié avec Xevolt contre la base de 
 
 *(À jouer séparément dans chaque canal Discord)*
 
-##### Canal de Karl Lagerfeld
+##### Canal de Karl L'Apartheid
 ::: desc
 Karl arrive au point de rendez-vous sans la moindre anicroche. Accueilli poliment par des agents armés d'UNTRUST, il est installé dans une salle sécurisée. On l'invite à patienter en lui indiquant calmement que les autres personnes attendues ne vont pas tarder.
 :::
 
-##### Canaux de Rick et Ho Lee Fuk
+##### Canaux de Rick Lestilo et Ho Lee Fuk
 ::: desc
 Arrivé sur place, c'est le piège. Aucun contact commercial ou indice ne vous attend : un groupe de révolutionnaires surentraînés surgit pour vous maîtriser avec une extrême violence. Plaqué au sol et neutralisé avant d'avoir pu esquisser le moindre geste, on vous enfile brutalement une épaisse cagoule opaque sur la tête avant de vous traîner sans ménagement.
 :::
@@ -134,14 +134,14 @@ Adam Freyer détaille les cibles et la méthode retenue pour saboter le procès 
 - **Le point faible :** Ces hauts dignitaires et officiers sont loin d'être irréprochables ; ils trempent dans de nombreuses affaires illégales et compromettantes.
 - **L'objectif :** Infiltrer leur entourage et leurs réseaux pour déterrer des preuves irréfutables de leurs malversations, afin de monter un dossier de chantage suffisant pour forcer l'abandon immédiat de toutes les charges contre New Right.
 - **La répartition des rôles :**
-  - **Rick :** Mobilisation de ses talents d'électronicien et de hacker pour percer les pare-feux, forcer les serrures sécurisées et extraire les données corrompues.
-  - **Karl :** Exploitation de ses réflexes tactiques, de son passé de combattant clandestin et de ses réseaux pour guider l'infiltration en milieu hostile[cite: 1].
-  - **Ho Lee Fuk :** Appui de combat rapproché en cas d'intervention musclée, et mise à disposition de son vaisseau personnel pour servir de vecteur de fuite et de plateforme mobile d'extraction[cite: 1].
+  - **Rick Lestilo :** Mobilisation de ses talents d'électronicien et de hacker pour percer les pare-feux, forcer les serrures sécurisées et extraire les données corrompues.
+  - **Karl L'Apartheid :** Exploitation de ses réflexes tactiques, de son passé de combattant clandestin et de ses réseaux pour guider l'infiltration en milieu hostile.
+  - **Ho Lee Fuk :** Appui de combat rapproché en cas d'intervention musclée, et mise à disposition de son vaisseau personnel pour servir de vecteur de fuite et de plateforme mobile d'extraction.
 :::
 
 ::: note Éléments Clés de la Mission
-- **Commanditaire :** Général Adam Freyer (UNTRUST)[cite: 1].
+- **Commanditaire :** Général Adam Freyer (UNTRUST).
 - **Cibles du chantage :** Juges d'exception et commandants de la milice privée supervisant l'instruction judiciaire.
-- **Moyen de transport :** Le vaisseau d'Ho Lee Fuk[cite: 1].
-- **Compétences requises :** Électronique & piratage (Rick), combat & expérience de terrain (Karl), combat & pilotage spatial (Ho Lee Fuk)[cite: 1, 2].
+- **Moyen de transport :** Le vaisseau d'Ho Lee Fuk.
+- **Compétences requises :** Électronique & piratage (Rick Lestilo), combat & expérience de terrain (Karl L'Apartheid), combat & pilotage spatial (Ho Lee Fuk).
 :::
