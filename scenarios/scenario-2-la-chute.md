@@ -1,4 +1,4 @@
-```markdown
+
 ---
 title: "La Chute"
 date: "12 février 2313"
@@ -204,4 +204,3 @@ Les joueurs doivent improviser une explication crédible pour justifier leur pr�
 ***[Rencontre avec le barman, échange du mot de passe et révélation de l'infoermateur]***
 :::
 
-```
