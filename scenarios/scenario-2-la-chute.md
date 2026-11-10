@@ -3,7 +3,7 @@ title: "La Chute"
 date: "12 février 2313"
 secret: false
 characters: ["karl-lapartheid","rick-lestilo","ho-lee-fuk","eva-cassaire","miranda","raphael"]
-characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-fuk":"#4A7A5C","eva-cassaire":"#ff0000","miranda":"#8000ff","raphael":"#004080"}
+characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-fuk":"#4A7A5C","eva-cassaire":"#444444","miranda":"#3D6FA8","raphael":"#9C6B2E"}
 ---
 
 ## Synopsis & Situation Initiale
@@ -145,7 +145,7 @@ Adam Freyer détaille les cibles et la méthode retenue pour saboter le procès 
 ::: note Éléments Clés de la Mission
 - **Commanditaire :** Général Adam Freyer (UNTRUST).
 - **Cible du chantage :** Cassandra Vance, directrice judiciaire de New Mind.
-- **Pêché secret :** Réseaux pédo-criminels et bordels clandestins des sous-sols de Paradise.
+- **Péché secret :** Réseaux pédo-criminels et bordels clandestins des sous-sols de Paradise.
 - **Première étape :** Le bar *The Dying Unicorn* à Londres.
 - **Mot de passe barman :** *« Les chimères ne dorment jamais sous la pluie de néon. »*
 - **Moyen de transport :** Le vaisseau d'Ho Lee Fuk.
@@ -225,7 +225,7 @@ L'adresse du bar *The Dying Unicorn* se trouve au **Niveau -4** de la mégalopol
 #### Étape 3 : The Dying Unicorn
 
 ::: desc
-La devanture grêlée de néons grésillants annonce le bar *The Dying Unicorn*. L'endroit ressemble à un pub anglais traditionnel d'un autre siècle, mais modernisé à grand renfort d'écrans encrassés, de tubulures apparentes et de plaques d'alliage rivetées. L'atmosphère est poisseuse et l'endroit sent clairement le coupe-gorge : la majorité des habitués arborent une ou deux balafres bien visibles, et plusieurs clients consomment ouvertement des substances illicites à peine dissimulés dans les recoins sombres.
+La devanture grêlée de néons grésillants annonce le bar *The Dying Unicorn*. L'endroit ressemble à un pub anglais traditionnel d'un autre siècle, mais modernisé à grand renfort d'écrans encrassés, de tubulures apparentes et de plaques d'alliage rivetées. L'atmosphère est poisseuse et l'endroit sent clairement le coupe-gorge : la majorité des habitués arborent une ou deux balafres bien visibles, et plusieurs clients consomment ouvertement des substances illicites à peine dissimulées dans les recoins sombres.
 
 Une dizaine d'individus plus ou moins imbibés errent entre les tables bancales. Dès que la porte grince à votre passage, les regards se braquent un instant sur vous. Derrière le comptoir en zinc vieilli, le barman vous jauge froidement avant de vous apostropher.
 :::
@@ -254,14 +254,14 @@ Sans ajouter un mot, le barman glisse sa main sous le comptoir pour presser un i
 
 ---
 
-#### Étape 4 : L'Arrière-Boutique & Révélations de June White
+#### Étape 4 : L'Arrière-Boutique & Révélations de Eva Cassaire
 
 ::: desc
 Vous franchissez le sas pour pénétrer dans une succursale sécurisée, coupée du tumulte crasseux du pub. Assise derrière une large table de travail encombrée de tablettes cryptées et d'optiques de surveillance, une femme au regard acéré vous observe approcher. Elle esquisse un sourire maîtrisé en vous invitant à prendre place.
 :::
 
-::: mj Secret MJ : L'identité de June White
-La femme assise en face d'eux n'est autre que **June White**, la véritable dirigeante de **New Mind**. Les PJ l'ignorent totalement au début de la scène.
+::: mj Secret MJ : L'identité de Eva Cassaire
+La femme assise en face d'eux n'est autre que **Eva Cassaire**, la véritable dirigeante de **New Mind**. Les PJ l'ignorent totalement au début de la scène.
 :::
 
 ::: dial Eva Cassaire
@@ -274,12 +274,12 @@ La femme assise en face d'eux n'est autre que **June White**, la véritable diri
 :::
 
 ::: dial Eva Cassaire
-**Eva Cassaire :** « *Rapplez vous, je vous ai eu au télphone il ya un mois* »
+**Eva Cassaire :** « *Rappelez-vous, je vous ai eus au téléphone il y a un mois.* »
 :::
 
-::: rp La Vérité sur New Mind
+::: rp La Vérité sur New Right
 Eva Cassaire profite de cet échange pour lever le voile sur la vraie nature de son organisation, brisant l'illusion pacifiste véhiculée précédemment :
-- **Le masque brisé :** Contrairement au portrait de façade et à l'image réformiste/pacifique que Raphaël leur avait servie lors de leur première rencontre, New Mind n'a absolument rien d'un groupe inoffensif.
-- **L'élite cybernétique :** New Mind est en réalité une organisation cybercriminelle et subversive de premier plan, ultra-spécialisée dans la guerre électronique et le cyber-terrorisme de haut vol.
+- **Le masque brisé :** Contrairement au portrait de façade et à l'image réformiste/pacifique que Raphaël leur avait servie lors de leur première rencontre, New Right n'a absolument rien d'un groupe inoffensif.
+- **L'élite cybernétique :** New Right est en réalité une organisation cybercriminelle et subversive de premier plan, ultra-spécialisée dans la guerre électronique et le cyber-terrorisme de haut vol.
 - **Les meilleurs hackers :** Le réseau rassemble et coordonne certains des esprits et des hackers les plus redoutables et dangereux de tout le système.
 :::
