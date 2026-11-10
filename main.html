@@ -1979,7 +1979,7 @@
                 const color = scenario.characterColors?.[id] ||
                     (character ? defaultScenarioCharacterColor(character, characters.indexOf(character)) : '');
                 if (character && typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color)) {
-                    styles[id] = { name: character.name, color };
+                    styles[id] = { name: character.name.replace(/\s*\([^)]*\).*$/, '').trim(), color };
                 }
             });
             return styles;
