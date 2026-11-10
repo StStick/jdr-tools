@@ -187,19 +187,106 @@ Les joueurs doivent improviser une explication crédible pour justifier leur pr�
 
 ::: event Test d'Interaction & Négociation
 - **Test de Charisme (Bluff ou Persuasion) :** DD 12 pour justifier l'absence d'enregistrement régulier dans les bases de données londoniennes.
-- **Succès :** Attribution d'un quai d'amarrage standard au niveau des docks souterrains.
-- **Échec :** Paiement d'une taxe d'atterrissage d'urgence ou complication administrative retardant l'entrée.
+- **Succès :** L'opérateur valide l'autorisation et assigne un quai d'amarrage standard au niveau des docks souterrains.
+- **Échec :** Refus d'accès formel, mise en attente forcée hors sas ou menace d'inspection lourde par la sécurité portuaire.
+:::
+
+::: rp Scène ouverte : Contourner le refus des Docks
+En cas d'échec du jet de négociation initial, laissez une totale liberté d'action et d'initiative aux PJ pour forcer ou débloquer la situation. Laissez-les proposer leurs solutions :
+- **Corruption :** Tenter de graisser la patte du contrôleur ou d'un docker via un canal sécurisé.
+- **Piratage informatique :** Rick Lestilo tente d'injecter une fausse autorisation ou de falsifier le registre d'amarrage.
+- **Sabotage technique :** Provoquer une panne feinte ou court-circuiter les sas d'accueil.
+- **Appel à UNTRUST :** Contacter les relais clandestins du Général Adam Freyer pour faire débloquer le signal à distance.
+:::
+
+::: event Résolution des actions alternatives
+Pour toute approche alternative nécessitant un test de compétence :
+- **Règle générale :** Tout jet technique ou social (Piratage, Sabotage, Corruption, etc.) est calibré sur une **difficulté DD 12**.
+- **Succès :** Le vaisseau est amarré discrètement sans déclencher d'alerte générale.
+- **Échec :** Complications supplémentaires, surcoût en crédits ou intervention imminente d'une patrouille de sécurité.
 :::
 
 ---
 
-#### Étape 2 : L'arrivée au pub The Dying Unicorn
+#### Étape 2 : Traversée vers le Niveau -4
 
 ::: desc
-***[Description du quartier des docks, du trajet vers le bar et de la façade de The Dying Unicorn]***
+Une fois les formalités franchies et le vaisseau sécurisé dans son alvéole, vous pénétrez dans les entrailles de Londres. Loin des tours étincelantes de la surface, l'ascenseur gravitationnel s'enfonce dans les strates inférieures de la mégalopole, traversant des niveaux de plus en plus humides, bruyants et saturés de fumées d'échappement synthétiques jusqu'au Niveau -4.
 :::
 
-::: rp Contact au comptoir
-***[Rencontre avec le barman, échange du mot de passe et révélation de l'infoermateur]***
+::: mj Gestion du trajet
+L'adresse du bar *The Dying Unicorn* se trouve au **Niveau -4** de la mégalopole.
+- **Progression normale :** Avec leurs terminaux et les applications cartographiques standard, les joueurs localisent directement l'itinéraire sans complication inutile.
+- **Option "gratter du temps" :** Si le groupe traîne, s'égare ou cherche délibérément à glaner des rumeurs, faites-les déambuler dans les coursives mal famées du Niveau -4 (rencontres avec la faune locale, petits marchands à la sauvette, toxicomanes sous néons défaillants) avant d'atteindre la devanture du pub.
 :::
 
+---
+
+#### Étape 3 : The Dying Unicorn
+
+::: desc
+La devanture grêlée de néons grésillants annonce le bar *The Dying Unicorn*. L'endroit ressemble à un pub anglais traditionnel d'un autre siècle, mais modernisé à grand renfort d'écrans encrassés, de tubulures apparentes et de plaques d'alliage rivetées. L'atmosphère est poisseuse et l'endroit sent clairement le coupe-gorge : la majorité des habitués arborent une ou deux balafres bien visibles, et plusieurs clients consomment ouvertement des substances illicites à peine dissimulés dans les recoins sombres.
+
+Une dizaine d'individus plus ou moins imbibés errent entre les tables bancales. Dès que la porte grince à votre passage, les regards se braquent un instant sur vous. Derrière le comptoir en zinc vieilli, le barman vous jauge froidement avant de vous apostropher.
+:::
+
+::: dial Le Barman
+**Le Barman :** « *Qu'est-ce que j'vous sers ?* »
+:::
+
+::: rp Le Contact au Comptoir
+Les joueurs doivent glisser le mot de passe convenu au barman (*« Les chimères ne dorment jamais sous la pluie de néon »*).
+- Si les PJ commandent d'abord à boire sans faire d'esclandre, il les sert d'un geste machinal.
+- Dès que la phrase secrète est prononcée, son expression se détend dans un rictus complice.
+:::
+
+::: dial Le Barman
+**Le Barman :** « *Ah... C'est donc eux qui vous envoient.* »
+:::
+
+::: desc
+Sans ajouter un mot, le barman glisse sa main sous le comptoir pour presser un interrupteur discret relié aux réseaux internes d'UNTRUST. Il incline ensuite la tête vers une porte renforcée située à l'arrière de la salle.
+:::
+
+::: dial Le Barman
+**Le Barman :** « *Passez derrière. On vous attend.* »
+:::
+
+---
+
+#### Étape 4 : L'Arrière-Boutique & Révélations de June White
+
+::: desc
+Vous franchissez le sas pour pénétrer dans une succursale sécurisée, coupée du tumulte crasseux du pub. Assise derrière une large table de travail encombrée de tablettes cryptées et d'optiques de surveillance, une femme au regard acéré vous observe approcher. Elle esquisse un sourire maîtrisé en vous invitant à prendre place.
+:::
+
+::: mj Secret MJ : L'identité de June White
+La femme assise en face d'eux n'est autre que **June White**, la véritable dirigeante de **New Mind**. Les PJ l'ignorent totalement au début de la scène.
+:::
+
+::: dial June White
+**June White :** « *Après tout ce qui s'est passé, j'avais hâte de vous rencontrer en personne. Enfin... je suis tout de même étonnée que vous ayez osé venir. Qu'est-ce qui vous amène jusqu'à moi ?* »
+:::
+
+::: rp Justifications des PJ & Demande d'identité
+- Les joueurs doivent répondre et expliquer qu'ils sont envoyés ici par UNTRUST dans le cadre d'un accord opérationnel.
+- Amenez naturellement les PJ à l'interroger sur son identité et sa fonction dans le réseau.
+:::
+
+::: dial June White
+**June White :** « *Je suis June White. C'est moi qui dirige New Mind.* »
+:::
+
+::: rp La Vérité sur New Mind
+June White profite de cet échange pour lever le voile sur la vraie nature de son organisation, brisant l'illusion pacifiste véhiculée précédemment :
+- **Le masque brisé :** Contrairement au portrait de façade et à l'image réformiste/pacifique que Raphaël leur avait servie lors de leur première rencontre, New Mind n'a absolument rien d'un groupe inoffensif.
+- **L'élite cybernétique :** New Mind est en réalité une organisation cybercriminelle et subversive de premier plan, ultra-spécialisée dans la guerre électronique et le cyber-terrorisme de haut vol.
+- **Les meilleurs hackers :** Le réseau rassemble et coordonne certains des esprits et des hackers les plus redoutables et dangereux de tout le système.
+:::
+
+::: note Dossier PNJ : June White
+- **Nom :** June White
+- **Affiliation :** Dirigeante suprême de New Mind
+- **Rôle secret :** Tête pensante de l'élite des hackers et du cyber-terrorisme systémique
+- **Statut vis-à-vis des PJ :** Méfiante mais intéressée par le levier que représente la mission d'UNTRUST
+:::
