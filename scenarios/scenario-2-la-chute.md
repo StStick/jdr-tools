@@ -9,11 +9,11 @@ characterColors: {"karl-lapartheid":"#3D6FA8","rick-lestilo":"#9C6B2E","ho-lee-f
 ## Synopsis & Situation Initiale
 
 ::: desc
-Les retombées des événements du mois dernier frappent de plein fouet le groupe. Depuis la capture de Raphaël et Miranda par les forces de l'ordre, l'étau se resserre inexorablement sur New Right, menaçant d'emporter l'ensemble du réseau et ses associés dans sa chute.
+Les retombées des événements du mois dernier frappent de plein fouet le groupe. Depuis la capture de Raphaël et Miranda par les forces de l'ordre, l'étau se resserre inexorablement sur New Right. En tant que témoin pricipaux de cette affaire les joueurs sont améné dans quelque chose de plus grand qu'eux.
 :::
 
 ::: mj
-La capture de Raphaël et Miranda lors du premier scénario a déclenché une réaction en chaîne dévastatrice. Les autorités corporatistes exploitent les données saisies et les interrogatoires, provoquant l'effondrement et le démantèlement méthodique de la cellule New Right. Les PJ se retrouvent en première ligne, traqués et vulnérables face à la dislocation générale du réseau.
+La capture de Raphaël et Miranda lors du premier scénario a déclenché une réaction en chaîne dévastatrice. Les autorités corporatistes exploitent les données saisies et les interrogatoires, provoquant l'effondrement et le démantèlement méthodique de la cellule New Right. Les Pj sont des témoin de première ligne et risque donc de devoir jouer un nouveaux rôle dans cette histoire. Cependant la chute de New  Right risque d'impacté durablement les plan de la résistance qui doit donc 'contacter' les joueurs.
 :::
 
 ::: prep Organisation Discord
@@ -28,7 +28,7 @@ Passez voir chaque joueur dans son salon pour lui exposer sa situation personnel
 ::: note
 - **Date de départ :** 12 février 2313
 - **Contexte direct :** Arrestation de Raphaël et Miranda, dislocation imminente de l'organisation.
-- **Enjeux :** Éviter d'être emporté dans la purge et survivre à la chute du réseau.
+- **Enjeux :** Éviter la chute du new right, un maillon discret mmais essentiel de la résistance
 :::
 
 ---
@@ -37,8 +37,8 @@ Passez voir chaque joueur dans son salon pour lui exposer sa situation personnel
 
 ### Scène 1 : Rencontre avec UNTRUST
 
-::: desc
-Après un mois d'isolement et de cavale suite à la chute de leur cellule, les membres du groupe sont contactés de manière bien distincte pour converger vers la région lyonnaise.
+::: note
+Après un mois de retour à la vie normale après le piège de new right les membres du groupe sont contactés de manière bien distincte pour converger vers la région lyonnaise.
 :::
 
 ::: mj
@@ -139,7 +139,7 @@ Adam Freyer détaille les cibles et la méthode retenue pour saboter le procès 
   - **Karl L'Apartheid :** Renseignements, savoir-faire tactique et passé d'opérations clandestines pour infiltrer les cercles fermés.
   - **Ho Lee Fuk :** Muscle du groupe pour les affrontements physiques et utilisation de son vaisseau personnel pour les déplacements et l'évacuation d'urgence.
 - **La piste initiale :** Pour amorcer l'enquête, Adam Freyer leur ordonne de se rendre à Londres, au pub ***The Dying Unicorn***. Là-bas, ils devront aborder le barman et lui glisser un mot de passe pour obtenir un premier contact clé :
-  > **Mot de passe :** *« Les chimères ne dorment jamais sous la pluie de néon. »*
+  > **Mot de passe :** *« 3 Mc-allan 2150 dans des verres à balons »*
 :::
 
 ::: note Éléments Clés de la Mission
